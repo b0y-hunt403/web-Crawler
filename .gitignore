@@ -1,0 +1,95 @@
+# ===============================
+# Environment
+# ===============================
+.env
+.env.*
+
+!.env.example
+
+# ===============================
+# SQLite databases
+# ===============================
+*.db
+*.sqlite
+*.sqlite3
+
+# ===============================
+# Go binaries
+# ===============================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+sessionmgr
+crawler
+
+# Build output
+bin/
+dist/
+build/
+
+# Coverage
+coverage.out
+*.coverprofile
+
+# ===============================
+# Archives
+# ===============================
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# ===============================
+# Downloaded packages
+# ===============================
+*.deb
+
+# ===============================
+# IDE
+# ===============================
+.vscode/
+.idea/
+
+# ===============================
+# OS
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Logs
+# ===============================
+# Environment
+.env
+.env.*
+
+!.env.example
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Browser profiles
+profiles/
+
+# Session data
+session/
+
+# Binaries
+crawler
+sessionmgr
+
+# Archives
+*.zip
+*.deb
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
