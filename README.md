@@ -32,33 +32,34 @@
 ```bash
 go install github.com/Anduamlk/raptor-crawler/cmd/crawler@latest
 
-Clone & Build
+
+Option 2: Clone & Build
 
 bash
-git clone https://github.com/yourusername/raptor-crawler.git
-cd raptor-crawler
+git clone https://github.com/Anduamlk/web-Crawler.git
+cd web-Crawler
 go mod download
-go build -o raptor cmd/crawler/main.go
+make build
+./raptor -url http://target.com -both
 
 
-Using curl (Linux/macOS)
+Option 3: Docker
 bash
-curl -L https://github.com/yourusername/raptor-crawler/releases/latest/download/raptor-linux-amd64 -o raptor
-chmod +x raptor
-sudo mv raptor /usr/local/bin/
-
+docker build -t raptor-crawler .
+docker run -v $(pwd):/data raptor-crawler -url http://target.com -db /data/results.db -both
 
 
 📖 Usage
+
 Basic Commands
 bash
 # Static crawling only
 raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100
 
-# Dynamic crawling only
+# Dynamic crawling only (for SPAs)
 raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100 -dynamic
 
-# Both static AND dynamic (Recommended)
+# Both static AND dynamic (Best for full coverage)
 raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100 -both
 
 # With JSON output
