@@ -3,36 +3,53 @@
 # ===============================
 .env
 .env.*
-
 !.env.example
 
 # ===============================
-# SQLite databases
+# SQLite Databases
 # ===============================
 *.db
 *.sqlite
 *.sqlite3
 
 # ===============================
-# Go binaries
+# Go Binaries
 # ===============================
+raptor
+crawler
+sessionmgr
+
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+*.test
 
-sessionmgr
-crawler
-
-# Build output
+# ===============================
+# Build Output
+# ===============================
 bin/
-dist/
 build/
+dist/
 
+# ===============================
 # Coverage
+# ===============================
 coverage.out
 *.coverprofile
+*.out
+
+# ===============================
+# Browser Profiles / Sessions
+# ===============================
+profiles/
+session/
+
+# ===============================
+# Logs
+# ===============================
+*.log
 
 # ===============================
 # Archives
@@ -41,10 +58,6 @@ coverage.out
 *.tar
 *.tar.gz
 *.tgz
-
-# ===============================
-# Downloaded packages
-# ===============================
 *.deb
 
 # ===============================
@@ -54,42 +67,7 @@ coverage.out
 .idea/
 
 # ===============================
-# OS
+# Operating System
 # ===============================
 .DS_Store
 Thumbs.db
-
-# ===============================
-# Logs
-# ===============================
-# Environment
-.env
-.env.*
-
-!.env.example
-
-# Databases
-*.db
-*.sqlite
-*.sqlite3
-
-# Browser profiles
-profiles/
-
-# Session data
-session/
-
-# Binaries
-crawler
-sessionmgr
-
-# Archives
-*.zip
-*.deb
-
-# Logs
-*.log
-
-# IDE
-.vscode/
-.idea/

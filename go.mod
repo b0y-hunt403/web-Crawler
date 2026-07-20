@@ -1,4 +1,4 @@
-module sessionmgr
+module github.com/Anduamlk/raptor-crawler
 
 go 1.26
 
