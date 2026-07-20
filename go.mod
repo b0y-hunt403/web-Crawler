@@ -1,4 +1,4 @@
-module github.com/Anduamlk/raptor-crawler
+module github.com/Anduamlk/web-Crawler
 
 go 1.26
 
