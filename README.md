@@ -1,17 +1,22 @@
-# 🦅 Raptor Crawler
+# 🦅 Raptor Web Crawler
 
 <div align="center">
   <img src="https://img.shields.io/badge/Go-1.26%2B-00ADD8?style=for-the-badge&logo=go" alt="Go Version"/>
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
   <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey?style=for-the-badge" alt="Platform"/>
   <img src="https://img.shields.io/badge/Version-2.0.0-green?style=for-the-badge" alt="Version"/>
-  <img src="https://img.shields.io/badge/Built%20with-Go-blue?style=for-the-badge&logo=go" alt="Built with Go"/>
-  
-  <br><br>
-  
-  > **Advanced Web Security Crawler with Request Intelligence**  
-  > Discover endpoints, forms, API routes, and hidden attack surfaces in modern web applications.
 </div>
+
+<br>
+
+<div align="center">
+  <img src="images/banner.png" alt="Raptor Crawler Banner" width="800"/>
+</div>
+
+<br>
+
+> **Advanced Web Security Crawler with Request Intelligence**  
+> Discover endpoints, forms, API routes, and hidden attack surfaces in modern web applications.
 
 ## 🔥 Features
 
