@@ -1,15 +1,10 @@
-// Package crawler discovers everything a target web app exposes — pages,
-// API endpoints, files, forms and their input fields, and SPA routes.
-//
-// It deliberately owns NO authentication or session logic. That is your
-// Session_Manager's job. This package only ever *reads* an already-captured
-// session via CrawlerConfig.SessionStatePath (a JSON file: cookies +
-// per-origin localStorage). If that path is empty, it crawls unauthenticated.
+// crawler/crawler.go
 package crawler
 
 import (
 	"container/heap"
 	"context"
+	"fmt"
 	"log"
 	"strings"
 )
@@ -22,9 +17,7 @@ type queueItem struct {
 	seq      int // tie-breaker so equal-priority items stay roughly FIFO
 }
 
-// priorityQueue is a min-heap on (priority, seq) — login/admin/api/graphql
-// pages jump the queue instead of waiting behind hundreds of static assets
-// discovered earlier, per the "adaptive priority" ask.
+// priorityQueue is a min-heap on (priority, seq)
 type priorityQueue []*queueItem
 
 func (pq priorityQueue) Len() int { return len(pq) }
@@ -46,10 +39,7 @@ func (pq *priorityQueue) Pop() interface{} {
 	return item
 }
 
-// urlPriority scores a URL for crawl ordering. Lower is crawled sooner.
-// This is intentionally simple keyword matching, not learned/adaptive —
-// good enough to make sure auth/admin/API surfaces get attention early
-// instead of getting starved by max-pages on a large site.
+// urlPriority scores a URL for crawl ordering
 func urlPriority(rawURL string) int {
 	lower := strings.ToLower(rawURL)
 	switch {
@@ -63,8 +53,7 @@ func urlPriority(rawURL string) int {
 	}
 }
 
-// Crawler ties the static and dynamic crawlers together into a single
-// priority-ordered BFS walk of the target, bounded by MaxDepth/MaxPages.
+// Crawler ties the static and dynamic crawlers together
 type Crawler struct {
 	config           CrawlerConfig
 	static           *StaticCrawler
@@ -77,18 +66,12 @@ type Crawler struct {
 	results          []*DiscoveredRequest
 }
 
-// NewCrawler wires up storage and, if config.UsePlaywright is true, the
-// chromedp-backed dynamic crawler. Every DiscoveredRequest is persisted to
-// DBPath and returned from Run(); nothing extra happens per-discovery.
+// NewCrawler wires up storage and crawlers
 func NewCrawler(config CrawlerConfig) (*Crawler, error) {
 	return NewCrawlerWithCallback(config, nil)
 }
 
-// NewCrawlerWithCallback is NewCrawler plus a caller-supplied callback that
-// fires for every DiscoveredRequest as it's found — e.g. for live colored
-// terminal output. The callback runs in addition to (not instead of)
-// persistence and dedup; it fires even for entries that turn out to be
-// duplicates, so a live UI can still show every match it saw.
+// NewCrawlerWithCallback creates a crawler with a callback
 func NewCrawlerWithCallback(config CrawlerConfig, cb RequestCallback) (*Crawler, error) {
 	store, err := NewRequestStore(config.DBPath)
 	if err != nil {
@@ -116,9 +99,7 @@ func NewCrawlerWithCallback(config CrawlerConfig, cb RequestCallback) (*Crawler,
 	return c, nil
 }
 
-// handleDiscovered is the single funnel every DiscoveredRequest passes
-// through: forward to the caller's callback (if any), dedup by fingerprint,
-// persist, and keep for the final results slice.
+// handleDiscovered is the single funnel every DiscoveredRequest passes through
 func (c *Crawler) handleDiscovered(req *DiscoveredRequest, err error) {
 	if c.externalCallback != nil {
 		c.externalCallback(req, err)
@@ -141,13 +122,8 @@ func (c *Crawler) handleDiscovered(req *DiscoveredRequest, err error) {
 	c.results = append(c.results, req)
 }
 
-// Run performs a priority-ordered crawl starting at config.SeedURL and
-// returns every DiscoveredRequest found (also persisted to DBPath along
-// the way). The seed URL itself is recorded at depth 0; its direct
-// children at depth 1, and so on.
+// Run performs a priority-ordered crawl starting at config.SeedURL
 func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
-	// Banner removed - now printed once in main.go
-
 	if c.config.RespectRobotsTxt {
 		c.robots = fetchRobotsRules(ctx, c.config.SeedURL, c.config.UserAgent)
 	}
@@ -169,6 +145,55 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 	push(c.config.SeedURL, 0)
 
 	queuedOrVisited := map[string]struct{}{c.config.SeedURL: {}}
+
+	// Katana pre-pass: fast, browser-free breadth-first discovery
+	if c.config.UseKatana {
+		PrintInfo("Running Katana pre-pass for fast breadth-first discovery...")
+		seeded := 0
+		
+		// Try library approach first
+		katanaErr := RunKatanaPhase(ctx, c.config,
+			func(req *DiscoveredRequest) {
+				c.handleDiscovered(req, nil)
+			},
+			func(u string, depth int) {
+				if _, seen := queuedOrVisited[u]; seen {
+					return
+				}
+				queuedOrVisited[u] = struct{}{}
+				push(u, depth)
+				seeded++
+			},
+		)
+		
+		// If library approach fails, try binary approach
+		if katanaErr != nil {
+			PrintWarning(fmt.Sprintf("Katana library pre-pass failed: %v", katanaErr))
+			PrintInfo("Attempting Katana binary pre-pass...")
+			
+			katanaErr = RunKatanaBinary(ctx, c.config,
+				func(req *DiscoveredRequest) {
+					c.handleDiscovered(req, nil)
+				},
+				func(u string, depth int) {
+					if _, seen := queuedOrVisited[u]; seen {
+						return
+					}
+					queuedOrVisited[u] = struct{}{}
+					push(u, depth)
+					seeded++
+				},
+			)
+			
+			if katanaErr != nil {
+				PrintWarning(fmt.Sprintf("Katana binary pre-pass failed, continuing with Raptor-only discovery: %v", katanaErr))
+			} else {
+				PrintSuccess(fmt.Sprintf("Katana binary pre-pass seeded %d additional URL(s) for deep crawling", seeded))
+			}
+		} else {
+			PrintSuccess(fmt.Sprintf("Katana pre-pass seeded %d additional URL(s) for deep crawling", seeded))
+		}
+	}
 
 	for pq.Len() > 0 && len(c.visited) < c.config.MaxPages {
 		item := heap.Pop(pq).(*queueItem)
@@ -209,9 +234,75 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 	return c.results, nil
 }
 
+// Close closes the crawler and releases resources
 func (c *Crawler) Close() error {
 	if c.dynamic != nil {
 		c.dynamic.Close()
 	}
 	return c.store.Close()
+}
+
+// Add to crawler.go
+func (c *Crawler) BuildAuthFlow(ctx context.Context) (*AuthFlow, error) {
+    // Find login endpoints
+    loginURLs := []string{}
+    for _, req := range c.results {
+        if req.Form != nil && req.Form.FormType == FormLogin {
+            loginURLs = append(loginURLs, req.URL)
+        }
+    }
+    
+    if len(loginURLs) == 0 {
+        return nil, fmt.Errorf("no login forms found")
+    }
+    
+    flow := &AuthFlow{
+        StartURL: loginURLs[0],
+        Steps:    []AuthStep{},
+    }
+    
+    // Step 1: GET login page (CSRF extraction)
+    step1 := AuthStep{
+        Order:   0,
+        URL:     loginURLs[0],
+        Method:  "GET",
+        IsLogin: false,
+    }
+    flow.Steps = append(flow.Steps, step1)
+    
+    // Step 2: POST login credentials
+    // Find the login form submission
+    for _, req := range c.results {
+        if req.URL == loginURLs[0] && req.Method == "POST" {
+            step2 := AuthStep{
+                Order:    1,
+                URL:      req.URL,
+                Method:   req.Method,
+                IsLogin:  true,
+                Request:  extractRequestHeaders(req.Headers),
+            }
+            flow.Steps = append(flow.Steps, step2)
+            break
+        }
+    }
+    
+    // Step 3: Check for redirect (dashboard)
+    for _, req := range c.results {
+        if req.Method == "GET" && strings.Contains(req.URL, "dashboard") ||
+           strings.Contains(req.URL, "profile") ||
+           strings.Contains(req.URL, "account") {
+            step3 := AuthStep{
+                Order:       2,
+                URL:         req.URL,
+                Method:      req.Method,
+                IsRedirect:  true,
+                IsLogin:     false,
+            }
+            flow.Steps = append(flow.Steps, step3)
+            flow.FinalURL = req.URL
+            break
+        }
+    }
+    
+    return flow, nil
 }

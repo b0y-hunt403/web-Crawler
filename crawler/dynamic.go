@@ -56,15 +56,22 @@ func LoadSessionState(path string) (*SessionState, error) {
 type RequestCallback func(req *DiscoveredRequest, err error)
 
 // pendingNetworkRequest tracks one in-flight browser network request.
+// ENHANCED: Added fetch/XHR tracking fields
 type pendingNetworkRequest struct {
-	method      string
-	url         string
-	headers     map[string]string
-	body        string
-	depth       int
-	isDocument  bool
-	resourceTyp network.ResourceType
-	startTime   time.Time
+	method       string
+	url          string
+	headers      map[string]string
+	body         string
+	depth        int
+	isDocument   bool
+	resourceTyp  network.ResourceType
+	startTime    time.Time
+	isFetch      bool
+	initiator    string
+	fetchCode    string
+	jsContext    string
+	contentType  string
+	requestBody  string
 }
 
 // urlQueueItem represents a URL in the crawling queue with its depth.
@@ -115,6 +122,8 @@ func mapToFormField(m map[string]interface{}) FormField {
 	if chk, ok := m["checked"].(bool); ok {
 		ff.Checked = chk
 	}
+	// Extract validation rules
+	ff.Validation = ExtractValidationRules(m)
 	return ff
 }
 
@@ -352,7 +361,16 @@ const domExtractionJS = `
         readonly: el.hasAttribute('readonly'),
         disabled: el.hasAttribute('disabled'),
         checked: !!el.checked,
-        'data-json': el.dataset.json || false
+        'data-json': el.dataset.json || false,
+        min: el.hasAttribute('min') ? el.getAttribute('min') : null,
+        max: el.hasAttribute('max') ? el.getAttribute('max') : null,
+        minlength: el.hasAttribute('minlength') ? el.getAttribute('minlength') : null,
+        maxlength: el.hasAttribute('maxlength') ? el.getAttribute('maxlength') : null,
+        pattern: el.getAttribute('pattern') || '',
+        step: el.hasAttribute('step') ? el.getAttribute('step') : null,
+        accept: el.getAttribute('accept') || '',
+        multiple: el.hasAttribute('multiple'),
+        autofocus: el.hasAttribute('autofocus')
       };
     });
   }
@@ -755,6 +773,9 @@ func (c *DynamicCrawler) processJSONForm(f struct {
 	formFields := BuildFormFields(f.Fields)
 	csrfField, requiredFields := FormMeta(formFields)
 
+	// Detect form framework from targetURL and fields
+	formFramework := DetectFormFramework("", "")
+	
 	method := strings.ToUpper(f.Method)
 	if method == "" {
 		method = "POST"
@@ -807,6 +828,9 @@ func (c *DynamicCrawler) processJSONForm(f struct {
 
 	formType := ClassifyForm(f.Fields, targetURL)
 
+	// Parse content type info
+	contentTypeInfo := DetectContentType("application/json")
+
 	c.emit(&DiscoveredRequest{
 		ID:            CalculateFingerprint(method, action, jsonBody, "application/json"),
 		URL:           action,
@@ -832,7 +856,15 @@ func (c *DynamicCrawler) processJSONForm(f struct {
 			CSRFTokenField: csrfField,
 			RequiredFields: requiredFields,
 			DataFormat:     "json",
+			Framework:      formFramework,
+			APIMapping: &APIMapping{
+				PageURL:     targetURL,
+				APIMethod:   method,
+				APIEndpoint: action,
+				BodyFormat:  "json",
+			},
 		},
+		ContentTypeInfo: &contentTypeInfo,
 	})
 }
 
@@ -853,6 +885,9 @@ func (c *DynamicCrawler) processForm(f struct {
 	formType := ClassifyForm(f.Fields, targetURL)
 	formFields := BuildFormFields(f.Fields)
 	csrfField, requiredFields := FormMeta(formFields)
+
+	// Detect form framework
+	formFramework := DetectFormFramework("", "")
 
 	formData := map[string]string{}
 	for _, raw := range f.Fields {
@@ -888,6 +923,9 @@ func (c *DynamicCrawler) processForm(f struct {
 
 	params := ExtractParameters(action, body, contentType)
 
+	// Parse content type info
+	contentTypeInfo := DetectContentType(contentType)
+
 	c.emit(&DiscoveredRequest{
 		ID:            CalculateFingerprint(method, action, body, contentType),
 		URL:           action,
@@ -912,7 +950,15 @@ func (c *DynamicCrawler) processForm(f struct {
 			CSRFTokenField: csrfField,
 			RequiredFields: requiredFields,
 			DataFormat:     getDataFormat(false, f.Enctype),
+			Framework:      formFramework,
+			APIMapping: &APIMapping{
+				PageURL:     targetURL,
+				APIMethod:   method,
+				APIEndpoint: action,
+				BodyFormat:  getDataFormat(false, f.Enctype),
+			},
 		},
+		ContentTypeInfo: &contentTypeInfo,
 	})
 
 	if method == "GET" && SafeToRequeueAsGET[formType] {
@@ -977,6 +1023,8 @@ func (c *DynamicCrawler) processShadowForms(hosts []struct {
 			}
 			contentType := headers["Content-Type"]
 
+			contentTypeInfo := DetectContentType(contentType)
+
 			c.emit(&DiscoveredRequest{
 				ID:            CalculateFingerprint(method, action, body, contentType),
 				URL:           action,
@@ -998,6 +1046,7 @@ func (c *DynamicCrawler) processShadowForms(hosts []struct {
 					RequiredFields: requiredFields,
 					DataFormat:     getDataFormat(false, ""),
 				},
+				ContentTypeInfo: &contentTypeInfo,
 			})
 
 			if method == "GET" && SafeToRequeueAsGET[shadowFormType] {
@@ -1086,7 +1135,7 @@ func (c *DynamicCrawler) analyzeScripts(ctx context.Context, scriptURLs []string
 	}
 }
 
-// trackRequest stashes an in-flight request.
+// trackRequest stashes an in-flight request with enhanced fetch/XHR detection.
 func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth int) {
 	if !c.IsInScope(e.Request.URL) {
 		return
@@ -1112,11 +1161,63 @@ func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth i
 		}
 	}
 
-	// Check if this is a JSON request for special handling
+	// Detect content type
 	contentType := ""
 	if ct, ok := headers["Content-Type"]; ok {
 		contentType = strings.ToLower(ct)
 	}
+
+	// Detect if this is a fetch/XHR request
+	isFetch := strings.Contains(e.Request.Headers["X-Requested-With"], "XMLHttpRequest") ||
+		strings.Contains(contentType, "application/json") ||
+		strings.Contains(e.Request.Headers["Accept"], "application/json")
+
+	// Detect initiator
+	initiator := "other"
+	if e.Initiator != nil {
+		if e.Initiator.Type == "script" {
+			initiator = "js_script"
+		} else if e.Initiator.Type == "parser" {
+			initiator = "html_parser"
+		}
+	}
+
+	// Reconstruct fetch code for debugging/intelligence
+	var fetchCode string
+	if isFetch && postData != "" {
+		var sb strings.Builder
+		sb.WriteString("fetch(\"")
+		sb.WriteString(e.Request.URL)
+		sb.WriteString("\", {\n")
+		sb.WriteString("  method: \"")
+		sb.WriteString(e.Request.Method)
+		sb.WriteString("\",\n")
+
+		if len(headers) > 0 {
+			sb.WriteString("  headers: {\n")
+			for k, v := range headers {
+				sb.WriteString(fmt.Sprintf("    \"%s\": \"%s\",\n", k, v))
+			}
+			sb.WriteString("  },\n")
+		}
+
+		if postData != "" {
+			// Try to parse as JSON for pretty display
+			var prettyBody string
+			var jsonPayload map[string]interface{}
+			if err := json.Unmarshal([]byte(postData), &jsonPayload); err == nil {
+				pretty, _ := json.MarshalIndent(jsonPayload, "  ", "  ")
+				prettyBody = string(pretty)
+			} else {
+				prettyBody = postData
+			}
+			sb.WriteString(fmt.Sprintf("  body: %s\n", prettyBody))
+		}
+		sb.WriteString("})")
+		fetchCode = sb.String()
+	}
+
+	// Check if this is a JSON request for special handling
 	isJSON := strings.Contains(contentType, "application/json") ||
 		strings.Contains(contentType, "application/vnd.api+json") ||
 		strings.Contains(contentType, "application/graphql")
@@ -1140,6 +1241,10 @@ func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth i
 		isDocument:  isDoc,
 		resourceTyp: e.Type,
 		startTime:   time.Now(),
+		isFetch:     isFetch,
+		initiator:   initiator,
+		fetchCode:   fetchCode,
+		contentType: contentType,
 	}
 	c.mu.Unlock()
 }
@@ -1156,6 +1261,8 @@ func (c *DynamicCrawler) emitJSONRequest(url, method, body string, payload map[s
 		return
 	}
 
+	contentTypeInfo := DetectContentType("application/json")
+
 	c.emit(&DiscoveredRequest{
 		ID:            fingerprint,
 		URL:           url,
@@ -1171,6 +1278,7 @@ func (c *DynamicCrawler) emitJSONRequest(url, method, body string, payload map[s
 			Raw:     body,
 			IsJSON:  true,
 		},
+		ContentTypeInfo: &contentTypeInfo,
 	})
 }
 
@@ -1238,6 +1346,22 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 	c.mu.RUnlock()
 
 	if !seen {
+		contentTypeInfo := DetectContentType(contentType)
+		
+		// Build fetch details if this was a fetch/XHR request
+		var fetchDetails *FetchDetails
+		if pending.isFetch {
+			fetchDetails = &FetchDetails{
+				Method:     pending.method,
+				URL:        pending.url,
+				Headers:    pending.headers,
+				Body:       pending.body,
+				BodyType:   contentType,
+				RawSnippet: pending.fetchCode,
+				Initiator:  pending.initiator,
+			}
+		}
+
 		c.emit(&DiscoveredRequest{
 			ID:            fingerprint,
 			URL:           pending.url,
@@ -1250,6 +1374,8 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 			Parameters:    ExtractParameters(pending.url, pending.body, contentType),
 			Cookies:       cookies,
 			Response:      response,
+			FetchDetails:  fetchDetails,
+			ContentTypeInfo: &contentTypeInfo,
 		})
 	}
 }
@@ -1375,4 +1501,284 @@ func (c *DynamicCrawler) Close() {
 	if c.allocCancel != nil {
 		c.allocCancel()
 	}
+}
+
+// Add to completeRequest function - extract all headers
+func extractRequestHeaders(headers map[string]string) RequestHeaders {
+    reqHeaders := RequestHeaders{
+        Raw: headers,
+        Custom: make(map[string]string),
+    }
+    
+    for k, v := range headers {
+        lowerK := strings.ToLower(k)
+        switch lowerK {
+        case "authorization":
+            reqHeaders.Authorization = v
+        case "cookie":
+            reqHeaders.Cookie = v
+        case "x-csrf-token", "x-xsrf-token", "csrf-token":
+            reqHeaders.CSRF = v
+        case "x-requested-with":
+            reqHeaders.XRequestedWith = v
+        case "origin":
+            reqHeaders.Origin = v
+        case "referer":
+            reqHeaders.Referer = v
+        case "host":
+            reqHeaders.Host = v
+        case "user-agent":
+            reqHeaders.UserAgent = v
+        case "accept":
+            reqHeaders.Accept = v
+        case "accept-language":
+            reqHeaders.AcceptLanguage = v
+        case "accept-encoding":
+            reqHeaders.AcceptEncoding = v
+        case "content-type":
+            reqHeaders.ContentType = v
+        case "content-length":
+            reqHeaders.ContentLength = v
+        case "content-encoding":
+            reqHeaders.ContentEncoding = v
+        case "cache-control":
+            reqHeaders.CacheControl = v
+        case "pragma":
+            reqHeaders.Pragma = v
+        case "connection":
+            reqHeaders.Connection = v
+        case "upgrade":
+            reqHeaders.Upgrade = v
+        default:
+            reqHeaders.Custom[lowerK] = v
+        }
+    }
+    
+    return reqHeaders
+}
+// Add to dynamic.go
+func parseCookieHeaderWithAttributes(cookieHeader string) []CookieInfo {
+    var cookies []CookieInfo
+    
+    // Parse Set-Cookie header with attributes
+    parts := strings.Split(cookieHeader, ";")
+    if len(parts) == 0 {
+        return cookies
+    }
+    
+    // First part is name=value
+    nameValue := strings.SplitN(strings.TrimSpace(parts[0]), "=", 2)
+    if len(nameValue) != 2 {
+        return cookies
+    }
+    
+    cookie := CookieInfo{
+        Name:  nameValue[0],
+        Value: nameValue[1],
+    }
+    
+    // Parse attributes
+    for i := 1; i < len(parts); i++ {
+        attr := strings.TrimSpace(parts[i])
+        attrLower := strings.ToLower(attr)
+        
+        switch {
+        case strings.HasPrefix(attrLower, "domain="):
+            cookie.Domain = strings.TrimPrefix(attr, "Domain=")
+        case strings.HasPrefix(attrLower, "path="):
+            cookie.Path = strings.TrimPrefix(attr, "Path=")
+        case strings.HasPrefix(attrLower, "expires="):
+            expires, _ := time.Parse(time.RFC1123, strings.TrimPrefix(attr, "Expires="))
+            cookie.Expires = expires
+        case strings.HasPrefix(attrLower, "max-age="):
+            maxAge, _ := strconv.Atoi(strings.TrimPrefix(attr, "Max-Age="))
+            cookie.MaxAge = maxAge
+        case attrLower == "httponly":
+            cookie.HttpOnly = true
+        case attrLower == "secure":
+            cookie.Secure = true
+        case strings.HasPrefix(attrLower, "samesite="):
+            cookie.SameSite = strings.TrimPrefix(attr, "SameSite=")
+        }
+    }
+    
+    cookies = append(cookies, cookie)
+    return cookies
+}
+// ExtractRequestHeaders extracts all headers from a request
+func ExtractRequestHeaders(headers map[string]string) RequestHeaders {
+    reqHeaders := RequestHeaders{
+        Raw:    headers,
+        Custom: make(map[string]string),
+    }
+    
+    for k, v := range headers {
+        lowerK := strings.ToLower(k)
+        switch lowerK {
+        case "authorization":
+            reqHeaders.Authorization = v
+        case "cookie":
+            reqHeaders.Cookie = v
+        case "x-csrf-token", "x-xsrf-token", "csrf-token":
+            reqHeaders.CSRF = v
+        case "x-xsrftoken", "xsrf-token":
+            reqHeaders.XSRFToken = v
+        case "x-requested-with":
+            reqHeaders.XRequestedWith = v
+        case "origin":
+            reqHeaders.Origin = v
+        case "referer":
+            reqHeaders.Referer = v
+        case "host":
+            reqHeaders.Host = v
+        case "user-agent":
+            reqHeaders.UserAgent = v
+        case "accept":
+            reqHeaders.Accept = v
+        case "accept-language":
+            reqHeaders.AcceptLanguage = v
+        case "accept-encoding":
+            reqHeaders.AcceptEncoding = v
+        case "content-type":
+            reqHeaders.ContentType = v
+        case "content-length":
+            reqHeaders.ContentLength = v
+        case "content-encoding":
+            reqHeaders.ContentEncoding = v
+        case "cache-control":
+            reqHeaders.CacheControl = v
+        case "pragma":
+            reqHeaders.Pragma = v
+        case "connection":
+            reqHeaders.Connection = v
+        case "upgrade":
+            reqHeaders.Upgrade = v
+        default:
+            reqHeaders.Custom[lowerK] = v
+        }
+    }
+    
+    return reqHeaders
+}
+
+// ParseCookies parses cookie header with attributes
+func ParseCookies(cookieHeader string) []CookieInfo {
+    var cookies []CookieInfo
+    
+    if cookieHeader == "" {
+        return cookies
+    }
+    
+    parts := strings.Split(cookieHeader, ";")
+    for _, part := range parts {
+        part = strings.TrimSpace(part)
+        if part == "" {
+            continue
+        }
+        
+        // Parse name=value
+        nv := strings.SplitN(part, "=", 2)
+        if len(nv) != 2 {
+            continue
+        }
+        
+        cookie := CookieInfo{
+            Name:  strings.TrimSpace(nv[0]),
+            Value: strings.TrimSpace(nv[1]),
+        }
+        
+        // Check for attributes (if this is a Set-Cookie header)
+        if len(parts) > 1 {
+            // Parse attributes
+            for _, attr := range parts[1:] {
+                attr = strings.TrimSpace(attr)
+                attrLower := strings.ToLower(attr)
+                
+                switch {
+                case strings.HasPrefix(attrLower, "domain="):
+                    cookie.Domain = strings.TrimPrefix(attr, "Domain=")
+                case strings.HasPrefix(attrLower, "path="):
+                    cookie.Path = strings.TrimPrefix(attr, "Path=")
+                case strings.HasPrefix(attrLower, "expires="):
+                    expires, _ := time.Parse(time.RFC1123, strings.TrimPrefix(attr, "Expires="))
+                    cookie.Expires = expires
+                case strings.HasPrefix(attrLower, "max-age="):
+                    maxAge, _ := strconv.Atoi(strings.TrimPrefix(attr, "Max-Age="))
+                    cookie.MaxAge = maxAge
+                case attrLower == "httponly":
+                    cookie.HttpOnly = true
+                case attrLower == "secure":
+                    cookie.Secure = true
+                case strings.HasPrefix(attrLower, "samesite="):
+                    cookie.SameSite = strings.TrimPrefix(attr, "SameSite=")
+                }
+            }
+        }
+        
+        cookies = append(cookies, cookie)
+    }
+    
+    return cookies
+}
+
+// DetectGraphQL detects GraphQL endpoints
+func DetectGraphQL(response *ResponseMetadata, body string) bool {
+    if response == nil {
+        return false
+    }
+    
+    // Check content type
+    if strings.Contains(response.ContentType, "application/graphql") {
+        return true
+    }
+    
+    // Check for GraphQL keywords in body
+    if strings.Contains(body, `"query"`) || 
+       strings.Contains(body, `"mutation"`) ||
+       strings.Contains(body, `"variables"`) ||
+       strings.Contains(body, "graphql") {
+        return true
+    }
+    
+    return false
+}
+
+// ExtractGraphQLIntrospection extracts GraphQL schema via introspection
+func ExtractGraphQLIntrospection(ctx context.Context, url string) (string, error) {
+    query := `query IntrospectionQuery {
+        __schema {
+            queryType { name }
+            mutationType { name }
+            subscriptionType { name }
+            types {
+                kind
+                name
+                description
+                fields {
+                    name
+                    type {
+                        kind
+                        name
+                        ofType {
+                            kind
+                            name
+                            ofType {
+                                kind
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }`
+    
+    // Send introspection query
+    req, _ := http.NewRequestWithContext(ctx, "POST", url, 
+        strings.NewReader(fmt.Sprintf(`{"query": "%s"}`, query)))
+    req.Header.Set("Content-Type", "application/json")
+    
+    // Execute request...
+    // Return schema
+    return "", nil
 }

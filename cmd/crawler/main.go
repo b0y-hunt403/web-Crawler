@@ -10,8 +10,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-  "github.com/Anduamlk/web-Crawler/crawler"
 
+	"github.com/Anduamlk/web-Crawler/crawler"
 )
 
 func main() {
@@ -29,6 +29,12 @@ func main() {
 		dbPath       = flag.String("db", "scanner_discovery.db", "SQLite database path")
 		timeout      = flag.Duration("timeout", 30*time.Second, "Request timeout")
 		jsonOutput   = flag.String("output", "", "Output results to JSON file (optional)")
+
+		useKatana         = flag.Bool("katana", false, "Run a Katana pre-pass for fast breadth-first discovery before Raptor's own crawl")
+		katanaHeadless    = flag.Bool("katana-headless", false, "Use Katana's headless (browser) engine instead of its standard net/http engine")
+		katanaDepth       = flag.Int("katana-depth", 2, "Katana's own crawl depth (independent of -depth)")
+		katanaConcurrency = flag.Int("katana-concurrency", 20, "Katana concurrency (can safely run higher than -concurrency since it has no browser overhead in standard mode)")
+		katanaFieldScope  = flag.String("katana-field-scope", "rdn", "Katana crawl scope field: rdn, fqdn, or dn")
 	)
 	flag.Parse()
 
@@ -50,7 +56,8 @@ func main() {
 		// Run static crawler
 		log.Println("🔍 Running static crawler...")
 		if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
-			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, false, *jsonOutput); err != nil {
+			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, false, *jsonOutput,
+			*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
 			log.Printf("❌ Static crawler failed: %v", err)
 		} else {
 			log.Println("✅ Static crawler completed successfully")
@@ -61,7 +68,10 @@ func main() {
 		// Run dynamic crawler
 		log.Println("🚀 Running dynamic crawler...")
 		if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
-			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, true, *jsonOutput); err != nil {
+			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, true, *jsonOutput,
+			// Katana pre-pass already ran during the static phase above and
+			// persisted its results to the same DBPath — don't run it twice.
+			false, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
 			log.Printf("❌ Dynamic crawler failed: %v", err)
 		} else {
 			log.Println("✅ Dynamic crawler completed successfully")
@@ -74,14 +84,16 @@ func main() {
 
 	// Single mode run
 	if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
-		*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, *useDynamic, *jsonOutput); err != nil {
+		*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, *useDynamic, *jsonOutput,
+		*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
 		log.Fatalf("❌ Crawl failed: %v", err)
 	}
 }
 
 func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 	stayInDomain bool, userAgent, proxy, sessionFile string,
-	timeout time.Duration, dynamic bool, jsonOutput string) error {
+	timeout time.Duration, dynamic bool, jsonOutput string,
+	useKatana, katanaHeadless bool, katanaDepth, katanaConcurrency int, katanaFieldScope string) error {
 
 	config := crawler.DefaultCrawlerConfig()
 	config.SeedURL = seedURL
@@ -95,6 +107,11 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 	config.SessionStatePath = sessionFile
 	config.DBPath = dbPath
 	config.RequestTimeout = timeout
+	config.UseKatana = useKatana
+	config.KatanaHeadless = katanaHeadless
+	config.KatanaMaxDepth = katanaDepth
+	config.KatanaConcurrency = katanaConcurrency
+	config.KatanaFieldScope = katanaFieldScope
 
 	if userAgent != "" {
 		config.UserAgent = userAgent
