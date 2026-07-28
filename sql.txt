@@ -1,0 +1,6 @@
+POST /login HTTP/1.1
+Host: 0a0100fb04983090804d81f8001a00b9.web-security-academy.net
+Cookie: session=MxeZqWor3sQ...9Z22ob0XrB
+Content-Type: application/x-www-form-urlencoded
+
+csrf=evMzFD1GjQtDlk5jYGNpkVmphB1SGysB&password=Test1234%21&username=testuser

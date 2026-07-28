@@ -116,6 +116,16 @@ raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100 -both -outp
 # With session (authenticated crawling)
 raptor -url http://localhost:3000 -db results.db -session session.json -both
 
+# Login automatically and export a reusable authenticated session
+raptor -url https://target.example/app \
+    --login-url https://target.example/login \
+    --username analyst@example.com \
+    --password 'replace-me' \
+    --login-method form \
+    --session-cookie session \
+    --cookie-file raptor-session.json \
+    -db results.db
+
 # Stay in domain (prevent cross-domain crawling)
 raptor -url http://localhost:3000 -db results.db -depth 3 -pages 50 -both -stay-in-domain
 Advanced Options
@@ -134,6 +144,21 @@ raptor -url https://target.com \
     -session session.json \
     -proxy http://127.0.0.1:8080 \
     -timeout 60s
+
+Authenticated crawling
+
+When `--username`, `--password`, and `--login-url` are supplied, Raptor starts
+its browser crawler even if `-dynamic` is omitted. It detects login fields and
+CSRF inputs, submits either an HTML form or JSON request, reuses the same browser
+context, and logs in again after an authenticated request returns 401/403.
+
+Use `--username-field`, `--password-field`, and `--csrf-field` when automatic
+detection is ambiguous. Each value can be a field name, element ID, or CSS
+selector. `--login-success-regex` can match either the resulting URL or visible
+page text. The `--cookie-file` JSON is written with owner-only permissions and
+contains a cookie header plus command-line hints for SQLMap, Dalfox, Nuclei,
+ffuf, and httpx. Avoid placing real passwords in shell history; invoke Raptor
+from a protected script or secret-injection mechanism.
 🎯 Scanner Integration
 Export for SQLMap (SQL Injection Testing)
 bash

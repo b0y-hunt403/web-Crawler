@@ -23,6 +23,7 @@ type CrawlerConfig struct {
 	DBPath           string            `json:"db_path"`
 	RespectRobotsTxt bool              `json:"respect_robots_txt"`
 	CustomHeaders    map[string]string `json:"custom_headers,omitempty"`
+	Auth             AuthConfig        `json:"auth,omitempty"`
 
 	// Katana pre-pass (see katana.go). Off by default — Raptor behaves
 	// exactly as before unless UseKatana is explicitly enabled. When on,

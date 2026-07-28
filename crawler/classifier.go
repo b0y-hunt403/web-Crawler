@@ -4,8 +4,10 @@ package crawler
 import (
 	"encoding/json"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // SafeToRequeueAsGET lists form types idempotent enough to be re-crawled
@@ -493,408 +495,410 @@ func GetSmartValue(field map[string]interface{}, credentials map[string]string) 
 
 // Add to classifier.go
 func DetectMultipartUpload(fields []map[string]interface{}) bool {
-    for _, f := range fields {
-        if ftype, ok := f["type"].(string); ok {
-            if ftype == "file" {
-                return true
-            }
-        }
-        if accept, ok := f["accept"].(string); ok {
-            if strings.Contains(accept, "image/") || 
-               strings.Contains(accept, "application/") ||
-               strings.Contains(accept, "audio/") ||
-               strings.Contains(accept, "video/") {
-                return true
-            }
-        }
-    }
-    return false
+	for _, f := range fields {
+		if ftype, ok := f["type"].(string); ok {
+			if ftype == "file" {
+				return true
+			}
+		}
+		if accept, ok := f["accept"].(string); ok {
+			if strings.Contains(accept, "image/") ||
+				strings.Contains(accept, "application/") ||
+				strings.Contains(accept, "audio/") ||
+				strings.Contains(accept, "video/") {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // Generate test file for multipart upload
-func GenerateTestFile(fieldName, accept string) MultipartFile {
-    var fileName, contentType string
-    var content []byte
-    
-    switch {
-    case strings.Contains(accept, "image/"):
-        fileName = "test_image.png"
-        contentType = "image/png"
-        content = []byte{0x89, 0x50, 0x4E, 0x47} // PNG header
-    case strings.Contains(accept, "application/pdf"):
-        fileName = "test.pdf"
-        contentType = "application/pdf"
-        content = []byte("%PDF-1.4") // PDF header
-    case strings.Contains(accept, "audio/"):
-        fileName = "test.mp3"
-        contentType = "audio/mpeg"
-        content = []byte("ID3") // MP3 header
-    case strings.Contains(accept, "video/"):
-        fileName = "test.mp4"
-        contentType = "video/mp4"
-        content = []byte{0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70} // MP4 header
-    default:
-        fileName = "test.txt"
-        contentType = "text/plain"
-        content = []byte("Test file content")
-    }
-    
-    return MultipartFile{
-        FieldName:   fieldName,
-        FileName:    fileName,
-        ContentType: contentType,
-        Size:        int64(len(content)),
-        Content:     content,
-    }
+func generateBasicTestFile(fieldName, accept string) MultipartFile {
+	var fileName, contentType string
+	var content []byte
+
+	switch {
+	case strings.Contains(accept, "image/"):
+		fileName = "test_image.png"
+		contentType = "image/png"
+		content = []byte{0x89, 0x50, 0x4E, 0x47} // PNG header
+	case strings.Contains(accept, "application/pdf"):
+		fileName = "test.pdf"
+		contentType = "application/pdf"
+		content = []byte("%PDF-1.4") // PDF header
+	case strings.Contains(accept, "audio/"):
+		fileName = "test.mp3"
+		contentType = "audio/mpeg"
+		content = []byte("ID3") // MP3 header
+	case strings.Contains(accept, "video/"):
+		fileName = "test.mp4"
+		contentType = "video/mp4"
+		content = []byte{0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70} // MP4 header
+	default:
+		fileName = "test.txt"
+		contentType = "text/plain"
+		content = []byte("Test file content")
+	}
+
+	return MultipartFile{
+		FieldName:   fieldName,
+		FileName:    fileName,
+		ContentType: contentType,
+		Size:        int64(len(content)),
+		Content:     content,
+	}
 }
+
 // Add to classifier.go
 func InferJSONSchema(body string) map[string]interface{} {
-    var data map[string]interface{}
-    if err := json.Unmarshal([]byte(body), &data); err != nil {
-        return nil
-    }
-    
-    schema := make(map[string]interface{})
-    for k, v := range data {
-        schema[k] = inferFieldType(v)
-    }
-    return schema
+	var data map[string]interface{}
+	if err := json.Unmarshal([]byte(body), &data); err != nil {
+		return nil
+	}
+
+	schema := make(map[string]interface{})
+	for k, v := range data {
+		schema[k] = inferFieldType(v)
+	}
+	return schema
 }
 
 func inferFieldType(value interface{}) map[string]interface{} {
-    field := make(map[string]interface{})
-    
-    switch v := value.(type) {
-    case string:
-        field["type"] = "string"
-        field["example"] = v
-        // Check if it looks like an email
-        if strings.Contains(v, "@") {
-            field["format"] = "email"
-        }
-        // Check if it looks like a URL
-        if strings.HasPrefix(v, "http://") || strings.HasPrefix(v, "https://") {
-            field["format"] = "url"
-        }
-        // Check if it looks like a date
-        if _, err := time.Parse(time.RFC3339, v); err == nil {
-            field["format"] = "date-time"
-        }
-    case float64:
-        field["type"] = "number"
-        field["example"] = v
-    case bool:
-        field["type"] = "boolean"
-        field["example"] = v
-    case map[string]interface{}:
-        field["type"] = "object"
-        properties := make(map[string]interface{})
-        for k, val := range v {
-            properties[k] = inferFieldType(val)
-        }
-        field["properties"] = properties
-    case []interface{}:
-        field["type"] = "array"
-        if len(v) > 0 {
-            field["items"] = inferFieldType(v[0])
-        }
-    default:
-        field["type"] = "unknown"
-    }
-    
-    return field
+	field := make(map[string]interface{})
+
+	switch v := value.(type) {
+	case string:
+		field["type"] = "string"
+		field["example"] = v
+		// Check if it looks like an email
+		if strings.Contains(v, "@") {
+			field["format"] = "email"
+		}
+		// Check if it looks like a URL
+		if strings.HasPrefix(v, "http://") || strings.HasPrefix(v, "https://") {
+			field["format"] = "url"
+		}
+		// Check if it looks like a date
+		if _, err := time.Parse(time.RFC3339, v); err == nil {
+			field["format"] = "date-time"
+		}
+	case float64:
+		field["type"] = "number"
+		field["example"] = v
+	case bool:
+		field["type"] = "boolean"
+		field["example"] = v
+	case map[string]interface{}:
+		field["type"] = "object"
+		properties := make(map[string]interface{})
+		for k, val := range v {
+			properties[k] = inferFieldType(val)
+		}
+		field["properties"] = properties
+	case []interface{}:
+		field["type"] = "array"
+		if len(v) > 0 {
+			field["items"] = inferFieldType(v[0])
+		}
+	default:
+		field["type"] = "unknown"
+	}
+
+	return field
 }
 
 // DetectMultipartForm detects if a form is multipart
 func DetectMultipartForm(form *Form) bool {
-    if form == nil {
-        return false
-    }
-    
-    // Check enctype
-    if strings.Contains(strings.ToLower(form.Enctype), "multipart/form-data") {
-        return true
-    }
-    
-    // Check for file inputs
-    for _, field := range form.Fields {
-        if field.Type == FieldFile {
-            return true
-        }
-        if strings.Contains(strings.ToLower(field.Accept), "image/") ||
-           strings.Contains(strings.ToLower(field.Accept), "application/") ||
-           strings.Contains(strings.ToLower(field.Accept), "audio/") ||
-           strings.Contains(strings.ToLower(field.Accept), "video/") {
-            return true
-        }
-    }
-    
-    return false
+	if form == nil {
+		return false
+	}
+
+	// Check enctype
+	if strings.Contains(strings.ToLower(form.Enctype), "multipart/form-data") {
+		return true
+	}
+
+	// Check for file inputs
+	for _, field := range form.Fields {
+		if field.Type == FieldFile {
+			return true
+		}
+		if strings.Contains(strings.ToLower(field.Accept), "image/") ||
+			strings.Contains(strings.ToLower(field.Accept), "application/") ||
+			strings.Contains(strings.ToLower(field.Accept), "audio/") ||
+			strings.Contains(strings.ToLower(field.Accept), "video/") {
+			return true
+		}
+	}
+
+	return false
 }
 
 // GenerateMultipartForm creates a test multipart form
 func GenerateMultipartForm(form *Form) *MultipartForm {
-    mf := &MultipartForm{
-        Fields: make(map[string]string),
-        Files:  []MultipartFile{},
-        Enctype: "multipart/form-data",
-    }
-    
-    for _, field := range form.Fields {
-        if field.Type == FieldFile {
-            // Generate test file
-            file := GenerateTestFile(field.Name, field.Accept)
-            mf.Files = append(mf.Files, file)
-        } else {
-            mf.Fields[field.Name] = GetSmartValueForField(field)
-        }
-    }
-    
-    return mf
+	mf := &MultipartForm{
+		Fields:  make(map[string]string),
+		Files:   []MultipartFile{},
+		Enctype: "multipart/form-data",
+	}
+
+	for _, field := range form.Fields {
+		if field.Type == FieldFile {
+			// Generate test file
+			file := GenerateTestFile(field.Name, field.Accept)
+			mf.Files = append(mf.Files, file)
+		} else {
+			mf.Fields[field.Name] = GetSmartValueForField(field)
+		}
+	}
+
+	return mf
 }
 
 // GenerateTestFile creates a test file for upload
 func GenerateTestFile(fieldName, accept string) MultipartFile {
-    var fileName, contentType string
-    var content []byte
-    
-    switch {
-    case strings.Contains(accept, "image/png") || strings.Contains(accept, "image/*"):
-        fileName = "test_image.png"
-        contentType = "image/png"
-        content = []byte{0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A} // PNG header
-    case strings.Contains(accept, "image/jpeg"):
-        fileName = "test_image.jpg"
-        contentType = "image/jpeg"
-        content = []byte{0xFF, 0xD8, 0xFF, 0xE0} // JPEG header
-    case strings.Contains(accept, "application/pdf"):
-        fileName = "test.pdf"
-        contentType = "application/pdf"
-        content = []byte{0x25, 0x50, 0x44, 0x46} // PDF header
-    case strings.Contains(accept, "application/zip"):
-        fileName = "test.zip"
-        contentType = "application/zip"
-        content = []byte{0x50, 0x4B, 0x03, 0x04} // ZIP header
-    case strings.Contains(accept, "application/json"):
-        fileName = "test.json"
-        contentType = "application/json"
-        content = []byte(`{"test": "data"}`)
-    case strings.Contains(accept, "text/plain") || accept == "":
-        fileName = "test.txt"
-        contentType = "text/plain"
-        content = []byte("Test file content for upload")
-    case strings.Contains(accept, "audio/"):
-        fileName = "test.mp3"
-        contentType = "audio/mpeg"
-        content = []byte{0x49, 0x44, 0x33} // MP3 header
-    case strings.Contains(accept, "video/"):
-        fileName = "test.mp4"
-        contentType = "video/mp4"
-        content = []byte{0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70} // MP4 header
-    default:
-        fileName = "test_" + fieldName + ".bin"
-        contentType = "application/octet-stream"
-        content = []byte("Binary test data")
-    }
-    
-    return MultipartFile{
-        FieldName:   fieldName,
-        FileName:    fileName,
-        ContentType: contentType,
-        Size:        int64(len(content)),
-        Content:     content,
-        Base64:      "", // Could add base64 encoding here
-    }
+	var fileName, contentType string
+	var content []byte
+
+	switch {
+	case strings.Contains(accept, "image/png") || strings.Contains(accept, "image/*"):
+		fileName = "test_image.png"
+		contentType = "image/png"
+		content = []byte{0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A} // PNG header
+	case strings.Contains(accept, "image/jpeg"):
+		fileName = "test_image.jpg"
+		contentType = "image/jpeg"
+		content = []byte{0xFF, 0xD8, 0xFF, 0xE0} // JPEG header
+	case strings.Contains(accept, "application/pdf"):
+		fileName = "test.pdf"
+		contentType = "application/pdf"
+		content = []byte{0x25, 0x50, 0x44, 0x46} // PDF header
+	case strings.Contains(accept, "application/zip"):
+		fileName = "test.zip"
+		contentType = "application/zip"
+		content = []byte{0x50, 0x4B, 0x03, 0x04} // ZIP header
+	case strings.Contains(accept, "application/json"):
+		fileName = "test.json"
+		contentType = "application/json"
+		content = []byte(`{"test": "data"}`)
+	case strings.Contains(accept, "text/plain") || accept == "":
+		fileName = "test.txt"
+		contentType = "text/plain"
+		content = []byte("Test file content for upload")
+	case strings.Contains(accept, "audio/"):
+		fileName = "test.mp3"
+		contentType = "audio/mpeg"
+		content = []byte{0x49, 0x44, 0x33} // MP3 header
+	case strings.Contains(accept, "video/"):
+		fileName = "test.mp4"
+		contentType = "video/mp4"
+		content = []byte{0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70} // MP4 header
+	default:
+		fileName = "test_" + fieldName + ".bin"
+		contentType = "application/octet-stream"
+		content = []byte("Binary test data")
+	}
+
+	return MultipartFile{
+		FieldName:   fieldName,
+		FileName:    fileName,
+		ContentType: contentType,
+		Size:        int64(len(content)),
+		Content:     content,
+		Base64:      "", // Could add base64 encoding here
+	}
 }
 
 // GetSmartValueForField returns smart value for a field
 func GetSmartValueForField(field FormField) string {
-    switch field.Type {
-    case FieldEmail:
-        return "test@example.com"
-    case FieldPassword:
-        return "Test1234!"
-    case FieldTel:
-        return "555-555-5555"
-    case FieldURL:
-        return "https://example.com"
-    case FieldNumber:
-        return "1"
-    case FieldDate:
-        return "2026-01-01"
-    default:
-        if field.Placeholder != "" {
-            return field.Placeholder
-        }
-        return "test_" + field.Name
-    }
+	switch field.Type {
+	case FieldEmail:
+		return "test@example.com"
+	case FieldPassword:
+		return "Test1234!"
+	case FieldTel:
+		return "555-555-5555"
+	case FieldURL:
+		return "https://example.com"
+	case FieldNumber:
+		return "1"
+	case FieldDate:
+		return "2026-01-01"
+	default:
+		if field.Placeholder != "" {
+			return field.Placeholder
+		}
+		return "test_" + field.Name
+	}
 }
+
 // InferAPISchema infers API schema from request/response pairs
 func InferAPISchema(requests []*DiscoveredRequest) map[string]APISchema {
-    schemas := make(map[string]APISchema)
-    
-    for _, req := range requests {
-        if req.Response == nil || req.Response.Body == "" {
-            continue
-        }
-        
-        // Try to parse as JSON
-        var data map[string]interface{}
-        if err := json.Unmarshal([]byte(req.Response.Body), &data); err != nil {
-            continue
-        }
-        
-        // Infer schema
-        schema := APISchema{
-            Endpoint:   req.URL,
-            Method:     req.Method,
-            Fields:     inferFields(data),
-            Example:    data,
-        }
-        
-        schemas[req.URL] = schema
-    }
-    
-    return schemas
+	schemas := make(map[string]APISchema)
+
+	for _, req := range requests {
+		if req.Response == nil || req.Response.Body == "" {
+			continue
+		}
+
+		// Try to parse as JSON
+		var data map[string]interface{}
+		if err := json.Unmarshal([]byte(req.Response.Body), &data); err != nil {
+			continue
+		}
+
+		// Infer schema
+		schema := APISchema{
+			Endpoint: req.URL,
+			Method:   req.Method,
+			Fields:   inferFields(data),
+			Example:  data,
+		}
+
+		schemas[req.URL] = schema
+	}
+
+	return schemas
 }
 
 // APISchema represents an API schema
 type APISchema struct {
-    Endpoint   string                 `json:"endpoint"`
-    Method     string                 `json:"method"`
-    Fields     []APIField             `json:"fields"`
-    Example    map[string]interface{} `json:"example"`
+	Endpoint string                 `json:"endpoint"`
+	Method   string                 `json:"method"`
+	Fields   []APIField             `json:"fields"`
+	Example  map[string]interface{} `json:"example"`
 }
 
 // APIField represents a field in API schema
 type APIField struct {
-    Name     string      `json:"name"`
-    Type     string      `json:"type"` // string, number, boolean, array, object
-    Required bool        `json:"required"`
-    Format   string      `json:"format,omitempty"` // email, url, date-time, etc.
-    Example  interface{} `json:"example,omitempty"`
-    Children []APIField  `json:"children,omitempty"`
+	Name     string      `json:"name"`
+	Type     string      `json:"type"` // string, number, boolean, array, object
+	Required bool        `json:"required"`
+	Format   string      `json:"format,omitempty"` // email, url, date-time, etc.
+	Example  interface{} `json:"example,omitempty"`
+	Children []APIField  `json:"children,omitempty"`
 }
 
 // inferFields infers field types from data
 func inferFields(data map[string]interface{}) []APIField {
-    var fields []APIField
-    
-    for key, value := range data {
-        field := APIField{
-            Name: key,
-        }
-        
-        switch v := value.(type) {
-        case string:
-            field.Type = "string"
-            field.Example = v
-            // Detect format
-            if strings.Contains(v, "@") && strings.Contains(v, ".") {
-                field.Format = "email"
-            } else if strings.HasPrefix(v, "http://") || strings.HasPrefix(v, "https://") {
-                field.Format = "url"
-            } else if _, err := time.Parse(time.RFC3339, v); err == nil {
-                field.Format = "date-time"
-            }
-        case float64:
-            field.Type = "number"
-            field.Example = v
-        case bool:
-            field.Type = "boolean"
-            field.Example = v
-        case map[string]interface{}:
-            field.Type = "object"
-            field.Children = inferFields(v)
-        case []interface{}:
-            field.Type = "array"
-            if len(v) > 0 {
-                // Try to infer array item type
-                if m, ok := v[0].(map[string]interface{}); ok {
-                    field.Children = inferFields(m)
-                }
-            }
-        default:
-            field.Type = "unknown"
-        }
-        
-        fields = append(fields, field)
-    }
-    
-    return fields
+	var fields []APIField
+
+	for key, value := range data {
+		field := APIField{
+			Name: key,
+		}
+
+		switch v := value.(type) {
+		case string:
+			field.Type = "string"
+			field.Example = v
+			// Detect format
+			if strings.Contains(v, "@") && strings.Contains(v, ".") {
+				field.Format = "email"
+			} else if strings.HasPrefix(v, "http://") || strings.HasPrefix(v, "https://") {
+				field.Format = "url"
+			} else if _, err := time.Parse(time.RFC3339, v); err == nil {
+				field.Format = "date-time"
+			}
+		case float64:
+			field.Type = "number"
+			field.Example = v
+		case bool:
+			field.Type = "boolean"
+			field.Example = v
+		case map[string]interface{}:
+			field.Type = "object"
+			field.Children = inferFields(v)
+		case []interface{}:
+			field.Type = "array"
+			if len(v) > 0 {
+				// Try to infer array item type
+				if m, ok := v[0].(map[string]interface{}); ok {
+					field.Children = inferFields(m)
+				}
+			}
+		default:
+			field.Type = "unknown"
+		}
+
+		fields = append(fields, field)
+	}
+
+	return fields
 }
 
 // ExtractRouteParameters extracts route parameters from URL patterns
 func ExtractRouteParameters(urls []string) []RoutePattern {
-    patterns := make(map[string]RoutePattern)
-    
-    // Find URLs with numbers (likely IDs)
-    for _, url := range urls {
-        // Check for numeric IDs
-        if strings.Contains(url, "/") {
-            parts := strings.Split(url, "/")
-            for i, part := range parts {
-                // If part is numeric, it's likely an ID
-                if _, err := strconv.Atoi(part); err == nil && part != "" {
-                    // Create pattern: /users/123 -> /users/{id}
-                    key := strings.Join(parts[:i+1], "/")
-                    pattern := strings.Replace(key, part, "{id}", 1)
-                    patterns[pattern] = RoutePattern{
-                        Pattern: pattern,
-                        Method:  "GET",
-                        ParamType: "numeric",
-                        Example: part,
-                    }
-                }
-                // Check for UUID format
-                if isUUID(part) {
-                    key := strings.Join(parts[:i+1], "/")
-                    pattern := strings.Replace(key, part, "{uuid}", 1)
-                    patterns[pattern] = RoutePattern{
-                        Pattern: pattern,
-                        Method:  "GET",
-                        ParamType: "uuid",
-                        Example: part,
-                    }
-                }
-                // Check for slug format
-                if isSlug(part) {
-                    key := strings.Join(parts[:i+1], "/")
-                    pattern := strings.Replace(key, part, "{slug}", 1)
-                    patterns[pattern] = RoutePattern{
-                        Pattern: pattern,
-                        Method:  "GET",
-                        ParamType: "slug",
-                        Example: part,
-                    }
-                }
-            }
-        }
-    }
-    
-    var result []RoutePattern
-    for _, p := range patterns {
-        result = append(result, p)
-    }
-    return result
+	patterns := make(map[string]RoutePattern)
+
+	// Find URLs with numbers (likely IDs)
+	for _, url := range urls {
+		// Check for numeric IDs
+		if strings.Contains(url, "/") {
+			parts := strings.Split(url, "/")
+			for i, part := range parts {
+				// If part is numeric, it's likely an ID
+				if _, err := strconv.Atoi(part); err == nil && part != "" {
+					// Create pattern: /users/123 -> /users/{id}
+					key := strings.Join(parts[:i+1], "/")
+					pattern := strings.Replace(key, part, "{id}", 1)
+					patterns[pattern] = RoutePattern{
+						Pattern:   pattern,
+						Method:    "GET",
+						ParamType: "numeric",
+						Example:   part,
+					}
+				}
+				// Check for UUID format
+				if isUUID(part) {
+					key := strings.Join(parts[:i+1], "/")
+					pattern := strings.Replace(key, part, "{uuid}", 1)
+					patterns[pattern] = RoutePattern{
+						Pattern:   pattern,
+						Method:    "GET",
+						ParamType: "uuid",
+						Example:   part,
+					}
+				}
+				// Check for slug format
+				if isSlug(part) {
+					key := strings.Join(parts[:i+1], "/")
+					pattern := strings.Replace(key, part, "{slug}", 1)
+					patterns[pattern] = RoutePattern{
+						Pattern:   pattern,
+						Method:    "GET",
+						ParamType: "slug",
+						Example:   part,
+					}
+				}
+			}
+		}
+	}
+
+	var result []RoutePattern
+	for _, p := range patterns {
+		result = append(result, p)
+	}
+	return result
 }
 
 // RoutePattern represents a route with parameters
 type RoutePattern struct {
-    Pattern   string `json:"pattern"`
-    Method    string `json:"method"`
-    ParamType string `json:"param_type"` // numeric, uuid, slug
-    Example   string `json:"example"`
+	Pattern   string `json:"pattern"`
+	Method    string `json:"method"`
+	ParamType string `json:"param_type"` // numeric, uuid, slug
+	Example   string `json:"example"`
 }
 
 // isUUID checks if string is a UUID
 func isUUID(s string) bool {
-    uuidRegex := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
-    return uuidRegex.MatchString(strings.ToLower(s))
+	uuidRegex := regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
+	return uuidRegex.MatchString(strings.ToLower(s))
 }
 
 // isSlug checks if string is a slug
 func isSlug(s string) bool {
-    slugRegex := regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`)
-    return slugRegex.MatchString(strings.ToLower(s))
+	slugRegex := regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`)
+	return slugRegex.MatchString(strings.ToLower(s))
 }

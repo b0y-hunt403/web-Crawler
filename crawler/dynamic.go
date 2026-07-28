@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
 	"strconv"
@@ -58,20 +59,20 @@ type RequestCallback func(req *DiscoveredRequest, err error)
 // pendingNetworkRequest tracks one in-flight browser network request.
 // ENHANCED: Added fetch/XHR tracking fields
 type pendingNetworkRequest struct {
-	method       string
-	url          string
-	headers      map[string]string
-	body         string
-	depth        int
-	isDocument   bool
-	resourceTyp  network.ResourceType
-	startTime    time.Time
-	isFetch      bool
-	initiator    string
-	fetchCode    string
-	jsContext    string
-	contentType  string
-	requestBody  string
+	method      string
+	url         string
+	headers     map[string]string
+	body        string
+	depth       int
+	isDocument  bool
+	resourceTyp network.ResourceType
+	startTime   time.Time
+	isFetch     bool
+	initiator   string
+	fetchCode   string
+	jsContext   string
+	contentType string
+	requestBody string
 }
 
 // urlQueueItem represents a URL in the crawling queue with its depth.
@@ -148,6 +149,10 @@ type DynamicCrawler struct {
 	maxDepth         int
 	wg               sync.WaitGroup
 	workerPool       chan struct{}
+	authMu           sync.Mutex
+	authSession      *AuthSession
+	authExpired      bool
+	authCallback     func(*AuthSession)
 }
 
 func NewDynamicCrawler(config CrawlerConfig, callback RequestCallback) (*DynamicCrawler, error) {
@@ -212,7 +217,11 @@ func (c *DynamicCrawler) Start(ctx context.Context) error {
 		}
 	}
 
-	return nil
+	return c.authenticate(ctx)
+}
+
+func (c *DynamicCrawler) SetAuthCallback(callback func(*AuthSession)) {
+	c.authCallback = callback
 }
 
 func (c *DynamicCrawler) injectSessionCookies() error {
@@ -578,6 +587,16 @@ func (c *DynamicCrawler) CrawlURL(ctx context.Context, targetURL string, depth i
 	var next []string
 	seenPaths := map[string]struct{}{}
 
+	c.authMu.Lock()
+	expired := c.authExpired
+	c.authMu.Unlock()
+	if c.config.Auth.Enabled() && expired {
+		if err := c.authenticate(ctx); err != nil {
+			c.callback(nil, fmt.Errorf("refreshing expired authentication: %w", err))
+			return next
+		}
+	}
+
 	// Use worker pool
 	select {
 	case c.workerPool <- struct{}{}:
@@ -604,7 +623,9 @@ func (c *DynamicCrawler) CrawlURL(ctx context.Context, targetURL string, depth i
 	chromedp.ListenTarget(navCtx, func(ev interface{}) {
 		switch e := ev.(type) {
 		case *network.EventRequestWillBeSent:
-			c.trackRequest(e, depth)
+			c.trackRequest(navCtx, e, depth)
+		case *network.EventRequestWillBeSentExtraInfo:
+			c.mergeExtraRequestHeaders(e)
 		case *network.EventResponseReceived:
 			c.completeRequest(e, depth)
 		case *network.EventLoadingFailed:
@@ -775,7 +796,7 @@ func (c *DynamicCrawler) processJSONForm(f struct {
 
 	// Detect form framework from targetURL and fields
 	formFramework := DetectFormFramework("", "")
-	
+
 	method := strings.ToUpper(f.Method)
 	if method == "" {
 		method = "POST"
@@ -1136,7 +1157,7 @@ func (c *DynamicCrawler) analyzeScripts(ctx context.Context, scriptURLs []string
 }
 
 // trackRequest stashes an in-flight request with enhanced fetch/XHR detection.
-func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth int) {
+func (c *DynamicCrawler) trackRequest(ctx context.Context, e *network.EventRequestWillBeSent, depth int) {
 	if !c.IsInScope(e.Request.URL) {
 		return
 	}
@@ -1147,6 +1168,13 @@ func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth i
 			headers[k] = s
 		}
 	}
+	if HeaderValue(headers, "Referer") == "" && e.DocumentURL != "" {
+		headers["Referer"] = e.DocumentURL
+	}
+	if HeaderValue(headers, "Origin") == "" && e.DocumentURL != "" {
+		headers["Origin"] = originOf(e.DocumentURL)
+	}
+	c.enrichAuthenticatedHeaders(headers)
 
 	reqDepth := depth + 1
 	isDoc := e.Type == network.ResourceTypeDocument
@@ -1156,9 +1184,13 @@ func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth i
 
 	var postData string
 	if e.Request.HasPostData {
-		if len(e.Request.PostDataEntries) > 0 {
-			postData = e.Request.PostDataEntries[0].Bytes
+		var body strings.Builder
+		for _, entry := range e.Request.PostDataEntries {
+			if entry != nil {
+				body.WriteString(entry.Bytes)
+			}
 		}
+		postData = body.String()
 	}
 
 	// Detect content type
@@ -1168,9 +1200,9 @@ func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth i
 	}
 
 	// Detect if this is a fetch/XHR request
-	isFetch := strings.Contains(e.Request.Headers["X-Requested-With"], "XMLHttpRequest") ||
+	isFetch := strings.Contains(HeaderValue(headers, "X-Requested-With"), "XMLHttpRequest") ||
 		strings.Contains(contentType, "application/json") ||
-		strings.Contains(e.Request.Headers["Accept"], "application/json")
+		strings.Contains(HeaderValue(headers, "Accept"), "application/json")
 
 	// Detect initiator
 	initiator := "other"
@@ -1247,6 +1279,39 @@ func (c *DynamicCrawler) trackRequest(e *network.EventRequestWillBeSent, depth i
 		contentType: contentType,
 	}
 	c.mu.Unlock()
+
+	if e.Request.HasPostData && postData == "" {
+		go func() {
+			var body []byte
+			err := chromedp.Run(ctx, chromedp.ActionFunc(func(ctx context.Context) error {
+				var err error
+				body, err = network.GetRequestPostData(e.RequestID).Do(ctx)
+				return err
+			}))
+			if err != nil || len(body) == 0 {
+				return
+			}
+			c.mu.Lock()
+			if pending := c.pending[e.RequestID]; pending != nil {
+				pending.body = string(body)
+			}
+			c.mu.Unlock()
+		}()
+	}
+}
+
+func (c *DynamicCrawler) mergeExtraRequestHeaders(e *network.EventRequestWillBeSentExtraInfo) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	pending := c.pending[e.RequestID]
+	if pending == nil {
+		return
+	}
+	for key, value := range e.Headers {
+		if text, ok := value.(string); ok {
+			pending.headers[key] = text
+		}
+	}
 }
 
 // emitJSONRequest emits a JSON API request
@@ -1284,15 +1349,13 @@ func (c *DynamicCrawler) emitJSONRequest(url, method, body string, payload map[s
 
 // completeRequest merges response information.
 func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int) {
-	c.mu.RLock()
-	pending, ok := c.pending[e.RequestID]
-	c.mu.RUnlock()
-
+	c.mu.Lock()
+	pendingPtr, ok := c.pending[e.RequestID]
 	if !ok {
+		c.mu.Unlock()
 		return
 	}
-
-	c.mu.Lock()
+	pending := *pendingPtr
 	delete(c.pending, e.RequestID)
 	c.mu.Unlock()
 
@@ -1324,9 +1387,17 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 		Headers:       respHeaders,
 		SetCookies:    setCookies,
 	}
+	redirectedToLogin := c.config.Auth.Enabled() &&
+		NormalizeURL(e.Response.URL) == NormalizeURL(c.config.Auth.LoginURL) &&
+		NormalizeURL(pending.url) != NormalizeURL(c.config.Auth.LoginURL)
+	if c.config.Auth.Enabled() && (response.StatusCode == 401 || response.StatusCode == 403 || redirectedToLogin) {
+		c.authMu.Lock()
+		c.authExpired = true
+		c.authMu.Unlock()
+	}
 
-	cookies := parseCookieHeader(pending.headers["Cookie"])
-	contentType := pending.headers["Content-Type"]
+	cookies := parseCookieHeader(HeaderValue(pending.headers, "Cookie"))
+	contentType := HeaderValue(pending.headers, "Content-Type")
 
 	sourceType := "ajax_fetch"
 	switch {
@@ -1347,7 +1418,7 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 
 	if !seen {
 		contentTypeInfo := DetectContentType(contentType)
-		
+
 		// Build fetch details if this was a fetch/XHR request
 		var fetchDetails *FetchDetails
 		if pending.isFetch {
@@ -1363,20 +1434,58 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 		}
 
 		c.emit(&DiscoveredRequest{
-			ID:            fingerprint,
-			URL:           pending.url,
-			Method:        pending.method,
-			Headers:       pending.headers,
-			Body:          pending.body,
-			SourceType:    sourceType,
-			Depth:         pending.depth,
-			NormalizedURL: NormalizeURL(pending.url),
-			Parameters:    ExtractParameters(pending.url, pending.body, contentType),
-			Cookies:       cookies,
-			Response:      response,
-			FetchDetails:  fetchDetails,
+			ID:              fingerprint,
+			URL:             pending.url,
+			Method:          pending.method,
+			Headers:         pending.headers,
+			Body:            pending.body,
+			BodyType:        bodyTypeFromContentType(contentType),
+			SourceType:      sourceType,
+			Depth:           pending.depth,
+			NormalizedURL:   NormalizeURL(pending.url),
+			Parameters:      ExtractParameters(pending.url, pending.body, contentType),
+			Cookies:         cookies,
+			Response:        response,
+			FetchDetails:    fetchDetails,
 			ContentTypeInfo: &contentTypeInfo,
+			JSONFormat:      ParseJSONFormat(pending.body, contentType),
 		})
+	}
+}
+
+func (c *DynamicCrawler) enrichAuthenticatedHeaders(headers map[string]string) {
+	c.authMu.Lock()
+	defer c.authMu.Unlock()
+	if c.authSession == nil {
+		return
+	}
+	if HeaderValue(headers, "Cookie") == "" && c.authSession.CookieHeader != "" {
+		headers["Cookie"] = c.authSession.CookieHeader
+	}
+	if c.authSession.CSRFToken != "" {
+		name := c.config.Auth.CSRFField
+		if name == "" || !strings.HasPrefix(strings.ToLower(name), "x-") {
+			name = "X-CSRF-Token"
+		}
+		if HeaderValue(headers, name) == "" {
+			headers[name] = c.authSession.CSRFToken
+		}
+	}
+	if HeaderValue(headers, "Authorization") == "" {
+		for _, origin := range c.authSession.Storage {
+			for _, item := range append(origin.LocalStorage, origin.SessionStorage...) {
+				key := strings.ToLower(item.Name)
+				if strings.Contains(key, "access_token") || strings.Contains(key, "authtoken") ||
+					key == "token" || key == "authorization" {
+					value := item.Value
+					if key != "authorization" && !strings.HasPrefix(strings.ToLower(value), "bearer ") {
+						value = "Bearer " + value
+					}
+					headers["Authorization"] = value
+					return
+				}
+			}
+		}
 	}
 }
 
@@ -1402,6 +1511,31 @@ func parseCookieHeader(cookieHeader string) map[string]string {
 
 // emit sends a discovered request through the callback after deduplication.
 func (c *DynamicCrawler) emit(req *DiscoveredRequest) {
+	if req.SourceType != "login_request" && c.config.Auth.Enabled() {
+		if req.Headers == nil {
+			req.Headers = map[string]string{}
+		}
+		c.enrichAuthenticatedHeaders(req.Headers)
+		if HeaderValue(req.Headers, "Referer") == "" {
+			referer := c.config.SeedURL
+			if req.Form != nil && req.Form.SourceURL != "" {
+				referer = req.Form.SourceURL
+			}
+			req.Headers["Referer"] = referer
+		}
+		if HeaderValue(req.Headers, "Origin") == "" {
+			req.Headers["Origin"] = originOf(req.Headers["Referer"])
+		}
+		if req.Cookies == nil {
+			req.Cookies = parseCookieHeader(HeaderValue(req.Headers, "Cookie"))
+		}
+		c.authMu.Lock()
+		if c.authSession != nil {
+			req.AuthSessionID = c.authSession.ID
+		}
+		c.authMu.Unlock()
+	}
+
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -1505,247 +1639,249 @@ func (c *DynamicCrawler) Close() {
 
 // Add to completeRequest function - extract all headers
 func extractRequestHeaders(headers map[string]string) RequestHeaders {
-    reqHeaders := RequestHeaders{
-        Raw: headers,
-        Custom: make(map[string]string),
-    }
-    
-    for k, v := range headers {
-        lowerK := strings.ToLower(k)
-        switch lowerK {
-        case "authorization":
-            reqHeaders.Authorization = v
-        case "cookie":
-            reqHeaders.Cookie = v
-        case "x-csrf-token", "x-xsrf-token", "csrf-token":
-            reqHeaders.CSRF = v
-        case "x-requested-with":
-            reqHeaders.XRequestedWith = v
-        case "origin":
-            reqHeaders.Origin = v
-        case "referer":
-            reqHeaders.Referer = v
-        case "host":
-            reqHeaders.Host = v
-        case "user-agent":
-            reqHeaders.UserAgent = v
-        case "accept":
-            reqHeaders.Accept = v
-        case "accept-language":
-            reqHeaders.AcceptLanguage = v
-        case "accept-encoding":
-            reqHeaders.AcceptEncoding = v
-        case "content-type":
-            reqHeaders.ContentType = v
-        case "content-length":
-            reqHeaders.ContentLength = v
-        case "content-encoding":
-            reqHeaders.ContentEncoding = v
-        case "cache-control":
-            reqHeaders.CacheControl = v
-        case "pragma":
-            reqHeaders.Pragma = v
-        case "connection":
-            reqHeaders.Connection = v
-        case "upgrade":
-            reqHeaders.Upgrade = v
-        default:
-            reqHeaders.Custom[lowerK] = v
-        }
-    }
-    
-    return reqHeaders
+	reqHeaders := RequestHeaders{
+		Raw:    headers,
+		Custom: make(map[string]string),
+	}
+
+	for k, v := range headers {
+		lowerK := strings.ToLower(k)
+		switch lowerK {
+		case "authorization":
+			reqHeaders.Authorization = v
+		case "cookie":
+			reqHeaders.Cookie = v
+		case "x-csrf-token", "x-xsrf-token", "csrf-token":
+			reqHeaders.CSRF = v
+		case "x-requested-with":
+			reqHeaders.XRequestedWith = v
+		case "origin":
+			reqHeaders.Origin = v
+		case "referer":
+			reqHeaders.Referer = v
+		case "host":
+			reqHeaders.Host = v
+		case "user-agent":
+			reqHeaders.UserAgent = v
+		case "accept":
+			reqHeaders.Accept = v
+		case "accept-language":
+			reqHeaders.AcceptLanguage = v
+		case "accept-encoding":
+			reqHeaders.AcceptEncoding = v
+		case "content-type":
+			reqHeaders.ContentType = v
+		case "content-length":
+			reqHeaders.ContentLength = v
+		case "content-encoding":
+			reqHeaders.ContentEncoding = v
+		case "cache-control":
+			reqHeaders.CacheControl = v
+		case "pragma":
+			reqHeaders.Pragma = v
+		case "connection":
+			reqHeaders.Connection = v
+		case "upgrade":
+			reqHeaders.Upgrade = v
+		default:
+			reqHeaders.Custom[lowerK] = v
+		}
+	}
+
+	return reqHeaders
 }
+
 // Add to dynamic.go
 func parseCookieHeaderWithAttributes(cookieHeader string) []CookieInfo {
-    var cookies []CookieInfo
-    
-    // Parse Set-Cookie header with attributes
-    parts := strings.Split(cookieHeader, ";")
-    if len(parts) == 0 {
-        return cookies
-    }
-    
-    // First part is name=value
-    nameValue := strings.SplitN(strings.TrimSpace(parts[0]), "=", 2)
-    if len(nameValue) != 2 {
-        return cookies
-    }
-    
-    cookie := CookieInfo{
-        Name:  nameValue[0],
-        Value: nameValue[1],
-    }
-    
-    // Parse attributes
-    for i := 1; i < len(parts); i++ {
-        attr := strings.TrimSpace(parts[i])
-        attrLower := strings.ToLower(attr)
-        
-        switch {
-        case strings.HasPrefix(attrLower, "domain="):
-            cookie.Domain = strings.TrimPrefix(attr, "Domain=")
-        case strings.HasPrefix(attrLower, "path="):
-            cookie.Path = strings.TrimPrefix(attr, "Path=")
-        case strings.HasPrefix(attrLower, "expires="):
-            expires, _ := time.Parse(time.RFC1123, strings.TrimPrefix(attr, "Expires="))
-            cookie.Expires = expires
-        case strings.HasPrefix(attrLower, "max-age="):
-            maxAge, _ := strconv.Atoi(strings.TrimPrefix(attr, "Max-Age="))
-            cookie.MaxAge = maxAge
-        case attrLower == "httponly":
-            cookie.HttpOnly = true
-        case attrLower == "secure":
-            cookie.Secure = true
-        case strings.HasPrefix(attrLower, "samesite="):
-            cookie.SameSite = strings.TrimPrefix(attr, "SameSite=")
-        }
-    }
-    
-    cookies = append(cookies, cookie)
-    return cookies
+	var cookies []CookieInfo
+
+	// Parse Set-Cookie header with attributes
+	parts := strings.Split(cookieHeader, ";")
+	if len(parts) == 0 {
+		return cookies
+	}
+
+	// First part is name=value
+	nameValue := strings.SplitN(strings.TrimSpace(parts[0]), "=", 2)
+	if len(nameValue) != 2 {
+		return cookies
+	}
+
+	cookie := CookieInfo{
+		Name:  nameValue[0],
+		Value: nameValue[1],
+	}
+
+	// Parse attributes
+	for i := 1; i < len(parts); i++ {
+		attr := strings.TrimSpace(parts[i])
+		attrLower := strings.ToLower(attr)
+
+		switch {
+		case strings.HasPrefix(attrLower, "domain="):
+			cookie.Domain = strings.TrimPrefix(attr, "Domain=")
+		case strings.HasPrefix(attrLower, "path="):
+			cookie.Path = strings.TrimPrefix(attr, "Path=")
+		case strings.HasPrefix(attrLower, "expires="):
+			expires, _ := time.Parse(time.RFC1123, strings.TrimPrefix(attr, "Expires="))
+			cookie.Expires = expires
+		case strings.HasPrefix(attrLower, "max-age="):
+			maxAge, _ := strconv.Atoi(strings.TrimPrefix(attr, "Max-Age="))
+			cookie.MaxAge = maxAge
+		case attrLower == "httponly":
+			cookie.HttpOnly = true
+		case attrLower == "secure":
+			cookie.Secure = true
+		case strings.HasPrefix(attrLower, "samesite="):
+			cookie.SameSite = strings.TrimPrefix(attr, "SameSite=")
+		}
+	}
+
+	cookies = append(cookies, cookie)
+	return cookies
 }
+
 // ExtractRequestHeaders extracts all headers from a request
 func ExtractRequestHeaders(headers map[string]string) RequestHeaders {
-    reqHeaders := RequestHeaders{
-        Raw:    headers,
-        Custom: make(map[string]string),
-    }
-    
-    for k, v := range headers {
-        lowerK := strings.ToLower(k)
-        switch lowerK {
-        case "authorization":
-            reqHeaders.Authorization = v
-        case "cookie":
-            reqHeaders.Cookie = v
-        case "x-csrf-token", "x-xsrf-token", "csrf-token":
-            reqHeaders.CSRF = v
-        case "x-xsrftoken", "xsrf-token":
-            reqHeaders.XSRFToken = v
-        case "x-requested-with":
-            reqHeaders.XRequestedWith = v
-        case "origin":
-            reqHeaders.Origin = v
-        case "referer":
-            reqHeaders.Referer = v
-        case "host":
-            reqHeaders.Host = v
-        case "user-agent":
-            reqHeaders.UserAgent = v
-        case "accept":
-            reqHeaders.Accept = v
-        case "accept-language":
-            reqHeaders.AcceptLanguage = v
-        case "accept-encoding":
-            reqHeaders.AcceptEncoding = v
-        case "content-type":
-            reqHeaders.ContentType = v
-        case "content-length":
-            reqHeaders.ContentLength = v
-        case "content-encoding":
-            reqHeaders.ContentEncoding = v
-        case "cache-control":
-            reqHeaders.CacheControl = v
-        case "pragma":
-            reqHeaders.Pragma = v
-        case "connection":
-            reqHeaders.Connection = v
-        case "upgrade":
-            reqHeaders.Upgrade = v
-        default:
-            reqHeaders.Custom[lowerK] = v
-        }
-    }
-    
-    return reqHeaders
+	reqHeaders := RequestHeaders{
+		Raw:    headers,
+		Custom: make(map[string]string),
+	}
+
+	for k, v := range headers {
+		lowerK := strings.ToLower(k)
+		switch lowerK {
+		case "authorization":
+			reqHeaders.Authorization = v
+		case "cookie":
+			reqHeaders.Cookie = v
+		case "x-csrf-token", "x-xsrf-token", "csrf-token":
+			reqHeaders.CSRF = v
+		case "x-xsrftoken", "xsrf-token":
+			reqHeaders.XSRFToken = v
+		case "x-requested-with":
+			reqHeaders.XRequestedWith = v
+		case "origin":
+			reqHeaders.Origin = v
+		case "referer":
+			reqHeaders.Referer = v
+		case "host":
+			reqHeaders.Host = v
+		case "user-agent":
+			reqHeaders.UserAgent = v
+		case "accept":
+			reqHeaders.Accept = v
+		case "accept-language":
+			reqHeaders.AcceptLanguage = v
+		case "accept-encoding":
+			reqHeaders.AcceptEncoding = v
+		case "content-type":
+			reqHeaders.ContentType = v
+		case "content-length":
+			reqHeaders.ContentLength = v
+		case "content-encoding":
+			reqHeaders.ContentEncoding = v
+		case "cache-control":
+			reqHeaders.CacheControl = v
+		case "pragma":
+			reqHeaders.Pragma = v
+		case "connection":
+			reqHeaders.Connection = v
+		case "upgrade":
+			reqHeaders.Upgrade = v
+		default:
+			reqHeaders.Custom[lowerK] = v
+		}
+	}
+
+	return reqHeaders
 }
 
 // ParseCookies parses cookie header with attributes
 func ParseCookies(cookieHeader string) []CookieInfo {
-    var cookies []CookieInfo
-    
-    if cookieHeader == "" {
-        return cookies
-    }
-    
-    parts := strings.Split(cookieHeader, ";")
-    for _, part := range parts {
-        part = strings.TrimSpace(part)
-        if part == "" {
-            continue
-        }
-        
-        // Parse name=value
-        nv := strings.SplitN(part, "=", 2)
-        if len(nv) != 2 {
-            continue
-        }
-        
-        cookie := CookieInfo{
-            Name:  strings.TrimSpace(nv[0]),
-            Value: strings.TrimSpace(nv[1]),
-        }
-        
-        // Check for attributes (if this is a Set-Cookie header)
-        if len(parts) > 1 {
-            // Parse attributes
-            for _, attr := range parts[1:] {
-                attr = strings.TrimSpace(attr)
-                attrLower := strings.ToLower(attr)
-                
-                switch {
-                case strings.HasPrefix(attrLower, "domain="):
-                    cookie.Domain = strings.TrimPrefix(attr, "Domain=")
-                case strings.HasPrefix(attrLower, "path="):
-                    cookie.Path = strings.TrimPrefix(attr, "Path=")
-                case strings.HasPrefix(attrLower, "expires="):
-                    expires, _ := time.Parse(time.RFC1123, strings.TrimPrefix(attr, "Expires="))
-                    cookie.Expires = expires
-                case strings.HasPrefix(attrLower, "max-age="):
-                    maxAge, _ := strconv.Atoi(strings.TrimPrefix(attr, "Max-Age="))
-                    cookie.MaxAge = maxAge
-                case attrLower == "httponly":
-                    cookie.HttpOnly = true
-                case attrLower == "secure":
-                    cookie.Secure = true
-                case strings.HasPrefix(attrLower, "samesite="):
-                    cookie.SameSite = strings.TrimPrefix(attr, "SameSite=")
-                }
-            }
-        }
-        
-        cookies = append(cookies, cookie)
-    }
-    
-    return cookies
+	var cookies []CookieInfo
+
+	if cookieHeader == "" {
+		return cookies
+	}
+
+	parts := strings.Split(cookieHeader, ";")
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		// Parse name=value
+		nv := strings.SplitN(part, "=", 2)
+		if len(nv) != 2 {
+			continue
+		}
+
+		cookie := CookieInfo{
+			Name:  strings.TrimSpace(nv[0]),
+			Value: strings.TrimSpace(nv[1]),
+		}
+
+		// Check for attributes (if this is a Set-Cookie header)
+		if len(parts) > 1 {
+			// Parse attributes
+			for _, attr := range parts[1:] {
+				attr = strings.TrimSpace(attr)
+				attrLower := strings.ToLower(attr)
+
+				switch {
+				case strings.HasPrefix(attrLower, "domain="):
+					cookie.Domain = strings.TrimPrefix(attr, "Domain=")
+				case strings.HasPrefix(attrLower, "path="):
+					cookie.Path = strings.TrimPrefix(attr, "Path=")
+				case strings.HasPrefix(attrLower, "expires="):
+					expires, _ := time.Parse(time.RFC1123, strings.TrimPrefix(attr, "Expires="))
+					cookie.Expires = expires
+				case strings.HasPrefix(attrLower, "max-age="):
+					maxAge, _ := strconv.Atoi(strings.TrimPrefix(attr, "Max-Age="))
+					cookie.MaxAge = maxAge
+				case attrLower == "httponly":
+					cookie.HttpOnly = true
+				case attrLower == "secure":
+					cookie.Secure = true
+				case strings.HasPrefix(attrLower, "samesite="):
+					cookie.SameSite = strings.TrimPrefix(attr, "SameSite=")
+				}
+			}
+		}
+
+		cookies = append(cookies, cookie)
+	}
+
+	return cookies
 }
 
 // DetectGraphQL detects GraphQL endpoints
 func DetectGraphQL(response *ResponseMetadata, body string) bool {
-    if response == nil {
-        return false
-    }
-    
-    // Check content type
-    if strings.Contains(response.ContentType, "application/graphql") {
-        return true
-    }
-    
-    // Check for GraphQL keywords in body
-    if strings.Contains(body, `"query"`) || 
-       strings.Contains(body, `"mutation"`) ||
-       strings.Contains(body, `"variables"`) ||
-       strings.Contains(body, "graphql") {
-        return true
-    }
-    
-    return false
+	if response == nil {
+		return false
+	}
+
+	// Check content type
+	if strings.Contains(response.ContentType, "application/graphql") {
+		return true
+	}
+
+	// Check for GraphQL keywords in body
+	if strings.Contains(body, `"query"`) ||
+		strings.Contains(body, `"mutation"`) ||
+		strings.Contains(body, `"variables"`) ||
+		strings.Contains(body, "graphql") {
+		return true
+	}
+
+	return false
 }
 
 // ExtractGraphQLIntrospection extracts GraphQL schema via introspection
 func ExtractGraphQLIntrospection(ctx context.Context, url string) (string, error) {
-    query := `query IntrospectionQuery {
+	query := `query IntrospectionQuery {
         __schema {
             queryType { name }
             mutationType { name }
@@ -1772,13 +1908,13 @@ func ExtractGraphQLIntrospection(ctx context.Context, url string) (string, error
             }
         }
     }`
-    
-    // Send introspection query
-    req, _ := http.NewRequestWithContext(ctx, "POST", url, 
-        strings.NewReader(fmt.Sprintf(`{"query": "%s"}`, query)))
-    req.Header.Set("Content-Type", "application/json")
-    
-    // Execute request...
-    // Return schema
-    return "", nil
+
+	// Send introspection query
+	req, _ := http.NewRequestWithContext(ctx, "POST", url,
+		strings.NewReader(fmt.Sprintf(`{"query": "%s"}`, query)))
+	req.Header.Set("Content-Type", "application/json")
+
+	// Execute request...
+	// Return schema
+	return "", nil
 }

@@ -285,7 +285,7 @@ func ExtractGraphQLOperations(jsContent string) []GraphQLOperation {
 	subscriptionPattern := regexp.MustCompile(`subscription\s+(\w+)?\s*(?:\([^)]*\))?\s*\{[^}]*\}`)
 
 	// gql tagged template literals
-	gqlPattern := regexp.MustCompile(`gql\s*` + "`" + `([^`]*)` + "`")
+	gqlPattern := regexp.MustCompile("gql\\s*`([^`]*)`")
 
 	for _, match := range queryPattern.FindAllStringSubmatch(jsContent, -1) {
 		key := match[0]
@@ -478,107 +478,108 @@ func resolveRef(base, ref string) (string, error) {
 
 // ExtractWebSockets extracts WebSocket URLs from JS
 func ExtractWebSockets(jsContent string) []string {
-    var wsURLs []string
-    seen := make(map[string]bool)
-    
-    // WebSocket patterns
-    patterns := []*regexp.Regexp{
-        regexp.MustCompile(`new\s+WebSocket\s*\(\s*['"]([^'"]+)['"]`),
-        regexp.MustCompile(`ws://[a-zA-Z0-9./?&=_-]+`),
-        regexp.MustCompile(`wss://[a-zA-Z0-9./?&=_-]+`),
-    }
-    
-    for _, pattern := range patterns {
-        for _, match := range pattern.FindAllStringSubmatch(jsContent, -1) {
-            url := match[len(match)-1]
-            if !seen[url] {
-                seen[url] = true
-                wsURLs = append(wsURLs, url)
-            }
-        }
-    }
-    
-    return wsURLs
+	var wsURLs []string
+	seen := make(map[string]bool)
+
+	// WebSocket patterns
+	patterns := []*regexp.Regexp{
+		regexp.MustCompile(`new\s+WebSocket\s*\(\s*['"]([^'"]+)['"]`),
+		regexp.MustCompile(`ws://[a-zA-Z0-9./?&=_-]+`),
+		regexp.MustCompile(`wss://[a-zA-Z0-9./?&=_-]+`),
+	}
+
+	for _, pattern := range patterns {
+		for _, match := range pattern.FindAllStringSubmatch(jsContent, -1) {
+			url := match[len(match)-1]
+			if !seen[url] {
+				seen[url] = true
+				wsURLs = append(wsURLs, url)
+			}
+		}
+	}
+
+	return wsURLs
 }
+
 // ExtractSecretsFromJS extracts secrets from JavaScript
 func ExtractSecretsFromJS(jsContent string) []Secret {
-    var secrets []Secret
-    seen := make(map[string]bool)
-    
-    // Secret patterns
-    patterns := []struct {
-        Pattern  *regexp.Regexp
-        Type     string
-    }{
-        {regexp.MustCompile(`api[_-]?key\s*[:=]\s*['"]([^'"]+)['"]`), "api_key"},
-        {regexp.MustCompile(`secret\s*[:=]\s*['"]([^'"]+)['"]`), "secret"},
-        {regexp.MustCompile(`token\s*[:=]\s*['"]([^'"]+)['"]`), "token"},
-        {regexp.MustCompile(`jwt\s*[:=]\s*['"]([^'"]+)['"]`), "jwt"},
-        {regexp.MustCompile(`password\s*[:=]\s*['"]([^'"]+)['"]`), "password"},
-        {regexp.MustCompile(`auth[_-]?token\s*[:=]\s*['"]([^'"]+)['"]`), "auth_token"},
-        {regexp.MustCompile(`bearer\s*[:=]\s*['"]([^'"]+)['"]`), "bearer"},
-        {regexp.MustCompile(`private[_-]?key\s*[:=]\s*['"]([^'"]+)['"]`), "private_key"},
-        // JWT tokens
-        {regexp.MustCompile(`eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+`), "jwt_token"},
-        // AWS keys
-        {regexp.MustCompile(`AKIA[0-9A-Z]{16}`), "aws_access_key"},
-        // Firebase
-        {regexp.MustCompile(`AIza[0-9A-Za-z_-]{35}`), "firebase_key"},
-    }
-    
-    for _, pattern := range patterns {
-        for _, match := range pattern.Pattern.FindAllStringSubmatch(jsContent, -1) {
-            if len(match) > 1 {
-                value := match[1]
-                if !seen[value] {
-                    seen[value] = true
-                    secrets = append(secrets, Secret{
-                        Type:  pattern.Type,
-                        Value: value,
-                        Snippet: match[0],
-                    })
-                }
-            }
-        }
-    }
-    
-    return secrets
+	var secrets []Secret
+	seen := make(map[string]bool)
+
+	// Secret patterns
+	patterns := []struct {
+		Pattern *regexp.Regexp
+		Type    string
+	}{
+		{regexp.MustCompile(`api[_-]?key\s*[:=]\s*['"]([^'"]+)['"]`), "api_key"},
+		{regexp.MustCompile(`secret\s*[:=]\s*['"]([^'"]+)['"]`), "secret"},
+		{regexp.MustCompile(`token\s*[:=]\s*['"]([^'"]+)['"]`), "token"},
+		{regexp.MustCompile(`jwt\s*[:=]\s*['"]([^'"]+)['"]`), "jwt"},
+		{regexp.MustCompile(`password\s*[:=]\s*['"]([^'"]+)['"]`), "password"},
+		{regexp.MustCompile(`auth[_-]?token\s*[:=]\s*['"]([^'"]+)['"]`), "auth_token"},
+		{regexp.MustCompile(`bearer\s*[:=]\s*['"]([^'"]+)['"]`), "bearer"},
+		{regexp.MustCompile(`private[_-]?key\s*[:=]\s*['"]([^'"]+)['"]`), "private_key"},
+		// JWT tokens
+		{regexp.MustCompile(`eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+`), "jwt_token"},
+		// AWS keys
+		{regexp.MustCompile(`AKIA[0-9A-Z]{16}`), "aws_access_key"},
+		// Firebase
+		{regexp.MustCompile(`AIza[0-9A-Za-z_-]{35}`), "firebase_key"},
+	}
+
+	for _, pattern := range patterns {
+		for _, match := range pattern.Pattern.FindAllStringSubmatch(jsContent, -1) {
+			if len(match) > 1 {
+				value := match[1]
+				if !seen[value] {
+					seen[value] = true
+					secrets = append(secrets, Secret{
+						Type:    pattern.Type,
+						Value:   value,
+						Snippet: match[0],
+					})
+				}
+			}
+		}
+	}
+
+	return secrets
 }
 
 // Secret represents a discovered secret
 type Secret struct {
-    Type    string `json:"type"`
-    Value   string `json:"value"`
-    Snippet string `json:"snippet"`
+	Type    string `json:"type"`
+	Value   string `json:"value"`
+	Snippet string `json:"snippet"`
 }
 
 // ExtractHiddenEndpointsFromJS extracts hidden endpoints from JS
 func ExtractHiddenEndpointsFromJS(jsContent string) []string {
-    var endpoints []string
-    seen := make(map[string]bool)
-    
-    // Hidden endpoint patterns
-    patterns := []*regexp.Regexp{
-        regexp.MustCompile(`["'](/[a-zA-Z0-9/_-]{3,})["']`),
-        regexp.MustCompile(`["'](/admin/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/internal/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/debug/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/hidden/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/private/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/secret/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/test/[a-zA-Z0-9/_-]+)["']`),
-        regexp.MustCompile(`["'](/v[0-9]+/[a-zA-Z0-9/_-]+)["']`),
-    }
-    
-    for _, pattern := range patterns {
-        for _, match := range pattern.FindAllStringSubmatch(jsContent, -1) {
-            endpoint := match[1]
-            if !seen[endpoint] && len(endpoint) > 3 {
-                seen[endpoint] = true
-                endpoints = append(endpoints, endpoint)
-            }
-        }
-    }
-    
-    return endpoints
+	var endpoints []string
+	seen := make(map[string]bool)
+
+	// Hidden endpoint patterns
+	patterns := []*regexp.Regexp{
+		regexp.MustCompile(`["'](/[a-zA-Z0-9/_-]{3,})["']`),
+		regexp.MustCompile(`["'](/admin/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/internal/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/debug/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/hidden/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/private/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/secret/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/test/[a-zA-Z0-9/_-]+)["']`),
+		regexp.MustCompile(`["'](/v[0-9]+/[a-zA-Z0-9/_-]+)["']`),
+	}
+
+	for _, pattern := range patterns {
+		for _, match := range pattern.FindAllStringSubmatch(jsContent, -1) {
+			endpoint := match[1]
+			if !seen[endpoint] && len(endpoint) > 3 {
+				seen[endpoint] = true
+				endpoints = append(endpoints, endpoint)
+			}
+		}
+	}
+
+	return endpoints
 }

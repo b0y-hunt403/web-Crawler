@@ -15,9 +15,14 @@
 # ===============================
 # Go Binaries
 # ===============================
-raptor
+/raptor
+/sessionmgr
 crawler
-sessionmgr
+!/crawler/
+/crawler/*
+!/crawler/auth.go
+!/crawler/request_intelligence.go
+!/crawler/request_intelligence_test.go
 
 *.exe
 *.exe~

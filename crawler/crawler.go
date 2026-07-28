@@ -87,13 +87,18 @@ func NewCrawlerWithCallback(config CrawlerConfig, cb RequestCallback) (*Crawler,
 	}
 	c.static = NewStaticCrawler(config, nil, store)
 
-	if config.UsePlaywright {
+	if config.UsePlaywright || config.Auth.Enabled() {
 		dyn, err := NewDynamicCrawler(config, c.handleDiscovered)
 		if err != nil {
 			store.Close()
 			return nil, err
 		}
 		c.dynamic = dyn
+		c.dynamic.SetAuthCallback(func(session *AuthSession) {
+			if err := c.store.SaveAuthSession(session); err != nil {
+				log.Printf("crawler: failed to persist auth session: %v", err)
+			}
+		})
 	}
 
 	return c, nil
@@ -150,12 +155,10 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 	if c.config.UseKatana {
 		PrintInfo("Running Katana pre-pass for fast breadth-first discovery...")
 		seeded := 0
-		
+
 		// Try library approach first
 		katanaErr := RunKatanaPhase(ctx, c.config,
-			func(req *DiscoveredRequest) {
-				c.handleDiscovered(req, nil)
-			},
+			nil, // Katana discovers URLs; Raptor owns request intelligence.
 			func(u string, depth int) {
 				if _, seen := queuedOrVisited[u]; seen {
 					return
@@ -165,16 +168,14 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 				seeded++
 			},
 		)
-		
+
 		// If library approach fails, try binary approach
 		if katanaErr != nil {
 			PrintWarning(fmt.Sprintf("Katana library pre-pass failed: %v", katanaErr))
 			PrintInfo("Attempting Katana binary pre-pass...")
-			
+
 			katanaErr = RunKatanaBinary(ctx, c.config,
-				func(req *DiscoveredRequest) {
-					c.handleDiscovered(req, nil)
-				},
+				nil,
 				func(u string, depth int) {
 					if _, seen := queuedOrVisited[u]; seen {
 						return
@@ -184,7 +185,7 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 					seeded++
 				},
 			)
-			
+
 			if katanaErr != nil {
 				PrintWarning(fmt.Sprintf("Katana binary pre-pass failed, continuing with Raptor-only discovery: %v", katanaErr))
 			} else {
@@ -244,65 +245,65 @@ func (c *Crawler) Close() error {
 
 // Add to crawler.go
 func (c *Crawler) BuildAuthFlow(ctx context.Context) (*AuthFlow, error) {
-    // Find login endpoints
-    loginURLs := []string{}
-    for _, req := range c.results {
-        if req.Form != nil && req.Form.FormType == FormLogin {
-            loginURLs = append(loginURLs, req.URL)
-        }
-    }
-    
-    if len(loginURLs) == 0 {
-        return nil, fmt.Errorf("no login forms found")
-    }
-    
-    flow := &AuthFlow{
-        StartURL: loginURLs[0],
-        Steps:    []AuthStep{},
-    }
-    
-    // Step 1: GET login page (CSRF extraction)
-    step1 := AuthStep{
-        Order:   0,
-        URL:     loginURLs[0],
-        Method:  "GET",
-        IsLogin: false,
-    }
-    flow.Steps = append(flow.Steps, step1)
-    
-    // Step 2: POST login credentials
-    // Find the login form submission
-    for _, req := range c.results {
-        if req.URL == loginURLs[0] && req.Method == "POST" {
-            step2 := AuthStep{
-                Order:    1,
-                URL:      req.URL,
-                Method:   req.Method,
-                IsLogin:  true,
-                Request:  extractRequestHeaders(req.Headers),
-            }
-            flow.Steps = append(flow.Steps, step2)
-            break
-        }
-    }
-    
-    // Step 3: Check for redirect (dashboard)
-    for _, req := range c.results {
-        if req.Method == "GET" && strings.Contains(req.URL, "dashboard") ||
-           strings.Contains(req.URL, "profile") ||
-           strings.Contains(req.URL, "account") {
-            step3 := AuthStep{
-                Order:       2,
-                URL:         req.URL,
-                Method:      req.Method,
-                IsRedirect:  true,
-                IsLogin:     false,
-            }
-            flow.Steps = append(flow.Steps, step3)
-            flow.FinalURL = req.URL
-            break
-        }
-    }
-    
-    return flow, nil
+	// Find login endpoints
+	loginURLs := []string{}
+	for _, req := range c.results {
+		if req.Form != nil && req.Form.FormType == FormLogin {
+			loginURLs = append(loginURLs, req.URL)
+		}
+	}
+
+	if len(loginURLs) == 0 {
+		return nil, fmt.Errorf("no login forms found")
+	}
+
+	flow := &AuthFlow{
+		StartURL: loginURLs[0],
+		Steps:    []AuthStep{},
+	}
+
+	// Step 1: GET login page (CSRF extraction)
+	step1 := AuthStep{
+		Order:   0,
+		URL:     loginURLs[0],
+		Method:  "GET",
+		IsLogin: false,
+	}
+	flow.Steps = append(flow.Steps, step1)
+
+	// Step 2: POST login credentials
+	// Find the login form submission
+	for _, req := range c.results {
+		if req.URL == loginURLs[0] && req.Method == "POST" {
+			step2 := AuthStep{
+				Order:   1,
+				URL:     req.URL,
+				Method:  req.Method,
+				IsLogin: true,
+				Request: extractRequestHeaders(req.Headers),
+			}
+			flow.Steps = append(flow.Steps, step2)
+			break
+		}
+	}
+
+	// Step 3: Check for redirect (dashboard)
+	for _, req := range c.results {
+		if req.Method == "GET" && strings.Contains(req.URL, "dashboard") ||
+			strings.Contains(req.URL, "profile") ||
+			strings.Contains(req.URL, "account") {
+			step3 := AuthStep{
+				Order:      2,
+				URL:        req.URL,
+				Method:     req.Method,
+				IsRedirect: true,
+				IsLogin:    false,
+			}
+			flow.Steps = append(flow.Steps, step3)
+			flow.FinalURL = req.URL
+			break
+		}
+	}
+
+	return flow, nil
 }
