@@ -1,0 +1,61 @@
+{
+  "id": "http://196.188.172.7:38415|user",
+  "cookies": [
+    {
+      "name": "redirect_count",
+      "value": "1",
+      "domain": "196.188.172.7",
+      "path": "/",
+      "expires": 1785231893.742341,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "name": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZDk2NGU4MjEtMjU4Mi00Y2ZkLWIxZTgtZWVjZmQyZDE5ZTBhIiwicm9sZSI6IkFkbWluIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImF1ZCI6ImhpYmlyLWFwaSIsImV4cCI6MTc4NTIzMjYyOSwiaXNzIjoiaGliaXItYmFja2VuZCIsIm5iZiI6MTc4NTIzMTcyOX0.OiCdSYWwbdpmTiod5tU2BYzojoPrOpWFghRGnGxe6Co",
+      "domain": "196.188.172.7",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "name": "user",
+      "value": "%7B%22avatar%22%3A%22uploads%2Fprofile%2F119e403a-708d-47c5-944d-466a622677a8-cropped-logo.jpg%22%2C%22firstName%22%3A%22Bekele%22%2C%22lastName%22%3A%22Mengesha%22%2C%22username%22%3A%22ethiot%22%2C%22email%22%3A%22ethiotech%40sharklasers.com%22%2C%22chatId%22%3A%22%22%2C%22role%22%3A%22Admin%22%2C%22userId%22%3A%22d964e821-2582-4cfd-b1e8-eecfd2d19e0a%22%2C%22mfaEnabled%22%3Afalse%2C%22org%22%3A%7B%22name%22%3A%22Client%22%2C%22id%22%3A%22cde022a6-10df-4a97-b06f-1d5b04e13e46%22%2C%22parentReferenceNumber%22%3A%22%22%7D%7D",
+      "domain": "196.188.172.7",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "name": "refreshToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZDk2NGU4MjEtMjU4Mi00Y2ZkLWIxZTgtZWVjZmQyZDE5ZTBhIiwicm9sZSI6IkFkbWluIiwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJhdWQiOiJoaWJpci1hcGkiLCJleHAiOjE3ODU4MzY1MjksImlzcyI6ImhpYmlyLWJhY2tlbmQiLCJuYmYiOjE3ODUyMzE3Mjl9.WQ8_6zTZaQwi55cgYXcKFLgtYRs7mJMr3vwJxRxY3lw",
+      "domain": "196.188.172.7",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://196.188.172.7:38415"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "refreshToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZDk2NGU4MjEtMjU4Mi00Y2ZkLWIxZTgtZWVjZmQyZDE5ZTBhIiwicm9sZSI6IkFkbWluIiwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJhdWQiOiJoaWJpci1hcGkiLCJleHAiOjE3ODU4MzY1MjksImlzcyI6ImhpYmlyLWJhY2tlbmQiLCJuYmYiOjE3ODUyMzE3Mjl9.WQ8_6zTZaQwi55cgYXcKFLgtYRs7mJMr3vwJxRxY3lw",
+      "source": "cookie",
+      "kind": "jwt"
+    },
+    {
+      "name": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZDk2NGU4MjEtMjU4Mi00Y2ZkLWIxZTgtZWVjZmQyZDE5ZTBhIiwicm9sZSI6IkFkbWluIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImF1ZCI6ImhpYmlyLWFwaSIsImV4cCI6MTc4NTIzMjYyOSwiaXNzIjoiaGliaXItYmFja2VuZCIsIm5iZiI6MTc4NTIzMTcyOX0.OiCdSYWwbdpmTiod5tU2BYzojoPrOpWFghRGnGxe6Co",
+      "source": "cookie",
+      "kind": "jwt"
+    }
+  ],
+  "created_at": "2026-07-28T09:44:44.519213258Z"
+}

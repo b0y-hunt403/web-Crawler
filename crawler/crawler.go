@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 	"strings"
+
+	sessionmgr "github.com/Anduamlk/web-Crawler/session"
 )
 
 // queueItem is one pending URL to crawl.
@@ -64,6 +66,8 @@ type Crawler struct {
 	visited          map[string]struct{}
 	seenFingerprints map[string]struct{}
 	results          []*DiscoveredRequest
+	contextProvider  sessionmgr.BrowserContextProvider
+	session          sessionmgr.Session
 }
 
 // NewCrawler wires up storage and crawlers
@@ -73,6 +77,15 @@ func NewCrawler(config CrawlerConfig) (*Crawler, error) {
 
 // NewCrawlerWithCallback creates a crawler with a callback
 func NewCrawlerWithCallback(config CrawlerConfig, cb RequestCallback) (*Crawler, error) {
+	provider := sessionmgr.NewChromiumProvider(sessionmgr.ChromiumOptions{
+		UserAgent: config.UserAgent, Proxy: config.Proxy, Headless: true,
+	})
+	return NewCrawlerWithBrowser(config, cb, provider, nil)
+}
+
+// NewCrawlerWithBrowser injects browser/session dependencies. Authentication
+// and browser-context creation remain outside the crawler.
+func NewCrawlerWithBrowser(config CrawlerConfig, cb RequestCallback, provider sessionmgr.BrowserContextProvider, activeSession sessionmgr.Session) (*Crawler, error) {
 	store, err := NewRequestStore(config.DBPath)
 	if err != nil {
 		return nil, err
@@ -84,21 +97,18 @@ func NewCrawlerWithCallback(config CrawlerConfig, cb RequestCallback) (*Crawler,
 		externalCallback: cb,
 		visited:          map[string]struct{}{},
 		seenFingerprints: map[string]struct{}{},
+		contextProvider:  provider,
+		session:          activeSession,
 	}
 	c.static = NewStaticCrawler(config, nil, store)
 
-	if config.UsePlaywright || config.Auth.Enabled() {
-		dyn, err := NewDynamicCrawler(config, c.handleDiscovered)
+	if config.UsePlaywright {
+		dyn, err := NewDynamicCrawler(config, c.handleDiscovered, provider, activeSession)
 		if err != nil {
 			store.Close()
 			return nil, err
 		}
 		c.dynamic = dyn
-		c.dynamic.SetAuthCallback(func(session *AuthSession) {
-			if err := c.store.SaveAuthSession(session); err != nil {
-				log.Printf("crawler: failed to persist auth session: %v", err)
-			}
-		})
 	}
 
 	return c, nil

@@ -12,34 +12,24 @@ import (
 	"time"
 
 	"github.com/Anduamlk/web-Crawler/crawler"
+	sessionmgr "github.com/Anduamlk/web-Crawler/session"
 )
 
 func main() {
 	var (
-		seedURL       = flag.String("url", "", "Seed URL to start crawling (required)")
-		maxDepth      = flag.Int("depth", 3, "Maximum crawl depth")
-		maxPages      = flag.Int("pages", 100, "Maximum number of pages to crawl")
-		concurrency   = flag.Int("concurrency", 5, "Number of concurrent workers")
-		userAgent     = flag.String("ua", "", "Custom User-Agent string")
-		stayInDomain  = flag.Bool("stay-in-domain", true, "Only crawl URLs within the same domain")
-		proxy         = flag.String("proxy", "", "Proxy URL (e.g., http://proxy:8080)")
-		useDynamic    = flag.Bool("dynamic", false, "Use dynamic (headless browser) crawler for SPAs")
-		bothModes     = flag.Bool("both", false, "Run both static and dynamic crawlers")
-		sessionFile   = flag.String("session", "", "Path to session state JSON file")
-		dbPath        = flag.String("db", "scanner_discovery.db", "SQLite database path")
-		timeout       = flag.Duration("timeout", 30*time.Second, "Request timeout")
-		jsonOutput    = flag.String("output", "", "Output results to JSON file (optional)")
-		username      = flag.String("username", "", "Username for authenticated crawling")
-		password      = flag.String("password", "", "Password for authenticated crawling")
-		loginURL      = flag.String("login-url", "", "Login page or JSON login endpoint")
-		usernameField = flag.String("username-field", "", "Username field name or CSS selector (auto-detected when empty)")
-		passwordField = flag.String("password-field", "", "Password field name or CSS selector (auto-detected when empty)")
-		csrfField     = flag.String("csrf-field", "", "CSRF field name, selector, or JSON header (auto-detected when empty)")
-		loginMethod   = flag.String("login-method", "form", "Login transport: form or json")
-		sessionCookie = flag.String("session-cookie", "", "Cookie whose creation confirms login success")
-		cookieFile    = flag.String("cookie-file", "", "Write reusable authenticated session metadata to this JSON file")
-		successRegex  = flag.String("login-success-regex", "", "Regex matched against post-login URL and page text")
-
+		seedURL           = flag.String("url", "", "Seed URL to start crawling (required)")
+		maxDepth          = flag.Int("depth", 3, "Maximum crawl depth")
+		maxPages          = flag.Int("pages", 100, "Maximum number of pages to crawl")
+		concurrency       = flag.Int("concurrency", 5, "Number of concurrent workers")
+		userAgent         = flag.String("ua", "", "Custom User-Agent string")
+		stayInDomain      = flag.Bool("stay-in-domain", true, "Only crawl URLs within the same domain")
+		proxy             = flag.String("proxy", "", "Proxy URL (e.g., http://proxy:8080)")
+		useDynamic        = flag.Bool("dynamic", false, "Use dynamic (headless browser) crawler for SPAs")
+		bothModes         = flag.Bool("both", false, "Run both static and dynamic crawlers")
+		sessionFile       = flag.String("session", "", "Path to session state JSON file")
+		dbPath            = flag.String("db", "scanner_discovery.db", "SQLite database path")
+		timeout           = flag.Duration("timeout", 30*time.Second, "Request timeout")
+		jsonOutput        = flag.String("output", "", "Output results to JSON file (optional)")
 		useKatana         = flag.Bool("katana", false, "Run a Katana pre-pass for fast breadth-first discovery before Raptor's own crawl")
 		katanaHeadless    = flag.Bool("katana-headless", false, "Use Katana's headless (browser) engine instead of its standard net/http engine")
 		katanaDepth       = flag.Int("katana-depth", 2, "Katana's own crawl depth (independent of -depth)")
@@ -48,18 +38,8 @@ func main() {
 	)
 	flag.Parse()
 
-	auth := crawler.AuthConfig{
-		Username: *username, Password: *password, LoginURL: *loginURL,
-		UsernameField: *usernameField, PasswordField: *passwordField, CSRFField: *csrfField,
-		LoginMethod: *loginMethod, SessionCookie: *sessionCookie, CookieFile: *cookieFile,
-		SuccessRegex: *successRegex,
-	}
-
 	if *seedURL == "" {
 		log.Fatal("Error: -url flag is required")
-	}
-	if (*username != "" || *password != "" || *loginURL != "") && !auth.Enabled() {
-		log.Fatal("Error: authenticated crawling requires --username, --password, and --login-url")
 	}
 
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
@@ -76,8 +56,8 @@ func main() {
 		// Run static crawler
 		log.Println("🔍 Running static crawler...")
 		if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
-			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, false, *jsonOutput,
-			*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope, auth); err != nil {
+			*stayInDomain, *userAgent, *proxy, "", *timeout, false, *jsonOutput,
+			*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
 			log.Printf("❌ Static crawler failed: %v", err)
 		} else {
 			log.Println("✅ Static crawler completed successfully")
@@ -91,7 +71,7 @@ func main() {
 			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, true, *jsonOutput,
 			// Katana pre-pass already ran during the static phase above and
 			// persisted its results to the same DBPath — don't run it twice.
-			false, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope, auth); err != nil {
+			false, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
 			log.Printf("❌ Dynamic crawler failed: %v", err)
 		} else {
 			log.Println("✅ Dynamic crawler completed successfully")
@@ -105,7 +85,7 @@ func main() {
 	// Single mode run
 	if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
 		*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, *useDynamic, *jsonOutput,
-		*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope, auth); err != nil {
+		*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
 		log.Fatalf("❌ Crawl failed: %v", err)
 	}
 }
@@ -113,8 +93,7 @@ func main() {
 func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 	stayInDomain bool, userAgent, proxy, sessionFile string,
 	timeout time.Duration, dynamic bool, jsonOutput string,
-	useKatana, katanaHeadless bool, katanaDepth, katanaConcurrency int, katanaFieldScope string,
-	auth crawler.AuthConfig) error {
+	useKatana, katanaHeadless bool, katanaDepth, katanaConcurrency int, katanaFieldScope string) error {
 
 	config := crawler.DefaultCrawlerConfig()
 	config.SeedURL = seedURL
@@ -133,8 +112,7 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 	config.KatanaMaxDepth = katanaDepth
 	config.KatanaConcurrency = katanaConcurrency
 	config.KatanaFieldScope = katanaFieldScope
-	config.Auth = auth
-	if auth.Enabled() {
+	if sessionFile != "" {
 		config.UsePlaywright = true
 		config.DynamicCrawl = true
 	}
@@ -143,7 +121,20 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 		config.UserAgent = userAgent
 	}
 
-	c, err := crawler.NewCrawler(config)
+	var activeSession sessionmgr.Session
+	if sessionFile != "" {
+		fileSession, err := sessionmgr.NewFileSession(sessionFile)
+		if err != nil {
+			return err
+		}
+		activeSession = fileSession
+	}
+	provider := sessionmgr.NewChromiumProvider(sessionmgr.ChromiumOptions{
+		UserAgent: config.UserAgent,
+		Proxy:     config.Proxy,
+		Headless:  true,
+	})
+	c, err := crawler.NewCrawlerWithBrowser(config, nil, provider, activeSession)
 	if err != nil {
 		return err
 	}

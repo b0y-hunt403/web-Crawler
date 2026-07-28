@@ -23,6 +23,8 @@ func main() {
 		cmdScan(os.Args[2:])
 	case "verify":
 		cmdVerify(os.Args[2:])
+	case "export":
+		cmdExport(os.Args[2:])
 	default:
 		usage()
 	}
@@ -68,6 +70,9 @@ func usage() {
                                                   (omit roles to use every role on file for this target)
   sessionmgr verify <target_url> <role_name>     replay the recorded login in a HEADED browser
                                                   you can watch, to confirm it still logs in
+  sessionmgr export <target_url> <role_name> <session.json> [--refresh]
+                                                export reusable storage_state JSON;
+                                                --refresh replays login first
 
 Archive storage (profile archives, not the sqlite index):
   MinIO is used automatically when configured and reachable. Set:
@@ -84,6 +89,27 @@ Archive storage (profile archives, not the sqlite index):
   PLAYSCAN_ARCHIVE_BACKEND=minio forces MinIO and fails startup instead of
   falling back if it can't connect.`)
 	os.Exit(1)
+}
+
+func cmdExport(args []string) {
+	if len(args) < 3 {
+		usage()
+	}
+	targetURL, roleName, outputPath := args[0], args[1], args[2]
+	refresh := len(args) > 3 && args[3] == "--refresh"
+	sessionID := fmt.Sprintf("%s|%s", targetURL, roleName)
+
+	store, err := session.OpenStore("./scanner.db")
+	if err != nil {
+		log.Fatalf("open store: %v", err)
+	}
+	defer store.Close()
+
+	managed := session.NewManagedSession(store, sessionID)
+	if err := managed.Export(context.Background(), outputPath, refresh); err != nil {
+		log.Fatalf("export session: %v", err)
+	}
+	log.Printf("[+] Session %q exported to %s", sessionID, outputPath)
 }
 
 // cmdRecord launches the headless recording browser + local relay UI, and

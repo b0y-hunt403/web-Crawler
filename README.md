@@ -33,9 +33,9 @@ Raptor is under active development. The current implementation supports:
 - JSON, URL-encoded, multipart, GraphQL, XML and text content classification
 - Request headers, cookies, authorization and CSRF metadata
 - JavaScript endpoint and SPA route extraction
-- Authenticated form and JSON login workflows
-- Browser cookie, localStorage and sessionStorage reuse
-- Automatic authentication refresh after an expired session is detected
+- Session Manager recording and login-flow replay
+- Browser cookie, localStorage, sessionStorage and JWT reuse
+- Session refresh through recorded login replay
 - SQLite persistence and JSON crawl output
 
 Dedicated Postman, Burp, SQLMap request-file, Nuclei and ffuf exporters are
@@ -169,85 +169,53 @@ Write crawl results to JSON in addition to SQLite:
 
 ## Authenticated crawling
 
-Supplying `-username`, `-password`, and `-login-url` automatically enables the
-browser crawler. Raptor logs in before crawling and reuses the same browser
-context for subsequent pages.
+Authentication is owned by the separate Session Manager. Raptor does not accept
+credentials and does not execute login workflows.
 
-### HTML form login
+Build both commands:
+
+```bash
+go build -o raptor ./cmd/crawler
+go build -o sessionmgr ./cmd/sessionmgr
+```
+
+Record a new login interactively:
+
+```bash
+./sessionmgr record https://target.example/login admin
+```
+
+Export the recorded role as reusable storage-state JSON:
+
+```bash
+./sessionmgr export \
+  https://target.example/login \
+  admin \
+  admin-session.json
+```
+
+Refresh an expired session by replaying the recorded login before export:
+
+```bash
+./sessionmgr export \
+  https://target.example/login \
+  admin \
+  admin-session.json \
+  --refresh
+```
+
+Pass the resulting state to Raptor:
 
 ```bash
 ./raptor \
   -url https://target.example/app \
-  -login-url https://target.example/login \
-  -username analyst@example.com \
-  -password 'replace-me' \
-  -login-method form \
-  -session-cookie session \
-  -cookie-file raptor-session.json \
+  -session admin-session.json \
   -db authenticated.db
 ```
 
-Raptor attempts to detect username, password and CSRF inputs automatically.
-Field names, element IDs or CSS selectors can be supplied when detection is
-ambiguous:
-
-```bash
-./raptor \
-  -url https://target.example/app \
-  -login-url https://target.example/sign-in \
-  -username analyst@example.com \
-  -password 'replace-me' \
-  -username-field '#email' \
-  -password-field '#password' \
-  -csrf-field '_csrf' \
-  -login-method form \
-  -db authenticated.db
-```
-
-### JSON login
-
-```bash
-./raptor \
-  -url https://target.example/app \
-  -login-url https://target.example/api/login \
-  -username analyst@example.com \
-  -password 'replace-me' \
-  -username-field email \
-  -password-field password \
-  -login-method json \
-  -session-cookie access_token \
-  -cookie-file raptor-session.json \
-  -db authenticated.db
-```
-
-### Login success detection
-
-Raptor recognizes successful authentication through:
-
-- A URL change
-- A logout control
-- A dashboard or account redirect
-- Creation of a new cookie
-- Creation of the configured session cookie
-- An optional success regex
-
-Example:
-
-```bash
-./raptor \
-  -url https://target.example/app \
-  -login-url https://target.example/login \
-  -username analyst@example.com \
-  -password 'replace-me' \
-  -login-success-regex 'Welcome|/dashboard' \
-  -db authenticated.db
-```
-
-The cookie export is written with owner-only permissions and contains the cookie
-header plus command hints for SQLMap, Dalfox, Nuclei, ffuf and httpx.
-
-> Command-line passwords may be recorded in shell history or process listings.
-> Use a protected launcher or secret-injection mechanism for real credentials.
+Supplying `-session` automatically enables dynamic crawling. The state contains
+cookies, localStorage, sessionStorage and extracted JWT/CSRF token metadata.
+Session files are written with owner-only permissions.
 
 ## Reusing an existing session
 
@@ -294,16 +262,6 @@ Send browser traffic through an HTTP proxy such as Burp Suite or ZAP:
 | `-proxy` | empty | HTTP proxy URL |
 | `-session` | empty | Existing browser state file |
 | `-output` | empty | Optional JSON result file |
-| `-username` | empty | Login username |
-| `-password` | empty | Login password |
-| `-login-url` | empty | Login page or API endpoint |
-| `-login-method` | `form` | `form` or `json` |
-| `-username-field` | auto | Field name, ID or selector |
-| `-password-field` | auto | Field name, ID or selector |
-| `-csrf-field` | auto | CSRF field, selector or JSON header |
-| `-session-cookie` | auto | Cookie used to confirm login |
-| `-login-success-regex` | empty | URL/page-text success expression |
-| `-cookie-file` | empty | Authenticated session export |
 
 Run `./raptor -help` for the complete list.
 
@@ -330,12 +288,14 @@ Important columns include:
 | `depth` | Crawl depth |
 | `created_at` | UTC discovery time |
 
-Authentication metadata is stored separately in:
+Session Manager metadata is stored in its own `scanner.db` database:
 
 - `auth_sessions`
-- `login_requests`
-- `cookies`
-- `csrf_tokens`
+- `crawl_contexts`
+
+Reusable cookie, storage and token values are exported to the protected session
+JSON passed through `-session`. Raptor stores only the associated session ID on
+captured requests.
 
 ### Useful queries
 
@@ -370,7 +330,7 @@ sqlite3 -header -column results.db "
 SELECT url, body_type, body
 FROM discovered_requests
 WHERE method = 'POST'
-  AND source_type IN ('ajax_fetch', 'login_request');
+  AND source_type = 'ajax_fetch';
 "
 ```
 

@@ -5,49 +5,6 @@ import (
 	"time"
 )
 
-type AuthConfig struct {
-	Username      string `json:"username,omitempty"`
-	Password      string `json:"password,omitempty"`
-	LoginURL      string `json:"login_url,omitempty"`
-	UsernameField string `json:"username_field,omitempty"`
-	PasswordField string `json:"password_field,omitempty"`
-	CSRFField     string `json:"csrf_field,omitempty"`
-	LoginMethod   string `json:"login_method,omitempty"`
-	SessionCookie string `json:"session_cookie,omitempty"`
-	CookieFile    string `json:"cookie_file,omitempty"`
-	SuccessRegex  string `json:"success_regex,omitempty"`
-}
-
-func (c AuthConfig) Enabled() bool {
-	return c.LoginURL != "" && c.Username != "" && c.Password != ""
-}
-
-type BrowserStorageValue struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
-
-type BrowserOriginStorage struct {
-	Origin         string                `json:"origin"`
-	LocalStorage   []BrowserStorageValue `json:"local_storage,omitempty"`
-	SessionStorage []BrowserStorageValue `json:"session_storage,omitempty"`
-}
-
-type AuthSession struct {
-	ID              string                 `json:"id"`
-	LoginURL        string                 `json:"login_url"`
-	FinalURL        string                 `json:"final_url"`
-	LoginMethod     string                 `json:"login_method"`
-	SuccessReason   string                 `json:"success_reason"`
-	CookieHeader    string                 `json:"cookie_header,omitempty"`
-	CSRFField       string                 `json:"csrf_field,omitempty"`
-	CSRFToken       string                 `json:"csrf_token,omitempty"`
-	Cookies         []CookieInfo           `json:"cookies,omitempty"`
-	Storage         []BrowserOriginStorage `json:"storage,omitempty"`
-	AuthenticatedAt time.Time              `json:"authenticated_at"`
-	ExpiresAt       *time.Time             `json:"expires_at,omitempty"`
-}
-
 // FieldType represents the type of form field
 type FieldType string
 

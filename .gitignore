@@ -20,7 +20,6 @@
 crawler
 !/crawler/
 /crawler/*
-!/crawler/auth.go
 !/crawler/banner_test.go
 !/crawler/request_intelligence.go
 !/crawler/request_intelligence_test.go
@@ -51,6 +50,11 @@ coverage.out
 # ===============================
 profiles/
 session/
+!/session/
+/session/*
+!/session/context.go
+!/session/context_test.go
+!/session/manager.go
 
 # ===============================
 # Logs

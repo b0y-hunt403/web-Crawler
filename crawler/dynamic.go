@@ -8,50 +8,16 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+	sessionmgr "github.com/Anduamlk/web-Crawler/session"
 	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/chromedp"
 )
-
-// SessionState mirrors the Playwright storage_state JSON shape Session_Manager
-type SessionState struct {
-	Cookies []struct {
-		Name     string `json:"name"`
-		Value    string `json:"value"`
-		Domain   string `json:"domain"`
-		Path     string `json:"path"`
-		HTTPOnly bool   `json:"httpOnly"`
-		Secure   bool   `json:"secure"`
-	} `json:"cookies"`
-	Origins []struct {
-		Origin       string `json:"origin"`
-		LocalStorage []struct {
-			Name  string `json:"name"`
-			Value string `json:"value"`
-		} `json:"localStorage"`
-	} `json:"origins"`
-}
-
-// LoadSessionState reads a captured session from disk.
-func LoadSessionState(path string) (*SessionState, error) {
-	if path == "" {
-		return nil, nil
-	}
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-	var s SessionState
-	if err := json.Unmarshal(data, &s); err != nil {
-		return nil, err
-	}
-	return &s, nil
-}
 
 // RequestCallback receives every DiscoveredRequest as it's found.
 type RequestCallback func(req *DiscoveredRequest, err error)
@@ -132,12 +98,12 @@ func mapToFormField(m map[string]interface{}) FormField {
 type DynamicCrawler struct {
 	config           CrawlerConfig
 	callback         RequestCallback
-	session          *SessionState
+	session          sessionmgr.Session
+	sessionState     *sessionmgr.State
+	contextProvider  sessionmgr.BrowserContextProvider
+	contextHandle    sessionmgr.BrowserContext
 	allowedHost      string
-	allocCtx         context.Context
-	allocCancel      context.CancelFunc
 	browserCtx       context.Context
-	browserCancel    context.CancelFunc
 	seenFingerprints map[string]struct{}
 	seenURLs         map[string]struct{}
 	pending          map[network.RequestID]*pendingNetworkRequest
@@ -149,19 +115,11 @@ type DynamicCrawler struct {
 	maxDepth         int
 	wg               sync.WaitGroup
 	workerPool       chan struct{}
-	authMu           sync.Mutex
-	authSession      *AuthSession
-	authExpired      bool
-	authCallback     func(*AuthSession)
+	sessionMu        sync.RWMutex
+	sessionExpired   bool
 }
 
-func NewDynamicCrawler(config CrawlerConfig, callback RequestCallback) (*DynamicCrawler, error) {
-	session, err := LoadSessionState(config.SessionStatePath)
-	if err != nil {
-		log.Printf("crawler: could not load session state at %s: %v (continuing unauthenticated)", config.SessionStatePath, err)
-		session = nil
-	}
-
+func NewDynamicCrawler(config CrawlerConfig, callback RequestCallback, provider sessionmgr.BrowserContextProvider, activeSession sessionmgr.Session) (*DynamicCrawler, error) {
 	host := ""
 	if u, err := url.Parse(config.SeedURL); err == nil {
 		host = u.Host
@@ -180,7 +138,8 @@ func NewDynamicCrawler(config CrawlerConfig, callback RequestCallback) (*Dynamic
 	return &DynamicCrawler{
 		config:           config,
 		callback:         callback,
-		session:          session,
+		session:          activeSession,
+		contextProvider:  provider,
 		allowedHost:      host,
 		seenFingerprints: map[string]struct{}{},
 		seenURLs:         map[string]struct{}{},
@@ -193,73 +152,25 @@ func NewDynamicCrawler(config CrawlerConfig, callback RequestCallback) (*Dynamic
 
 // Start launches the headless browser and initializes the crawler.
 func (c *DynamicCrawler) Start(ctx context.Context) error {
-	opts := append(chromedp.DefaultExecAllocatorOptions[:],
-		chromedp.Flag("headless", true),
-		chromedp.UserAgent(c.config.UserAgent),
-		chromedp.Flag("disable-gpu", true),
-		chromedp.Flag("no-sandbox", true),
-		chromedp.Flag("disable-dev-shm-usage", true),
-	)
-	if c.config.Proxy != "" {
-		opts = append(opts, chromedp.ProxyServer(c.config.Proxy))
+	if c.contextProvider == nil {
+		return fmt.Errorf("dynamic crawler requires a browser context provider")
 	}
-
-	c.allocCtx, c.allocCancel = chromedp.NewExecAllocator(ctx, opts...)
-	c.browserCtx, c.browserCancel = chromedp.NewContext(c.allocCtx)
-
-	if err := chromedp.Run(c.browserCtx); err != nil {
-		return fmt.Errorf("starting browser: %w", err)
-	}
-
+	var state *sessionmgr.State
+	var err error
 	if c.session != nil {
-		if err := c.injectSessionCookies(); err != nil {
-			log.Printf("crawler: failed to inject session cookies: %v", err)
+		state, err = c.session.State(ctx)
+		if err != nil {
+			return fmt.Errorf("load supplied session: %w", err)
 		}
 	}
-
-	return c.authenticate(ctx)
-}
-
-func (c *DynamicCrawler) SetAuthCallback(callback func(*AuthSession)) {
-	c.authCallback = callback
-}
-
-func (c *DynamicCrawler) injectSessionCookies() error {
-	var cookieParams []*network.CookieParam
-	for _, ck := range c.session.Cookies {
-		cookieParams = append(cookieParams, &network.CookieParam{
-			Name: ck.Name, Value: ck.Value, Domain: ck.Domain, Path: ck.Path,
-			HTTPOnly: ck.HTTPOnly, Secure: ck.Secure,
-		})
-	}
-	if len(cookieParams) == 0 {
-		return nil
-	}
-	return chromedp.Run(c.browserCtx, network.SetCookies(cookieParams))
-}
-
-// seedLocalStorage injects localStorage entries for the page origin.
-func (c *DynamicCrawler) seedLocalStorage(ctx context.Context, pageURL string) {
-	if c.session == nil {
-		return
-	}
-	u, err := url.Parse(pageURL)
+	handle, err := c.contextProvider.NewContext(ctx, state)
 	if err != nil {
-		return
+		return err
 	}
-	origin := u.Scheme + "://" + u.Host
-
-	for _, o := range c.session.Origins {
-		if o.Origin != origin {
-			continue
-		}
-		for _, item := range o.LocalStorage {
-			js := fmt.Sprintf("window.localStorage.setItem(%q, %q);", item.Name, item.Value)
-			if err := chromedp.Run(ctx, chromedp.Evaluate(js, nil)); err != nil {
-				log.Printf("crawler: could not set localStorage %q on %s: %v", item.Name, origin, err)
-			}
-		}
-	}
+	c.contextHandle = handle
+	c.browserCtx = handle.Context()
+	c.sessionState = state
+	return nil
 }
 
 // canonicalizeURL removes trailing slash for dedup purposes.
@@ -587,12 +498,12 @@ func (c *DynamicCrawler) CrawlURL(ctx context.Context, targetURL string, depth i
 	var next []string
 	seenPaths := map[string]struct{}{}
 
-	c.authMu.Lock()
-	expired := c.authExpired
-	c.authMu.Unlock()
-	if c.config.Auth.Enabled() && expired {
-		if err := c.authenticate(ctx); err != nil {
-			c.callback(nil, fmt.Errorf("refreshing expired authentication: %w", err))
+	c.sessionMu.RLock()
+	expired := c.sessionExpired
+	c.sessionMu.RUnlock()
+	if c.session != nil && expired {
+		if err := c.refreshSession(ctx); err != nil {
+			c.callback(nil, fmt.Errorf("refreshing supplied session: %w", err))
 			return next
 		}
 	}
@@ -646,8 +557,6 @@ func (c *DynamicCrawler) CrawlURL(ctx context.Context, targetURL string, depth i
 		c.callback(nil, fmt.Errorf("navigating %s: %w", targetURL, err))
 		return next
 	}
-
-	c.seedLocalStorage(navCtx, targetURL)
 
 	var snap domSnapshot
 	if err := json.Unmarshal([]byte(snapshotJSON), &snap); err != nil {
@@ -1387,13 +1296,10 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 		Headers:       respHeaders,
 		SetCookies:    setCookies,
 	}
-	redirectedToLogin := c.config.Auth.Enabled() &&
-		NormalizeURL(e.Response.URL) == NormalizeURL(c.config.Auth.LoginURL) &&
-		NormalizeURL(pending.url) != NormalizeURL(c.config.Auth.LoginURL)
-	if c.config.Auth.Enabled() && (response.StatusCode == 401 || response.StatusCode == 403 || redirectedToLogin) {
-		c.authMu.Lock()
-		c.authExpired = true
-		c.authMu.Unlock()
+	if c.session != nil && (response.StatusCode == 401 || response.StatusCode == 403) {
+		c.sessionMu.Lock()
+		c.sessionExpired = true
+		c.sessionMu.Unlock()
 	}
 
 	cookies := parseCookieHeader(HeaderValue(pending.headers, "Cookie"))
@@ -1454,39 +1360,64 @@ func (c *DynamicCrawler) completeRequest(e *network.EventResponseReceived, _ int
 }
 
 func (c *DynamicCrawler) enrichAuthenticatedHeaders(headers map[string]string) {
-	c.authMu.Lock()
-	defer c.authMu.Unlock()
-	if c.authSession == nil {
+	c.sessionMu.RLock()
+	defer c.sessionMu.RUnlock()
+	if c.sessionState == nil {
 		return
 	}
-	if HeaderValue(headers, "Cookie") == "" && c.authSession.CookieHeader != "" {
-		headers["Cookie"] = c.authSession.CookieHeader
-	}
-	if c.authSession.CSRFToken != "" {
-		name := c.config.Auth.CSRFField
-		if name == "" || !strings.HasPrefix(strings.ToLower(name), "x-") {
-			name = "X-CSRF-Token"
+	if HeaderValue(headers, "Cookie") == "" {
+		if cookieHeader := sessionCookieHeader(c.sessionState); cookieHeader != "" {
+			headers["Cookie"] = cookieHeader
 		}
-		if HeaderValue(headers, name) == "" {
-			headers[name] = c.authSession.CSRFToken
+	}
+	for _, token := range c.sessionState.Tokens {
+		if token.Kind == "csrf" && HeaderValue(headers, "X-CSRF-Token") == "" {
+			headers["X-CSRF-Token"] = token.Value
+			break
 		}
 	}
 	if HeaderValue(headers, "Authorization") == "" {
-		for _, origin := range c.authSession.Storage {
-			for _, item := range append(origin.LocalStorage, origin.SessionStorage...) {
-				key := strings.ToLower(item.Name)
-				if strings.Contains(key, "access_token") || strings.Contains(key, "authtoken") ||
-					key == "token" || key == "authorization" {
-					value := item.Value
-					if key != "authorization" && !strings.HasPrefix(strings.ToLower(value), "bearer ") {
-						value = "Bearer " + value
-					}
-					headers["Authorization"] = value
-					return
-				}
+		for _, token := range c.sessionState.Tokens {
+			if token.Kind != "jwt" && token.Kind != "token" {
+				continue
 			}
+			value := token.Value
+			if !strings.HasPrefix(strings.ToLower(value), "bearer ") {
+				value = "Bearer " + value
+			}
+			headers["Authorization"] = value
+			return
 		}
 	}
+}
+
+func (c *DynamicCrawler) refreshSession(ctx context.Context) error {
+	state, err := c.session.Refresh(ctx)
+	if err != nil {
+		return err
+	}
+	if err := c.contextHandle.ApplyState(ctx, state); err != nil {
+		return err
+	}
+	c.sessionMu.Lock()
+	c.sessionState = state
+	c.sessionExpired = false
+	c.sessionMu.Unlock()
+	return nil
+}
+
+func sessionCookieHeader(state *sessionmgr.State) string {
+	if state == nil {
+		return ""
+	}
+	parts := make([]string, 0, len(state.Cookies))
+	for _, cookie := range state.Cookies {
+		if cookie.Name != "" {
+			parts = append(parts, cookie.Name+"="+cookie.Value)
+		}
+	}
+	sort.Strings(parts)
+	return strings.Join(parts, "; ")
 }
 
 func parseCookieHeader(cookieHeader string) map[string]string {
@@ -1511,7 +1442,7 @@ func parseCookieHeader(cookieHeader string) map[string]string {
 
 // emit sends a discovered request through the callback after deduplication.
 func (c *DynamicCrawler) emit(req *DiscoveredRequest) {
-	if req.SourceType != "login_request" && c.config.Auth.Enabled() {
+	if c.session != nil {
 		if req.Headers == nil {
 			req.Headers = map[string]string{}
 		}
@@ -1529,11 +1460,7 @@ func (c *DynamicCrawler) emit(req *DiscoveredRequest) {
 		if req.Cookies == nil {
 			req.Cookies = parseCookieHeader(HeaderValue(req.Headers, "Cookie"))
 		}
-		c.authMu.Lock()
-		if c.authSession != nil {
-			req.AuthSessionID = c.authSession.ID
-		}
-		c.authMu.Unlock()
+		req.AuthSessionID = c.session.ID()
 	}
 
 	c.mu.Lock()
@@ -1629,11 +1556,9 @@ func (c *DynamicCrawler) Crawl(ctx context.Context) error {
 }
 
 func (c *DynamicCrawler) Close() {
-	if c.browserCancel != nil {
-		c.browserCancel()
-	}
-	if c.allocCancel != nil {
-		c.allocCancel()
+	if c.contextHandle != nil {
+		_ = c.contextHandle.Close()
+		c.contextHandle = nil
 	}
 }
 

@@ -35,6 +35,34 @@ func DetectContentType(raw string) ContentTypeInfo {
 	return info
 }
 
+func originOf(raw string) string {
+	parts := strings.SplitN(raw, "/", 4)
+	if len(parts) >= 3 {
+		return strings.Join(parts[:3], "/")
+	}
+	return raw
+}
+
+func bodyTypeFromContentType(contentType string) string {
+	info := DetectContentType(contentType)
+	switch {
+	case info.IsJSON:
+		return "json"
+	case info.IsMultipart:
+		return "multipart"
+	case info.IsURLEncoded:
+		return "form-urlencoded"
+	case info.IsGraphQL:
+		return "graphql"
+	case info.IsXML:
+		return "xml"
+	case info.IsText:
+		return "text"
+	default:
+		return "binary"
+	}
+}
+
 func ParseJSONFormat(body, contentType string) *JSONFormat {
 	if body == "" || !DetectContentType(contentType).IsJSON {
 		return nil
