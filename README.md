@@ -1,229 +1,527 @@
-# 🦅 Raptor Web Crawler - Advanced Security Testing Framework
+# Raptor
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Go-1.26%2B-00ADD8?style=for-the-badge&logo=go" alt="Go Version"/>
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
-  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey?style=for-the-badge" alt="Platform"/>
-  <img src="https://img.shields.io/badge/Version-2.0.0-green?style=for-the-badge" alt="Version"/>
-  <img src="https://img.shields.io/badge/Katana-Integrated-purple?style=for-the-badge" alt="Katana"/>
-  <img src="https://img.shields.io/badge/SQLMap-Ready-orange?style=for-the-badge" alt="SQLMap"/>
-  <img src="https://img.shields.io/badge/Dalfox-Ready-red?style=for-the-badge" alt="Dalfox"/>
+  <img src="images/banner.png" alt="Raptor web crawler" width="800">
 </div>
 
-<br>
+<p align="center">
+  <strong>A Go-based web reconnaissance crawler focused on request intelligence.</strong>
+</p>
 
-<div align="center">
-  <img src="images/banner.png" alt="Raptor Crawler Banner" width="800"/>
-</div>
+<p align="center">
+  <img src="https://img.shields.io/badge/Go-1.26%2B-00ADD8?logo=go" alt="Go 1.26+">
+  <img src="https://img.shields.io/badge/storage-SQLite-003B57?logo=sqlite" alt="SQLite">
+  <img src="https://img.shields.io/badge/browser-Chromium-4285F4?logo=googlechrome" alt="Chromium">
+  <img src="https://img.shields.io/badge/discovery-Katana-7B42BC" alt="Katana">
+</p>
 
-<br>
+Raptor combines fast URL discovery with static analysis and Chromium-backed
+dynamic crawling. Katana is used to find URLs; Raptor owns request capture,
+normalization, authentication metadata, form analysis, JavaScript endpoint
+extraction, deduplication, and SQLite persistence.
 
-> **Advanced Web Security Crawler with Request Intelligence**  
-> Discover endpoints, forms, API routes, hidden attack surfaces, and automatically generate scanner-ready artifacts for modern web applications.
+> Use Raptor only against systems you own or are explicitly authorized to test.
 
----
+## Status
 
-## 📋 Table of Contents
+Raptor is under active development. The current implementation supports:
 
-- [🔥 Features](#-features)
-- [📊 Architecture](#-architecture)
-- [🚀 Quick Install](#-quick-install)
-- [📖 Usage](#-usage)
-- [🎯 Scanner Integration](#-scanner-integration)
-- [📊 Results](#-results)
-- [🔧 Configuration](#-configuration)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+- Static HTML crawling and form extraction
+- Chromium network capture through `chromedp`
+- Optional Katana URL-discovery pre-pass
+- GET, POST, PUT, PATCH and other browser-observed requests
+- JSON, URL-encoded, multipart, GraphQL, XML and text content classification
+- Request headers, cookies, authorization and CSRF metadata
+- JavaScript endpoint and SPA route extraction
+- Authenticated form and JSON login workflows
+- Browser cookie, localStorage and sessionStorage reuse
+- Automatic authentication refresh after an expired session is detected
+- SQLite persistence and JSON crawl output
 
----
+Dedicated Postman, Burp, SQLMap request-file, Nuclei and ffuf exporters are
+planned. The current scanner integration examples use SQLite queries and the
+authenticated cookie export.
 
-## 🔥 Features
+## Architecture
 
-### 🎯 Core Capabilities
+```text
+                         +---------------------+
+                         |       Katana        |
+                         | URL discovery only  |
+                         +----------+----------+
+                                    |
+                                    v
++------------------+      +---------+----------+
+| Static crawler   +----->| Priority URL queue |
+| HTML and forms   |      +---------+----------+
++------------------+                |
+                                    v
+                         +----------+-----------+
+                         | Chromium / chromedp  |
+                         | DOM + network events |
+                         +----------+-----------+
+                                    |
+                                    v
+                         +----------+-----------+
+                         | Request intelligence |
+                         | normalize / classify |
+                         | enrich / deduplicate |
+                         +----------+-----------+
+                                    |
+                                    v
+                         +----------+-----------+
+                         |       SQLite         |
+                         | discovered_requests  |
+                         | auth metadata        |
+                         +----------------------+
+```
 
-| Feature | Description |
-|---------|-------------|
-| **Static & Dynamic Crawling** | Fast static crawling + headless browser for SPAs |
-| **Katana Integration** | 100% Katana pre-pass for fast breadth-first discovery |
-| **Form Discovery** | Automatically detect and extract all forms with parameters |
-| **JSON Support** | Capture JSON payloads from modern SPAs with schema inference |
-| **SPA Detection** | Discover React, Vue, Angular, and Next.js routes |
-| **AJAX/Fetch Detection** | Capture XHR, fetch, axios, GraphQL, and WebSocket requests |
-| **Request Templates** | Generate reusable request templates with JSON schemas |
-| **SQLite Storage** | All results saved to SQLite database |
-| **Beautiful CLI** | Colored output with professional banner |
-| **Both Modes** | Run static and dynamic in one command |
+Katana results are used to seed Raptor's crawl queue. Katana request records are
+not treated as authoritative request intelligence.
 
-### 🔐 Security Testing Features
+## Requirements
 
-| Feature | Description |
-|---------|-------------|
-| **Full Headers Capture** | Authorization, Cookies, CSRF, XSRF, Origin, Referer |
-| **Cookie Analysis** | HttpOnly, Secure, SameSite attributes |
-| **Response Fingerprinting** | Status, Length, Hash, Mime, Title |
-| **API Schema Inference** | Auto-generate OpenAPI/Swagger specs |
-| **GraphQL Detection** | Detect and extract GraphQL queries and mutations |
-| **WebSocket Detection** | Capture ws:// and wss:// endpoints |
-| **Route Parameter Extraction** | `/users/123` → `/users/{id}` |
-| **JS Endpoint Mining** | Extract fetch(), axios(), GraphQL from JavaScript |
-| **Secret Detection** | API keys, JWT tokens, AWS keys from JS |
-| **Multipart Upload Detection** | File upload forms with test files |
+- Go 1.26 or newer
+- Chromium or Google Chrome for dynamic and authenticated crawling
+- SQLite CLI, optional, for inspecting databases
+- Linux, macOS or Windows
 
-### 📤 Scanner Integration
+The Katana Go library is included through Go modules. Raptor can also fall back
+to a Katana binary when available.
 
-| Integration | Purpose |
-|-------------|---------|
-| **SQLMap** | Export discovered endpoints for SQL injection testing |
-| **Dalfox** | Export URLs for XSS vulnerability scanning |
-| **Nuclei** | Generate custom Nuclei templates |
-| **OpenAPI** | Generate OpenAPI/Swagger specifications |
-| **Postman** | Export collections for API testing |
-| **Burp Suite** | Request files for manual testing |
+## Installation
 
----
+Clone and build:
 
-## 📊 Architecture
-
-
-Option 2: Clone & Build
-bash
+```bash
 git clone https://github.com/Anduamlk/web-Crawler.git
 cd web-Crawler
 go mod download
 go build -o raptor ./cmd/crawler
-Option 3: Docker
-bash
-docker build -t raptor-crawler .
-docker run -v $(pwd):/data raptor-crawler -url http://target.com -db /data/results.db -both
-📖 Usage
-Basic Commands
-bash
-# Static crawling only
-raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100
+```
 
-# Dynamic crawling only (for SPAs)
-raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100 -dynamic
+Verify the installation:
 
-# Both static AND dynamic (Best for full coverage)
-raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100 -both
+```bash
+./raptor -help
+```
 
-# With Katana pre-pass (Fast discovery + Deep intelligence)
-raptor -url http://localhost:3000 -db results.db -depth 3 -pages 50 -both -katana -katana-depth 3
+Run the test suite:
 
-# With JSON output
-raptor -url http://localhost:3000 -db results.db -depth 3 -pages 100 -both -output results.json
+```bash
+go test ./...
+go vet ./...
+```
 
-# With session (authenticated crawling)
-raptor -url http://localhost:3000 -db results.db -session session.json -both
+## Quick start
 
-# Login automatically and export a reusable authenticated session
-raptor -url https://target.example/app \
-    --login-url https://target.example/login \
-    --username analyst@example.com \
-    --password 'replace-me' \
-    --login-method form \
-    --session-cookie session \
-    --cookie-file raptor-session.json \
-    -db results.db
+Static crawl:
 
-# Stay in domain (prevent cross-domain crawling)
-raptor -url http://localhost:3000 -db results.db -depth 3 -pages 50 -both -stay-in-domain
-Advanced Options
-bash
-# Full hybrid mode with all options
-raptor -url https://target.com \
-    -db results.db \
-    -depth 3 \
-    -pages 100 \
-    -both \
-    -katana \
-    -katana-depth 3 \
-    -katana-concurrency 20 \
-    -stay-in-domain \
-    -output scan_results.json \
-    -session session.json \
-    -proxy http://127.0.0.1:8080 \
-    -timeout 60s
+```bash
+./raptor \
+  -url https://target.example \
+  -db results.db \
+  -depth 3 \
+  -pages 100
+```
 
-Authenticated crawling
+Dynamic crawl for JavaScript-heavy applications:
 
-When `--username`, `--password`, and `--login-url` are supplied, Raptor starts
-its browser crawler even if `-dynamic` is omitted. It detects login fields and
-CSRF inputs, submits either an HTML form or JSON request, reuses the same browser
-context, and logs in again after an authenticated request returns 401/403.
+```bash
+./raptor \
+  -url https://target.example \
+  -db results.db \
+  -dynamic \
+  -depth 3 \
+  -pages 100
+```
 
-Use `--username-field`, `--password-field`, and `--csrf-field` when automatic
-detection is ambiguous. Each value can be a field name, element ID, or CSS
-selector. `--login-success-regex` can match either the resulting URL or visible
-page text. The `--cookie-file` JSON is written with owner-only permissions and
-contains a cookie header plus command-line hints for SQLMap, Dalfox, Nuclei,
-ffuf, and httpx. Avoid placing real passwords in shell history; invoke Raptor
-from a protected script or secret-injection mechanism.
-🎯 Scanner Integration
-Export for SQLMap (SQL Injection Testing)
-bash
-# Extract all parameterized URLs
-sqlite3 results.db "SELECT url FROM discovered_requests WHERE method='GET' AND url LIKE '%?%';" > sqlmap_urls.txt
+Run the static and dynamic phases:
 
-# Run SQLMap
-sqlmap -m sqlmap_urls.txt --batch --level=2 --risk=2 --dbms=postgresql
-Export for Dalfox (XSS Testing)
-bash
-# Extract all URLs
-sqlite3 results.db "SELECT url FROM discovered_requests WHERE method='GET';" > dalfox_urls.txt
+```bash
+./raptor \
+  -url https://target.example \
+  -db results.db \
+  -both
+```
 
-# Run Dalfox
-dalfox file dalfox_urls.txt --output xss_results.txt --only-poc
-Export POST Requests with Bodies
-bash
-# Export POST requests for SQLMap
-sqlite3 results.db "SELECT url, body FROM discovered_requests WHERE method='POST' AND body != '';" > post_requests.txt
+Use Katana for breadth-first URL discovery:
 
-# Create SQLMap request files
-sqlite3 results.db -csv -header "SELECT url, body FROM discovered_requests WHERE method='POST' AND body != '';" > post_requests.csv
-Generate OpenAPI Specification
-bash
-# Export to OpenAPI format
-raptor -url https://api.target.com -db results.db -both -output openapi.json
+```bash
+./raptor \
+  -url https://target.example \
+  -db results.db \
+  -both \
+  -katana \
+  -katana-depth 3 \
+  -katana-concurrency 20
+```
 
-# Or convert existing results
-python3 scripts/export_openapi.py results.db > openapi.yaml
-📊 Results
-Database Schema
-sql
--- Discovered requests with full metadata
-CREATE TABLE discovered_requests (
-    id TEXT PRIMARY KEY,
-    url TEXT NOT NULL,
-    method TEXT NOT NULL,
-    headers TEXT,      -- JSON
-    body TEXT,
-    source_type TEXT,
-    depth INTEGER,
-    normalized_url TEXT,
-    created_at TIMESTAMP,
-    form_fields TEXT,  -- JSON
-    form TEXT,         -- JSON
-    spa_route TEXT,    -- JSON
-    parameters TEXT,   -- JSON
-    cookies TEXT,      -- JSON
-    response TEXT,     -- JSON
-    body_type TEXT,
-    json_format TEXT   -- JSON
-);
-Query Examples
-bash
-# Count by source type
-sqlite3 results.db "SELECT source_type, COUNT(*) FROM discovered_requests GROUP BY source_type;"
+Write crawl results to JSON in addition to SQLite:
 
-# Find all forms
-sqlite3 results.db "SELECT url, json_extract(form, '$.form_type') as form_type FROM discovered_requests WHERE form IS NOT NULL;"
+```bash
+./raptor \
+  -url https://target.example \
+  -db results.db \
+  -dynamic \
+  -output results.json
+```
 
-# Find POST requests with bodies
-sqlite3 results.db "SELECT url, body FROM discovered_requests WHERE method='POST' AND body != '';"
+## Authenticated crawling
 
-# Find JSON APIs
-sqlite3 results.db "SELECT url, method, json_extract(json_format, '$.payload') as payload FROM discovered_requests WHERE json_format IS NOT NULL;"
+Supplying `-username`, `-password`, and `-login-url` automatically enables the
+browser crawler. Raptor logs in before crawling and reuses the same browser
+context for subsequent pages.
 
-# Find GraphQL endpoints
-sqlite3 results.db "SELECT url FROM discovered_requests WHERE url LIKE '%graphql%' OR body LIKE '%query%';"
+### HTML form login
+
+```bash
+./raptor \
+  -url https://target.example/app \
+  -login-url https://target.example/login \
+  -username analyst@example.com \
+  -password 'replace-me' \
+  -login-method form \
+  -session-cookie session \
+  -cookie-file raptor-session.json \
+  -db authenticated.db
+```
+
+Raptor attempts to detect username, password and CSRF inputs automatically.
+Field names, element IDs or CSS selectors can be supplied when detection is
+ambiguous:
+
+```bash
+./raptor \
+  -url https://target.example/app \
+  -login-url https://target.example/sign-in \
+  -username analyst@example.com \
+  -password 'replace-me' \
+  -username-field '#email' \
+  -password-field '#password' \
+  -csrf-field '_csrf' \
+  -login-method form \
+  -db authenticated.db
+```
+
+### JSON login
+
+```bash
+./raptor \
+  -url https://target.example/app \
+  -login-url https://target.example/api/login \
+  -username analyst@example.com \
+  -password 'replace-me' \
+  -username-field email \
+  -password-field password \
+  -login-method json \
+  -session-cookie access_token \
+  -cookie-file raptor-session.json \
+  -db authenticated.db
+```
+
+### Login success detection
+
+Raptor recognizes successful authentication through:
+
+- A URL change
+- A logout control
+- A dashboard or account redirect
+- Creation of a new cookie
+- Creation of the configured session cookie
+- An optional success regex
+
+Example:
+
+```bash
+./raptor \
+  -url https://target.example/app \
+  -login-url https://target.example/login \
+  -username analyst@example.com \
+  -password 'replace-me' \
+  -login-success-regex 'Welcome|/dashboard' \
+  -db authenticated.db
+```
+
+The cookie export is written with owner-only permissions and contains the cookie
+header plus command hints for SQLMap, Dalfox, Nuclei, ffuf and httpx.
+
+> Command-line passwords may be recorded in shell history or process listings.
+> Use a protected launcher or secret-injection mechanism for real credentials.
+
+## Reusing an existing session
+
+Raptor accepts a browser storage-state JSON file:
+
+```bash
+./raptor \
+  -url https://target.example/app \
+  -session session.json \
+  -dynamic \
+  -db results.db
+```
+
+The state format contains browser cookies and origin-scoped localStorage values.
+
+## Proxying traffic
+
+Send browser traffic through an HTTP proxy such as Burp Suite or ZAP:
+
+```bash
+./raptor \
+  -url https://target.example \
+  -dynamic \
+  -proxy http://127.0.0.1:8080 \
+  -db proxied.db
+```
+
+## Important options
+
+| Option | Default | Description |
+|---|---:|---|
+| `-url` | required | Seed URL |
+| `-db` | `scanner_discovery.db` | SQLite database path |
+| `-depth` | `3` | Maximum crawl depth |
+| `-pages` | `100` | Maximum pages |
+| `-concurrency` | `5` | Requested crawler concurrency |
+| `-timeout` | `30s` | Request/navigation timeout |
+| `-dynamic` | `false` | Enable Chromium crawling |
+| `-both` | `false` | Run static and dynamic phases |
+| `-stay-in-domain` | `true` | Restrict crawling to the seed host |
+| `-katana` | `false` | Enable the Katana discovery pre-pass |
+| `-katana-depth` | `2` | Katana crawl depth |
+| `-katana-concurrency` | `20` | Katana worker count |
+| `-proxy` | empty | HTTP proxy URL |
+| `-session` | empty | Existing browser state file |
+| `-output` | empty | Optional JSON result file |
+| `-username` | empty | Login username |
+| `-password` | empty | Login password |
+| `-login-url` | empty | Login page or API endpoint |
+| `-login-method` | `form` | `form` or `json` |
+| `-username-field` | auto | Field name, ID or selector |
+| `-password-field` | auto | Field name, ID or selector |
+| `-csrf-field` | auto | CSRF field, selector or JSON header |
+| `-session-cookie` | auto | Cookie used to confirm login |
+| `-login-success-regex` | empty | URL/page-text success expression |
+| `-cookie-file` | empty | Authenticated session export |
+
+Run `./raptor -help` for the complete list.
+
+## SQLite output
+
+The primary compatibility table is `discovered_requests`.
+
+Important columns include:
+
+| Column | Description |
+|---|---|
+| `id` | Semantic request fingerprint |
+| `auth_session_id` | Associated authentication session |
+| `method` | HTTP method |
+| `url` | Original URL |
+| `normalized_url` | Canonical URL |
+| `headers` | Request headers as JSON |
+| `cookies` | Parsed request cookies as JSON |
+| `parameters` | Query/form parameters as JSON |
+| `body` | Raw request body |
+| `body_type` | JSON, form, multipart, XML, text or binary classification |
+| `response` | Response metadata as JSON |
+| `source_type` | Browser, page, form or JavaScript discovery source |
+| `depth` | Crawl depth |
+| `created_at` | UTC discovery time |
+
+Authentication metadata is stored separately in:
+
+- `auth_sessions`
+- `login_requests`
+- `cookies`
+- `csrf_tokens`
+
+### Useful queries
+
+Request counts by method and source:
+
+```bash
+sqlite3 results.db "
+SELECT method, source_type, COUNT(*) AS total
+FROM discovered_requests
+GROUP BY method, source_type
+ORDER BY total DESC;
+"
+```
+
+Pretty-print headers containing cookies:
+
+```bash
+sqlite3 -header -column results.db "
+SELECT
+  method,
+  url,
+  json_extract(headers, '$.Cookie') AS cookie
+FROM discovered_requests
+WHERE json_extract(headers, '$.Cookie') IS NOT NULL;
+"
+```
+
+Find browser-observed POST requests:
+
+```bash
+sqlite3 -header -column results.db "
+SELECT url, body_type, body
+FROM discovered_requests
+WHERE method = 'POST'
+  AND source_type IN ('ajax_fetch', 'login_request');
+"
+```
+
+Find JSON requests:
+
+```bash
+sqlite3 -header -column results.db "
+SELECT
+  method,
+  url,
+  json_extract(json_format, '$.payload') AS payload
+FROM discovered_requests
+WHERE json_extract(json_format, '$.is_json') = 1;
+"
+```
+
+Find GraphQL candidates:
+
+```bash
+sqlite3 -header -column results.db "
+SELECT method, url, body
+FROM discovered_requests
+WHERE source_type = 'graphql'
+   OR lower(url) LIKE '%graphql%'
+   OR lower(body) LIKE '%mutation%';
+"
+```
+
+## Scanner workflows
+
+### SQLMap
+
+Export parameterized GET URLs:
+
+```bash
+sqlite3 -noheader results.db "
+SELECT DISTINCT url
+FROM discovered_requests
+WHERE method = 'GET' AND instr(url, '?') > 0;
+" > sqlmap-urls.txt
+
+sqlmap -m sqlmap-urls.txt --batch
+```
+
+Authenticated scans can reuse the cookie header from `raptor-session.json`.
+For POST and JSON requests, a dedicated raw HTTP request exporter is planned.
+
+### Dalfox
+
+```bash
+sqlite3 -noheader results.db "
+SELECT DISTINCT url
+FROM discovered_requests
+WHERE method = 'GET' AND instr(url, '?') > 0;
+" > dalfox-urls.txt
+
+dalfox file dalfox-urls.txt
+```
+
+### Nuclei, ffuf and httpx
+
+The authenticated cookie export includes command hints for these tools.
+Request-specific adapters and template generation are on the roadmap.
+
+## Request normalization
+
+Raptor currently normalizes:
+
+- URL scheme and hostname case
+- Default HTTP and HTTPS ports
+- URL fragments
+- Trailing slashes
+- Query parameter ordering
+- JSON object formatting for fingerprints
+- URL-encoded form ordering
+- Content-Type parameters for semantic comparison
+
+The raw URL, headers and body remain available for debugging and replay.
+
+## JavaScript intelligence
+
+Raptor analyzes loaded JavaScript for:
+
+- REST-style endpoints
+- `fetch(...)`
+- Axios requests
+- `XMLHttpRequest.open(...)`
+- GraphQL endpoints and operations
+- WebSocket URLs
+- EventSource endpoints
+- Beacon calls
+- React and Vue route definitions
+- Dynamically imported routes
+
+JavaScript extraction is heuristic. Browser-observed network requests should be
+treated as higher-confidence evidence than statically inferred endpoints.
+
+## Roadmap
+
+- Versioned request-schema migrations
+- Human-readable database viewer
+- Canonical structured `requests` table
+- Raw HTTP replay export
+- curl export
+- Postman Collection v2.1 export
+- SQLMap request-file adapter
+- Dalfox input adapter
+- Nuclei request/template adapter
+- ffuf command generation
+- Response-body capture with configurable limits
+- AST-backed JavaScript analysis
+- Multi-step and MFA-assisted authentication workflows
+
+## Project layout
+
+```text
+cmd/crawler/        Raptor command-line application
+cmd/sessionmgr/     Session recording and verification utility
+crawler/            Crawl, browser, request-intelligence and SQLite code
+session/            Session archive and replay support
+images/             Project artwork
+```
+
+## Security and data handling
+
+Crawler databases and session exports may contain:
+
+- Passwords submitted to test forms
+- Session cookies
+- Authorization headers
+- CSRF tokens
+- Personal or application data
+
+Do not commit generated databases, session exports or credential files. Store
+them securely, restrict filesystem permissions and delete them when no longer
+needed.
+
+## Contributing
+
+1. Create a focused branch.
+2. Keep changes backward compatible with `discovered_requests`.
+3. Add tests for normalization, persistence and request capture behavior.
+4. Run:
+
+   ```bash
+   gofmt -w $(find cmd crawler session -name '*.go')
+   go test ./...
+   go vet ./...
+   ```
+
+5. Open a pull request describing the behavior change and migration impact.
+
+Bug reports should include the Raptor command, target application type, relevant
+logs and a sanitized database example. Never include live credentials or tokens.
