@@ -470,6 +470,10 @@ func (c *StaticCrawler) CrawlURL(ctx context.Context, rawURL string, depth int, 
 			RequiredFields: requiredFields,
 			DataFormat:     getDataFormat(isJSONForm, f.explicitEnctype), // Uses getDataFormat from dynamic.go
 		}
+		// Static analysis records form metadata only. It must never manufacture
+		// an HTTP request; runtime browser events are the sole request source.
+		_ = form
+		continue
 
 		for _, sub := range submissions {
 			contentType := sub.Headers["Content-Type"]

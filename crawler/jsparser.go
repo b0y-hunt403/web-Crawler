@@ -2,10 +2,298 @@
 package crawler
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"net/url"
 	"regexp"
 	"strings"
 )
+
+type JSFailureReason struct {
+	Condition  string  `json:"condition"`
+	SourceURL  string  `json:"source_url"`
+	Line       int     `json:"line"`
+	Confidence float64 `json:"confidence"`
+}
+
+type JSApplicationAnalysis struct {
+	FailureReasonCandidates []JSFailureReason    `json:"failure_reason_candidates"`
+	APICandidates           []StaticAPICandidate `json:"api_candidates"`
+	Messages                []string             `json:"messages,omitempty"`
+}
+
+func ExtractSourceMapURL(source string, scriptURL string) string {
+	m := regexp.MustCompile(`(?m)sourceMappingURL\s*=\s*([^\s]+)`).FindStringSubmatch(source)
+	if len(m) < 2 {
+		return ""
+	}
+	u, err := url.Parse(scriptURL)
+	if err != nil {
+		return ""
+	}
+	mapURL, err := u.Parse(strings.TrimSpace(m[1]))
+	if err != nil {
+		return ""
+	}
+	return mapURL.String()
+}
+
+// StaticAPICandidate is a JavaScript-derived endpoint. It is never an
+// observed browser request and must remain separate from DiscoveredRequest.
+type StaticAPICandidate struct {
+	URL                string  `json:"url"`
+	RawURLExpression   string  `json:"raw_url_expression"`
+	Method             string  `json:"method"`
+	BodyTemplate       string  `json:"body_template,omitempty"`
+	ContentType        string  `json:"content_type,omitempty"`
+	HeadersTemplate    string  `json:"headers_template,omitempty"`
+	SourceJSURL        string  `json:"source_js_url,omitempty"`
+	PageURL            string  `json:"page_url,omitempty"`
+	Line               int     `json:"line,omitempty"`
+	Column             int     `json:"column,omitempty"`
+	Framework          string  `json:"framework,omitempty"`
+	Confidence         float64 `json:"confidence"`
+	Evidence           string  `json:"evidence"`
+	BodyHash           string  `json:"body_hash,omitempty"`
+	OriginalSourceURL  string  `json:"original_source_url,omitempty"`
+	OriginalLine       int     `json:"original_line,omitempty"`
+	OriginalColumn     int     `json:"original_column,omitempty"`
+	InteractionOutcome string  `json:"interaction_outcome,omitempty"`
+	RelatedError       string  `json:"related_error,omitempty"`
+	Confirmed          bool    `json:"confirmed"`
+}
+
+// AnalyzeApplicationScript is a bounded, lexical JavaScript/TypeScript
+// analyzer. It tokenizes calls and simple constant expressions rather than
+// treating every string literal as an endpoint; this keeps static findings
+// separate from authoritative CDP observations while covering modern bundled
+// syntax used by fetch, axios, XHR, clients and GraphQL wrappers.
+func AnalyzeApplicationScript(source, scriptURL, pageURL string) JSApplicationAnalysis {
+	result := JSApplicationAnalysis{}
+	constants := map[string]string{}
+	for _, m := range regexp.MustCompile(`(?m)\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*([^;\n]+)`).FindAllStringSubmatch(source, -1) {
+		if v, ok := resolveJSExpression(m[2], constants); ok {
+			constants[m[1]] = v
+		}
+	}
+	lineAt := func(pos int) int {
+		if pos < 0 {
+			return 1
+		}
+		return 1 + strings.Count(source[:pos], "\n")
+	}
+	add := func(method, raw, body, headers, evidence string, pos int) {
+		resolved := raw
+		if v, ok := resolveJSExpression(raw, constants); ok {
+			resolved = v
+		}
+		if resolved == "" {
+			return
+		}
+		if u, err := url.Parse(pageURL); err == nil {
+			if x, err := u.Parse(resolved); err == nil {
+				resolved = x.String()
+			}
+		}
+		candidate := StaticAPICandidate{URL: resolved, RawURLExpression: raw, Method: strings.ToUpper(method), BodyTemplate: body, HeadersTemplate: headers, SourceJSURL: scriptURL, PageURL: pageURL, Line: lineAt(pos), Confidence: .85, Evidence: evidence}
+		if strings.Contains(strings.ToLower(headers), "application/json") {
+			candidate.ContentType = "application/json"
+		}
+		candidate.BodyHash = fmt.Sprintf("%x", sha256.Sum256([]byte(body)))
+		for _, old := range result.APICandidates {
+			if old.Method == candidate.Method && old.RawURLExpression == candidate.RawURLExpression && old.SourceJSURL == candidate.SourceJSURL {
+				return
+			}
+		}
+		result.APICandidates = append(result.APICandidates, candidate)
+	}
+	callRE := regexp.MustCompile(`(?is)(fetch|axios\.(?:get|post|put|patch|delete)|(?:api|client|http|request)\.(?:get|post|put|patch|delete|request)|new\s+XMLHttpRequest|navigator\.sendBeacon|new\s+(?:WebSocket|EventSource))\s*\(([^)]*)\)`)
+	for _, m := range callRE.FindAllStringSubmatchIndex(source, -1) {
+		call := source[m[2]:m[3]]
+		args := source[m[4]:m[5]]
+		method, raw := "GET", ""
+		lc := strings.ToLower(call)
+		if strings.Contains(lc, ".post") {
+			method = "POST"
+		} else if strings.Contains(lc, ".put") {
+			method = "PUT"
+		} else if strings.Contains(lc, ".patch") {
+			method = "PATCH"
+		} else if strings.Contains(lc, ".delete") {
+			method = "DELETE"
+		}
+		if strings.Contains(lc, "sendbeacon") {
+			method = "POST"
+		}
+		if strings.Contains(lc, "xmlhttprequest") {
+			x := regexp.MustCompile(`(?is)["'](GET|POST|PUT|PATCH|DELETE)["']\s*,\s*([^,\)]+)`).FindStringSubmatch(args)
+			if len(x) > 2 {
+				method, raw = x[1], strings.TrimSpace(x[2])
+			}
+		}
+		if raw == "" {
+			raw = firstJSArgument(args)
+		}
+		body, headers := "", ""
+		if i := strings.Index(args, "{"); i >= 0 {
+			cfg := args[i:]
+			if b := regexp.MustCompile(`(?is)body\s*:\s*([^,}]+|\{.*\})`).FindStringSubmatch(cfg); len(b) > 1 {
+				body = strings.TrimSpace(b[1])
+			}
+			if h := regexp.MustCompile(`(?is)content-type['"]?\s*:\s*['"]([^'"]+)`).FindStringSubmatch(cfg); len(h) > 1 {
+				headers = h[1]
+			}
+		}
+		add(method, strings.TrimSpace(raw), body, headers, call, m[0])
+	}
+	for _, m := range regexp.MustCompile(`(?m)if\s*\(([^\)]*(?:email|password|token|valid|consent)[^\)]*)\)\s*\{?\s*return`).FindAllStringSubmatchIndex(source, -1) {
+		result.FailureReasonCandidates = append(result.FailureReasonCandidates, JSFailureReason{Condition: strings.TrimSpace(source[m[2]:m[3]]), SourceURL: scriptURL, Line: lineAt(m[0]), Confidence: .9})
+	}
+	return result
+}
+
+func firstJSArgument(args string) string {
+	depth, quote := 0, byte(0)
+	for i := 0; i < len(args); i++ {
+		c := args[i]
+		if quote != 0 {
+			if c == quote && (i == 0 || args[i-1] != '\\') {
+				quote = 0
+			}
+			continue
+		}
+		if c == '\'' || c == '"' || c == '`' {
+			quote = c
+			continue
+		}
+		if c == '(' || c == '{' || c == '[' {
+			depth++
+		}
+		if c == ')' || c == '}' || c == ']' {
+			depth--
+		}
+		if c == ',' && depth == 0 {
+			return args[:i]
+		}
+	}
+	return args
+}
+func resolveJSExpression(expr string, constants map[string]string) (string, bool) {
+	expr = strings.TrimSpace(expr)
+	if len(expr) >= 2 && ((expr[0] == '"' && expr[len(expr)-1] == '"') || (expr[0] == '\'' && expr[len(expr)-1] == '\'')) {
+		return expr[1 : len(expr)-1], true
+	}
+	if strings.HasPrefix(expr, "`") && strings.HasSuffix(expr, "`") {
+		s := expr[1 : len(expr)-1]
+		s = regexp.MustCompile(`\$\{([A-Za-z_$][\w$]*)\}`).ReplaceAllStringFunc(s, func(x string) string { return constants[strings.TrimSuffix(strings.TrimPrefix(x, "${"), "}")] })
+		return s, true
+	}
+	if v, ok := constants[expr]; ok {
+		return v, true
+	}
+	if strings.Contains(expr, "+") {
+		parts := strings.Split(expr, "+")
+		out := ""
+		for _, p := range parts {
+			v, ok := resolveJSExpression(p, constants)
+			if !ok {
+				return expr, false
+			}
+			out += v
+		}
+		return out, true
+	}
+	return expr, strings.HasPrefix(expr, "/")
+}
+
+func ExtractStaticAPICandidates(source, scriptURL, pageURL string) []StaticAPICandidate {
+	var out []StaticAPICandidate
+	seen := map[string]bool{}
+	add := func(method, raw, body, evidence string, confidence float64) {
+		raw = strings.TrimSpace(raw)
+		if raw == "" {
+			return
+		}
+		resolved := raw
+		if b, err := url.Parse(pageURL); err == nil {
+			if u, err := b.Parse(raw); err == nil {
+				resolved = u.String()
+			}
+		}
+		key := strings.ToUpper(method) + "|" + raw + "|" + body
+		if seen[key] {
+			return
+		}
+		seen[key] = true
+		line := 1 + strings.Count(source[:maxIntJS(0, strings.Index(source, raw))], "\n")
+		hash := ""
+		if body != "" {
+			hash = fmt.Sprintf("%x", sha256.Sum256([]byte(body)))
+		}
+		out = append(out, StaticAPICandidate{URL: resolved, RawURLExpression: raw, Method: strings.ToUpper(method), BodyTemplate: body, SourceJSURL: scriptURL, PageURL: pageURL, Line: line, Confidence: confidence, Evidence: evidence, BodyHash: hash})
+	}
+	patterns := []struct {
+		re               *regexp.Regexp
+		method, evidence string
+	}{
+		{regexp.MustCompile("(?is)fetch\\s*\\(\\s*[\\\"']([^\\\"']+)[\\\"'][^)]*?method\\s*:\\s*[\\\"']?(POST|PUT|PATCH|DELETE)[\\\"']?"), "", "fetch"},
+		{regexp.MustCompile("(?is)fetch\\s*\\(\\s*[\\\"']([^\\\"']+)[\\\"']"), "GET", "fetch"},
+		{regexp.MustCompile("(?is)axios\\.(post|put|patch|delete|get)\\s*\\(\\s*[\\\"']([^\\\"']+)[\\\"']"), "", "axios"},
+		{regexp.MustCompile("(?is)\\.open\\s*\\(\\s*[\\\"'](GET|POST|PUT|PATCH|DELETE)[\\\"']\\s*,\\s*[\\\"']([^\\\"']+)[\\\"']"), "", "xhr"},
+		{regexp.MustCompile("(?is)sendBeacon\\s*\\(\\s*[\\\"']([^\\\"']+)[\\\"']"), "POST", "beacon"},
+		{regexp.MustCompile("(?is)new\\s+WebSocket\\s*\\(\\s*[\\\"']([^\\\"']+)[\\\"']"), "GET", "websocket"},
+	}
+	for _, p := range patterns {
+		for _, m := range p.re.FindAllStringSubmatch(source, -1) {
+			method, raw := p.method, m[1]
+			if p.evidence == "axios" || p.evidence == "xhr" {
+				method, raw = m[1], m[2]
+			}
+			add(method, raw, "", p.evidence, 1.0)
+		}
+	}
+	return out
+}
+
+func maxIntJS(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// RuntimeAPIEndpoint is a network endpoint found in executable JavaScript.
+// Unlike SPA route extraction, these entries represent calls that can reach a
+// backend and therefore carry the HTTP method used by the client.
+type RuntimeAPIEndpoint struct {
+	Method string
+	URL    string
+}
+
+var runtimeAPIPattern = regexp.MustCompile(`(?is)(fetch|axios\.(?:get|post|put|patch|delete)|\$\.ajax|\.(?:get|post|put|patch|delete|request)|graphql|new\s+XMLHttpRequest)[[:space:]]*\([^\)]{0,600}?['"]((?:https?://|/)[^'"[:space:]]+)['"]`)
+
+// ExtractRuntimeAPIEndpoints extracts only URLs used by network-capable JS
+// calls. Plain strings and client-side router paths are intentionally omitted.
+func ExtractRuntimeAPIEndpoints(source string) []RuntimeAPIEndpoint {
+	seen := make(map[string]struct{})
+	var out []RuntimeAPIEndpoint
+	for _, m := range runtimeAPIPattern.FindAllStringSubmatch(source, -1) {
+		method := "GET"
+		call := strings.ToLower(m[1])
+		for _, candidate := range []string{"post", "put", "patch", "delete"} {
+			if strings.Contains(call, candidate) {
+				method = strings.ToUpper(candidate)
+			}
+		}
+		key := method + " " + m[2]
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		out = append(out, RuntimeAPIEndpoint{Method: method, URL: m[2]})
+	}
+	return out
+}
 
 // =============================================================================
 // CONSTANTS & PATTERNS

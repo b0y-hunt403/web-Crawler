@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	sessionmgr "github.com/Anduamlk/web-Crawler/session"
 )
@@ -57,17 +58,19 @@ func urlPriority(rawURL string) int {
 
 // Crawler ties the static and dynamic crawlers together
 type Crawler struct {
-	config           CrawlerConfig
-	static           *StaticCrawler
-	dynamic          *DynamicCrawler
-	store            *RequestStore
-	robots           *robotsRules
-	externalCallback RequestCallback
-	visited          map[string]struct{}
-	seenFingerprints map[string]struct{}
-	results          []*DiscoveredRequest
-	contextProvider  sessionmgr.BrowserContextProvider
-	session          sessionmgr.Session
+	config               CrawlerConfig
+	static               *StaticCrawler
+	dynamic              *DynamicCrawler
+	store                *RequestStore
+	robots               *robotsRules
+	externalCallback     RequestCallback
+	visited              map[string]struct{}
+	seenFingerprints     map[string]struct{}
+	results              []*DiscoveredRequest
+	routeTemplateQueued  map[string]int
+	routeTemplateSkipped map[string]int
+	contextProvider      sessionmgr.BrowserContextProvider
+	session              sessionmgr.Session
 }
 
 // NewCrawler wires up storage and crawlers
@@ -92,13 +95,15 @@ func NewCrawlerWithBrowser(config CrawlerConfig, cb RequestCallback, provider se
 	}
 
 	c := &Crawler{
-		config:           config,
-		store:            store,
-		externalCallback: cb,
-		visited:          map[string]struct{}{},
-		seenFingerprints: map[string]struct{}{},
-		contextProvider:  provider,
-		session:          activeSession,
+		config:               config,
+		store:                store,
+		externalCallback:     cb,
+		visited:              map[string]struct{}{},
+		seenFingerprints:     map[string]struct{}{},
+		contextProvider:      provider,
+		routeTemplateQueued:  map[string]int{},
+		routeTemplateSkipped: map[string]int{},
+		session:              activeSession,
 	}
 	c.static = NewStaticCrawler(config, nil, store)
 
@@ -109,6 +114,11 @@ func NewCrawlerWithBrowser(config CrawlerConfig, cb RequestCallback, provider se
 			return nil, err
 		}
 		c.dynamic = dyn
+		dyn.yieldCallback = func(task *workflowTask, status string, elapsed time.Duration) {
+			if err := c.store.SaveWorkflowYield(task, status, elapsed); err != nil {
+				log.Printf("workflow yield persist: %v", err)
+			}
+		}
 	}
 
 	return c, nil
@@ -127,6 +137,11 @@ func (c *Crawler) handleDiscovered(req *DiscoveredRequest, err error) {
 		return
 	}
 	if _, seen := c.seenFingerprints[req.ID]; seen {
+		if req.CDPRequestID != "" {
+			if saveErr := c.store.SaveRequest(req); saveErr != nil {
+				log.Printf("crawler: failed to update %s: %v", req.URL, saveErr)
+			}
+		}
 		return
 	}
 	c.seenFingerprints[req.ID] = struct{}{}
@@ -154,6 +169,16 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 	heap.Init(pq)
 	seq := 0
 	push := func(u string, depth int) {
+		template := EndpointTemplate(u)
+		limit := c.config.RouteTemplateSampleLimit
+		if limit < 0 {
+			limit = 0
+		}
+		if depth > 0 && limit > 0 && c.routeTemplateQueued[template] >= limit {
+			c.routeTemplateSkipped[template]++
+			return
+		}
+		c.routeTemplateQueued[template]++
 		heap.Push(pq, &queueItem{url: u, depth: depth, priority: urlPriority(u), seq: seq})
 		seq++
 	}
@@ -163,6 +188,7 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 
 	// Katana pre-pass: fast, browser-free breadth-first discovery
 	if c.config.UseKatana {
+		log.Printf("static phase: Katana start")
 		PrintInfo("Running Katana pre-pass for fast breadth-first discovery...")
 		seeded := 0
 
@@ -178,9 +204,11 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 				seeded++
 			},
 		)
+		log.Printf("static phase: AFTER RunKatanaPhase (err=%v)", katanaErr)
 
 		// If library approach fails, try binary approach
 		if katanaErr != nil {
+			log.Printf("static phase: BEFORE Katana fallback")
 			PrintWarning(fmt.Sprintf("Katana library pre-pass failed: %v", katanaErr))
 			PrintInfo("Attempting Katana binary pre-pass...")
 
@@ -202,9 +230,15 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 				PrintSuccess(fmt.Sprintf("Katana binary pre-pass seeded %d additional URL(s) for deep crawling", seeded))
 			}
 		} else {
+			log.Printf("static phase: BEFORE Katana success output")
 			PrintSuccess(fmt.Sprintf("Katana pre-pass seeded %d additional URL(s) for deep crawling", seeded))
+			log.Printf("static phase: AFTER Katana success output")
 		}
+		log.Printf("static phase: Katana finished")
 	}
+	log.Printf("static phase: BEFORE static crawl initialization")
+	log.Printf("static phase: AFTER static crawler object creation")
+	log.Printf("static phase: BEFORE crawl loop")
 
 	for pq.Len() > 0 && len(c.visited) < c.config.MaxPages {
 		item := heap.Pop(pq).(*queueItem)
@@ -226,7 +260,9 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 		if c.dynamic != nil {
 			next = c.dynamic.CrawlURL(ctx, u, item.depth)
 		} else {
+			log.Printf("static phase: crawling %s", u)
 			found, staticNext := c.static.CrawlURL(ctx, u, item.depth, nil)
+			log.Printf("static phase: completed %s (%d results)", u, len(found))
 			for _, req := range found {
 				c.handleDiscovered(req, nil)
 			}
@@ -242,6 +278,10 @@ func (c *Crawler) Run(ctx context.Context) ([]*DiscoveredRequest, error) {
 		}
 	}
 
+	log.Printf("static phase: crawl loop finished")
+	for template, count := range c.routeTemplateSkipped {
+		_ = c.store.SaveCoverageGap("ROUTE_TEMPLATE", "GET", template, "route_planner", template, 1, fmt.Sprintf("sample_limit_reached; skipped=%d", count), "increase RAPTOR_ROUTE_TEMPLATE_SAMPLE_LIMIT")
+	}
 	return c.results, nil
 }
 

@@ -191,7 +191,9 @@ func withQuery(rawURL string, data map[string]string) string {
 	return u.String()
 }
 
-// BuildFormSubmissions returns every plausible form submission representation
+// BuildFormSubmissions returns the submission representation declared by the
+// form.  It deliberately does not invent alternate encodings: the browser's
+// network events are the source of truth for JavaScript requests.
 func BuildFormSubmissions(actionURL string, hasExplicitMethod, hasExplicitEnctype bool, explicitMethod, explicitEnctype string, formData map[string]string, containsPassword bool) []FormSubmission {
 	var out []FormSubmission
 
@@ -211,7 +213,10 @@ func BuildFormSubmissions(actionURL string, hasExplicitMethod, hasExplicitEnctyp
 		return out
 	}
 
-	// Always include POST urlencoded (traditional form)
+	// Native HTML forms default to URL encoded data.  Only emit the format that
+	// the form declares; emitting a speculative JSON request creates false
+	// endpoints (for example /signin when the application actually calls
+	// /login from JavaScript).
 	if !wantsMultipart && !wantsJSON {
 		encodedBody := encodeFormData(formData)
 		out = append(out, FormSubmission{
@@ -225,7 +230,6 @@ func BuildFormSubmissions(actionURL string, hasExplicitMethod, hasExplicitEnctyp
 		})
 	}
 
-	// If multipart, include that
 	if wantsMultipart {
 		out = append(out, FormSubmission{
 			Method: "POST",
@@ -238,20 +242,20 @@ func BuildFormSubmissions(actionURL string, hasExplicitMethod, hasExplicitEnctyp
 		})
 	}
 
-	// ALWAYS include JSON variant with proper data
-	jsonPayload := buildJSONPayload(formData, actionURL)
-	jsonBody, _ := json.MarshalIndent(jsonPayload, "", "  ")
-
-	out = append(out, FormSubmission{
-		Method: "POST",
-		URL:    actionURL,
-		Headers: map[string]string{
-			"Content-Type": "application/json",
-			"Accept":       "application/json",
-		},
-		Body:     string(jsonBody),
-		BodyType: "json",
-	})
+	if wantsJSON {
+		jsonPayload := buildJSONPayload(formData, actionURL)
+		jsonBody, _ := json.MarshalIndent(jsonPayload, "", "  ")
+		out = append(out, FormSubmission{
+			Method: "POST",
+			URL:    actionURL,
+			Headers: map[string]string{
+				"Content-Type": "application/json",
+				"Accept":       "application/json",
+			},
+			Body:     string(jsonBody),
+			BodyType: "json",
+		})
+	}
 
 	return out
 }

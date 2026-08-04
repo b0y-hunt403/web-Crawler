@@ -158,6 +158,10 @@ type FetchDetails struct {
 	Referrer    string            `json:"referrer,omitempty"`
 	RawSnippet  string            `json:"raw_snippet,omitempty"`
 	Initiator   string            `json:"initiator,omitempty"`
+	CallStack   string            `json:"call_stack,omitempty"`
+	ScriptURL   string            `json:"script_url,omitempty"`
+	Line        int               `json:"line,omitempty"`
+	Column      int               `json:"column,omitempty"`
 }
 
 // SPARoute represents a single-page application route
@@ -188,28 +192,52 @@ type JSONFormat struct {
 
 // DiscoveredRequest represents a discovered request with full metadata
 type DiscoveredRequest struct {
-	ID                string                   `json:"id"`
-	AuthSessionID     string                   `json:"auth_session_id,omitempty"`
-	URL               string                   `json:"url"`
-	Method            string                   `json:"method"`
-	Headers           map[string]string        `json:"headers,omitempty"`
-	Body              string                   `json:"body,omitempty"`
-	BodyType          string                   `json:"body_type,omitempty"`
-	SourceType        string                   `json:"source_type"`
-	Depth             int                      `json:"depth"`
-	NormalizedURL     string                   `json:"normalized_url"`
-	Parameters        map[string]interface{}   `json:"parameters,omitempty"`
-	FormFields        []FormField              `json:"form_fields,omitempty"`
-	Cookies           map[string]string        `json:"cookies,omitempty"`
-	Response          *ResponseMetadata        `json:"response,omitempty"`
-	Form              *Form                    `json:"form,omitempty"`
-	SPARoute          *SPARoute                `json:"spa_route,omitempty"`
-	JSONFormat        *JSONFormat              `json:"json_format,omitempty"`
-	ShadowDOMElements []map[string]interface{} `json:"shadow_dom_elements,omitempty"`
-	FetchDetails      *FetchDetails            `json:"fetch_details,omitempty"`
-	ContentTypeInfo   *ContentTypeInfo         `json:"content_type_info,omitempty"`
-	APIMapping        *APIMapping              `json:"api_mapping,omitempty"`
-	CreatedAt         time.Time                `json:"created_at"`
+	ID                    string                   `json:"id"`
+	AuthSessionID         string                   `json:"auth_session_id,omitempty"`
+	URL                   string                   `json:"url"`
+	Method                string                   `json:"method"`
+	Headers               map[string]string        `json:"headers,omitempty"`
+	Body                  string                   `json:"body,omitempty"`
+	BodyType              string                   `json:"body_type,omitempty"`
+	SourceType            string                   `json:"source_type"`
+	Depth                 int                      `json:"depth"`
+	NormalizedURL         string                   `json:"normalized_url"`
+	Parameters            map[string]interface{}   `json:"parameters,omitempty"`
+	FormFields            []FormField              `json:"form_fields,omitempty"`
+	Cookies               map[string]string        `json:"cookies,omitempty"`
+	Response              *ResponseMetadata        `json:"response,omitempty"`
+	Form                  *Form                    `json:"form,omitempty"`
+	SPARoute              *SPARoute                `json:"spa_route,omitempty"`
+	JSONFormat            *JSONFormat              `json:"json_format,omitempty"`
+	ShadowDOMElements     []map[string]interface{} `json:"shadow_dom_elements,omitempty"`
+	FetchDetails          *FetchDetails            `json:"fetch_details,omitempty"`
+	CallStack             string                   `json:"call_stack,omitempty"`
+	ScriptURL             string                   `json:"script_url,omitempty"`
+	Line                  int                      `json:"line,omitempty"`
+	Column                int                      `json:"column,omitempty"`
+	ContentTypeInfo       *ContentTypeInfo         `json:"content_type_info,omitempty"`
+	APIMapping            *APIMapping              `json:"api_mapping,omitempty"`
+	CreatedAt             time.Time                `json:"created_at"`
+	CDPRequestID          string                   `json:"cdp_request_id,omitempty"`
+	LifecycleState        string                   `json:"lifecycle_state,omitempty"`
+	FailureReason         string                   `json:"failure_reason,omitempty"`
+	RequestTimestamp      float64                  `json:"request_timestamp,omitempty"`
+	ResponseTimestamp     float64                  `json:"response_timestamp,omitempty"`
+	CompletedAt           time.Time                `json:"completed_at,omitempty"`
+	PageURL               string                   `json:"page_url,omitempty"`
+	TaskID                string                   `json:"task_id,omitempty"`
+	TaskSelector          string                   `json:"task_selector,omitempty"`
+	InteractionType       string                   `json:"interaction_type,omitempty"`
+	ParentWorkflowID      string                   `json:"parent_workflow_id,omitempty"`
+	FrameURL              string                   `json:"frame_url,omitempty"`
+	FrameID               string                   `json:"frame_id,omitempty"`
+	ShadowHost            string                   `json:"shadow_host,omitempty"`
+	BodyComplete          bool                     `json:"body_complete"`
+	BodyCompletenessKnown bool                     `json:"body_completeness_known"`
+	CompletenessStatus    string                   `json:"completeness_status,omitempty"`
+	ResourceType          string                   `json:"resource_type,omitempty"`
+	DocumentURL           string                   `json:"document_url,omitempty"`
+	InitiatorType         string                   `json:"initiator_type,omitempty"`
 }
 
 // FormSubmission represents a form submission candidate

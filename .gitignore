@@ -23,6 +23,10 @@ crawler
 !/crawler/banner_test.go
 !/crawler/request_intelligence.go
 !/crawler/request_intelligence_test.go
+!/crawler/api_intelligence.go
+!/crawler/api_intelligence_test.go
+!/crawler/export.go
+!/crawler/dynamic_integration_test.go
 
 *.exe
 *.exe~

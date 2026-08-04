@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -16,6 +17,11 @@ import (
 )
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("PANIC RECOVERED: %v", r)
+		}
+	}()
 	var (
 		seedURL           = flag.String("url", "", "Seed URL to start crawling (required)")
 		maxDepth          = flag.Int("depth", 3, "Maximum crawl depth")
@@ -55,27 +61,36 @@ func main() {
 
 		// Run static crawler
 		log.Println("🔍 Running static crawler...")
+		log.Println("STATIC START")
+		var staticErr error
 		if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
 			*stayInDomain, *userAgent, *proxy, "", *timeout, false, *jsonOutput,
 			*useKatana, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
+			staticErr = err
 			log.Printf("❌ Static crawler failed: %v", err)
 		} else {
 			log.Println("✅ Static crawler completed successfully")
 		}
+		log.Printf("STATIC END (err=%v)", staticErr)
+		log.Println("MAIN STILL ALIVE")
 
 		log.Println("")
 
 		// Run dynamic crawler
 		log.Println("🚀 Running dynamic crawler...")
+		log.Println("DYNAMIC START")
+		var dynamicErr error
 		if err := runCrawler(*seedURL, *dbPath, *maxDepth, *maxPages, *concurrency,
 			*stayInDomain, *userAgent, *proxy, *sessionFile, *timeout, true, *jsonOutput,
 			// Katana pre-pass already ran during the static phase above and
 			// persisted its results to the same DBPath — don't run it twice.
 			false, *katanaHeadless, *katanaDepth, *katanaConcurrency, *katanaFieldScope); err != nil {
+			dynamicErr = err
 			log.Printf("❌ Dynamic crawler failed: %v", err)
 		} else {
 			log.Println("✅ Dynamic crawler completed successfully")
 		}
+		log.Printf("DYNAMIC END (err=%v)", dynamicErr)
 
 		log.Println("")
 		log.Println("✅ Both crawls completed!")
@@ -94,6 +109,12 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 	stayInDomain bool, userAgent, proxy, sessionFile string,
 	timeout time.Duration, dynamic bool, jsonOutput string,
 	useKatana, katanaHeadless bool, katanaDepth, katanaConcurrency int, katanaFieldScope string) error {
+	phase := "static"
+	if dynamic {
+		phase = "dynamic"
+	}
+	log.Printf("%s runCrawler: start", phase)
+	defer log.Printf("%s runCrawler: returning", phase)
 
 	config := crawler.DefaultCrawlerConfig()
 	config.SeedURL = seedURL
@@ -112,6 +133,8 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 	config.KatanaMaxDepth = katanaDepth
 	config.KatanaConcurrency = katanaConcurrency
 	config.KatanaFieldScope = katanaFieldScope
+	config.RouteTemplateSampleLimit = envNonNegativeInt("RAPTOR_ROUTE_TEMPLATE_SAMPLE_LIMIT", config.RouteTemplateSampleLimit)
+	config.RecordActionSampleLimit = envNonNegativeInt("RAPTOR_RECORD_ACTION_SAMPLE_LIMIT", config.RecordActionSampleLimit)
 	if sessionFile != "" {
 		config.UsePlaywright = true
 		config.DynamicCrawl = true
@@ -144,7 +167,13 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 		}
 	}()
 
-	ctx, cancel := context.WithCancel(context.Background())
+	// Bound each crawl invocation so a stalled static/Katana request cannot
+	// prevent the following dynamic phase in -both mode from ever starting.
+	phaseTimeout := timeout * time.Duration(maxPages+2)
+	if phaseTimeout < 2*time.Minute {
+		phaseTimeout = 2 * time.Minute
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), phaseTimeout)
 	defer cancel()
 
 	sigChan := make(chan os.Signal, 1)
@@ -177,9 +206,35 @@ func runCrawler(seedURL, dbPath string, maxDepth, maxPages, concurrency int,
 			log.Printf("📄 Results written to %s", jsonOutput)
 		}
 	}
+	// Automatically generate replay artifacts from authoritative CDP rows.
+	// Static candidates and framework traffic are excluded by the exporter.
+	if store, openErr := crawler.NewRequestStore(config.DBPath); openErr != nil {
+		log.Printf("Replay export unavailable: %v", openErr)
+	} else {
+		if exportErr := crawler.ExportReplayArtifacts(store, "exports"); exportErr != nil {
+			log.Printf("Replay export failed: %v", exportErr)
+		} else {
+			log.Printf("Replay exports written to exports/{sqlmap,burp,postman,har,dalfox}")
+		}
+		_ = store.Close()
+	}
 
 	log.Printf("💾 Results persisted to database: %s", config.DBPath)
 	return nil
+}
+
+func envPositiveInt(name string, fallback int) int {
+	if value, err := strconv.Atoi(os.Getenv(name)); err == nil && value > 0 {
+		return value
+	}
+	return fallback
+}
+
+func envNonNegativeInt(name string, fallback int) int {
+	if value, err := strconv.Atoi(os.Getenv(name)); err == nil && value >= 0 {
+		return value
+	}
+	return fallback
 }
 
 func printSummary(results []*crawler.DiscoveredRequest) {
