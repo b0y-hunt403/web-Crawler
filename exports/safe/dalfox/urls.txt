@@ -1,0 +1,6 @@
+https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?checkIn=2026-08-20T06%3A35%3A50.9425774%2B07%3A00&currency=USD&occupancy=2&suggestedPrice=2
+https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?propertyId=0
+https://www.agoda.com/api/cronos/geo/getpopularhotelsinfooter?accommodationType=0&objectId=14524&pageTypeId=5
+https://www.agoda.com/api/cronos/geo/nearbyFromExternalProvider?accommodationType=0&objectId=14524&pageTypeId=5&subTypeId=0&themeType=0
+https://www.agoda.com/api/cronos/geo/faq?objectId=14524&pageTypeId=5
+https://www.agoda.com/api/cronos/geo/goodtoknow?accommodationType=0&objectId=14524&pageTypeId=5

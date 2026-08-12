@@ -231,7 +231,7 @@ func ExportReplayArtifacts(store *RequestStore, dir string) error {
 }
 
 func exportDalfox(store *RequestStore, dir string, private, exportAuth bool) error {
-	rows, err := store.db.Query(`SELECT d.id,d.method,d.url,d.page_url,i.authentication_context,p.parameter_path,p.inferred_type,p.reflection_status
+	rows, err := store.db.Query(`SELECT d.id,d.method,d.url,d.page_url,i.authentication_context,p.source,p.parameter_path,p.inferred_type,p.reflection_status
 		FROM scanner_candidates s JOIN discovered_requests d ON d.id=s.request_id JOIN api_endpoint_inventory i ON i.representative_request_id=d.id JOIN request_parameters p ON p.request_id=d.id
 		WHERE s.scanner='DALFOX' AND s.eligible=1 AND p.scanner_eligible=1 ORDER BY d.created_at,p.parameter_path`)
 	if err != nil {
@@ -242,9 +242,12 @@ func exportDalfox(store *RequestStore, dir string, private, exportAuth bool) err
 	var urls strings.Builder
 	candidates := []map[string]interface{}{}
 	for rows.Next() {
-		var id, method, raw, page, auth, paramPath, sampleType, reflection string
-		if err := rows.Scan(&id, &method, &raw, &page, &auth, &paramPath, &sampleType, &reflection); err != nil {
+		var id, method, raw, page, auth, source, paramPath, sampleType, reflection string
+		if err := rows.Scan(&id, &method, &raw, &page, &auth, &source, &paramPath, &sampleType, &reflection); err != nil {
 			return err
+		}
+		if source != "query" || noiseQuery(paramPath) {
+			continue
 		}
 		authRequired := auth == "AUTHENTICATED"
 		reason := ""

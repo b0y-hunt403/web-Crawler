@@ -184,7 +184,7 @@ func AnalyzeRequest(req *DiscoveredRequest) RequestAnalysis {
 	a.Replayability, a.ExclusionReasons = replayability(req, a)
 	application := a.Classification == ClassApplication || a.Classification == ClassGraphQL || a.Classification == ClassParameterizedNavigation || a.Classification == ClassAuthAPI || a.Classification == ClassAuthRecoveryAPI
 	a.SQLMapEligible = application && strings.HasPrefix(a.Replayability, "REPLAYABLE") && hasEligible(a.Parameters)
-	a.DalfoxEligible = (a.Classification == ClassApplication || a.Classification == ClassGraphQL || a.Classification == ClassParameterizedNavigation) && strings.EqualFold(req.Method, "GET") && hasEligibleStringQuery(a.Parameters)
+	a.DalfoxEligible = (a.Classification == ClassApplication || a.Classification == ClassGraphQL || a.Classification == ClassParameterizedNavigation) && strings.EqualFold(req.Method, "GET") && hasEligibleQuery(a.Parameters)
 	if !a.SQLMapEligible {
 		a.SQLMapReason = strings.Join(a.ExclusionReasons, ",")
 		if a.SQLMapReason == "" {
@@ -395,9 +395,9 @@ func hasEligible(ps []ParameterRecord) bool {
 	}
 	return false
 }
-func hasEligibleStringQuery(ps []ParameterRecord) bool {
+func hasEligibleQuery(ps []ParameterRecord) bool {
 	for _, p := range ps {
-		if p.Source == "query" && p.Type == "string" && p.ScannerEligible && !noiseQuery(p.Path) {
+		if p.Source == "query" && p.ScannerEligible && !noiseQuery(p.Path) {
 			return true
 		}
 	}

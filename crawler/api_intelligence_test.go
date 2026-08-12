@@ -136,6 +136,73 @@ func TestCuratedExportsDoNotTurnJSONPostIntoDalfoxURL(t *testing.T) {
 	}
 }
 
+func TestDalfoxAcceptsNumericQueryParametersAndExcludesNoise(t *testing.T) {
+	for _, rawURL := range []string{
+		"https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?propertyId=0",
+		"https://www.agoda.com/api/cronos/geo/faq?objectId=14524&pageTypeId=5",
+	} {
+		a := AnalyzeRequest(observed("GET", rawURL, "", "text/plain"))
+		if !a.DalfoxEligible {
+			t.Fatalf("numeric query URL is not Dalfox eligible: %s (%s)", rawURL, a.DalfoxReason)
+		}
+	}
+
+	for _, rawURL := range []string{
+		"https://www.agoda.com/search?page=2",
+		"https://www.agoda.com/search?utm_source=test",
+	} {
+		a := AnalyzeRequest(observed("GET", rawURL, "", "text/plain"))
+		if a.DalfoxEligible {
+			t.Fatalf("noise-only query URL is Dalfox eligible: %s", rawURL)
+		}
+	}
+}
+
+func TestDalfoxExportIncludesNumericQueriesOnceAndOnlyQueryParameters(t *testing.T) {
+	store, err := NewRequestStore(filepath.Join(t.TempDir(), "r.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+
+	r := observed("GET", "https://www.agoda.com/api/cronos/geo/faq?objectId=14524&pageTypeId=5&utm_source=test", "", "text/plain")
+	if err := store.SaveRequest(r); err != nil {
+		t.Fatal(err)
+	}
+	dir := filepath.Join(t.TempDir(), "dalfox")
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := exportDalfox(store, dir, false, false); err != nil {
+		t.Fatal(err)
+	}
+
+	urls, err := os.ReadFile(filepath.Join(dir, "urls.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := strings.Count(string(urls), "\n"); got != 1 {
+		t.Fatalf("urls.txt contains %d URLs, want 1: %s", got, urls)
+	}
+
+	b, err := os.ReadFile(filepath.Join(dir, "candidates.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var candidates []map[string]interface{}
+	if err := json.Unmarshal(b, &candidates); err != nil {
+		t.Fatal(err)
+	}
+	if len(candidates) != 2 {
+		t.Fatalf("candidates.json contains %d parameters, want 2: %s", len(candidates), b)
+	}
+	for _, candidate := range candidates {
+		if candidate["parameter_path"] == "query.utm_source" {
+			t.Fatalf("noise parameter exported: %s", b)
+		}
+	}
+}
+
 func assertCount(t *testing.T, db *sql.DB, query string, want int) {
 	t.Helper()
 	var got int

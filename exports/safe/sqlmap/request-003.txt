@@ -1,15 +1,4 @@
 GET /api/cronos/geo/getpopularhotelsinfooter?accommodationType=0&objectId=14524&pageTypeId=5 HTTP/1.1
 Host: www.agoda.com
-AG-Language-Id: 1
-Accept: */*
-CR-Currency-Code: USD
-Referer: https://www.agoda.com/city/kuala-lumpur-my.html
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "Linux"
-AG-Language-Locale: en-us
-CR-Currency-Id: 7
-Origin: https://www.agoda.com
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
-X-Requested-With: XMLHttpRequest
-sec-ch-ua: "Not;A=Brand";v="8", "Chromium";v="150", "Google Chrome";v="150"
+Content-Type: text/plain
 

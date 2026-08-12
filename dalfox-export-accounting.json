@@ -1,0 +1,20 @@
+{
+  "requested_corpus": {"get_observations": 3367, "available": false, "reason": "No workspace database contains 3367 GET observations; available discovered_requests databases contain 25, 54, 57, 85, 253, and 6999 GET observations."},
+  "total_get_observations": null,
+  "unique_get_urls": null,
+  "get_without_query": null,
+  "static": null,
+  "framework": null,
+  "analytics_development": null,
+  "auth_session": null,
+  "noise_only_query": null,
+  "sensitive_only_query": null,
+  "numeric_only_meaningful_query": null,
+  "string_containing_meaningful_query": null,
+  "authenticated_private_candidates_excluded_from_safe_urls": null,
+  "semantic_inventory_duplicates": null,
+  "eligible_representative_urls": null,
+  "final_urls_txt_lines": 6,
+  "final_candidates_json_records": 18,
+  "fresh_fixture": {"requests": 6, "post_requests": 0, "urls_txt_unique_lines": 6, "candidates_json_records": 18}
+}

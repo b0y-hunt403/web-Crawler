@@ -3,5 +3,192 @@
     "name": "Raptor observed APIs",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": []
+  "item": [
+    {
+      "name": "GET https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?checkIn=2026-08-20T06%3A35%3A50.9425774%2B07%3A00\u0026currency=USD\u0026occupancy=2\u0026suggestedPrice=2",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "www",
+            "agoda",
+            "com"
+          ],
+          "path": [
+            "api",
+            "cronos",
+            "layout",
+            "GetCalendarExtrasAsync"
+          ],
+          "protocol": "https",
+          "raw": "https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?checkIn=2026-08-20T06%3A35%3A50.9425774%2B07%3A00\u0026currency=USD\u0026occupancy=2\u0026suggestedPrice=2"
+        }
+      }
+    },
+    {
+      "name": "GET https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?propertyId=0",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "www",
+            "agoda",
+            "com"
+          ],
+          "path": [
+            "api",
+            "cronos",
+            "layout",
+            "GetCalendarExtrasAsync"
+          ],
+          "protocol": "https",
+          "raw": "https://www.agoda.com/api/cronos/layout/GetCalendarExtrasAsync/?propertyId=0"
+        }
+      }
+    },
+    {
+      "name": "GET https://www.agoda.com/api/cronos/geo/getpopularhotelsinfooter?accommodationType=0\u0026objectId=14524\u0026pageTypeId=5",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "www",
+            "agoda",
+            "com"
+          ],
+          "path": [
+            "api",
+            "cronos",
+            "geo",
+            "getpopularhotelsinfooter"
+          ],
+          "protocol": "https",
+          "raw": "https://www.agoda.com/api/cronos/geo/getpopularhotelsinfooter?accommodationType=0\u0026objectId=14524\u0026pageTypeId=5"
+        }
+      }
+    },
+    {
+      "name": "GET https://www.agoda.com/api/cronos/geo/nearbyFromExternalProvider?accommodationType=0\u0026objectId=14524\u0026pageTypeId=5\u0026subTypeId=0\u0026themeType=0",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "www",
+            "agoda",
+            "com"
+          ],
+          "path": [
+            "api",
+            "cronos",
+            "geo",
+            "nearbyFromExternalProvider"
+          ],
+          "protocol": "https",
+          "raw": "https://www.agoda.com/api/cronos/geo/nearbyFromExternalProvider?accommodationType=0\u0026objectId=14524\u0026pageTypeId=5\u0026subTypeId=0\u0026themeType=0"
+        }
+      }
+    },
+    {
+      "name": "GET https://www.agoda.com/api/cronos/geo/faq?objectId=14524\u0026pageTypeId=5",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "www",
+            "agoda",
+            "com"
+          ],
+          "path": [
+            "api",
+            "cronos",
+            "geo",
+            "faq"
+          ],
+          "protocol": "https",
+          "raw": "https://www.agoda.com/api/cronos/geo/faq?objectId=14524\u0026pageTypeId=5"
+        }
+      }
+    },
+    {
+      "name": "GET https://www.agoda.com/api/cronos/geo/goodtoknow?accommodationType=0\u0026objectId=14524\u0026pageTypeId=5",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "www",
+            "agoda",
+            "com"
+          ],
+          "path": [
+            "api",
+            "cronos",
+            "geo",
+            "goodtoknow"
+          ],
+          "protocol": "https",
+          "raw": "https://www.agoda.com/api/cronos/geo/goodtoknow?accommodationType=0\u0026objectId=14524\u0026pageTypeId=5"
+        }
+      }
+    }
+  ]
 }
