@@ -1,0 +1,10 @@
+Script started on 2026-08-08 10:58:00+03:00 [COMMAND="go vet ./..." <not executed on terminal>]
+crawler/dynamic.go:2440:4: the cancelField function is not used on all paths (possible context leak)
+crawler/dynamic.go:2888:2: this return statement may be reached without using the cancelField var defined on line 2440
+crawler/dynamic.go:3188:2: unreachable code
+crawler/dynamic.go:3280:2: unreachable code
+crawler/dynamic.go:3381:4: unreachable code
+crawler/katana.go:106:2: unreachable code
+crawler/static.go:478:3: unreachable code
+
+Script done on 2026-08-08 10:58:11+03:00 [COMMAND_EXIT_CODE="1"]

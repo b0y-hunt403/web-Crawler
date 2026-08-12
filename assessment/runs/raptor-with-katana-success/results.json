@@ -1,0 +1,439 @@
+[
+  {
+    "id": "744c43f60ec5d82ccf2216e5b4682afde42311cfbbf1fffe33027ecaa4f7faea",
+    "url": "http://127.0.0.1:18080/login",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/login",
+    "response": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 127,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "127",
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.387898237Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "d1ef8f81ba3c9a2bf948ef6a9854c9046184c01d58d6e8b7c3fbcba1b06b5ee0",
+    "url": "http://127.0.0.1:18080",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/",
+    "response": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 528,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "528",
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.395885045Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "714c199dfe305660bcd4d4c37e18ce48f60db524f601060b93ecfbba0e664cae",
+    "url": "http://127.0.0.1:18080/item?id=1",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/item?id=1",
+    "parameters": {
+      "id": "1"
+    },
+    "created_at": "2026-08-08T06:09:12.396152741Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "7f4f831f217c294137c9b581855e69b8a7b25dd172f29ccd7bc19bc93b8d268c",
+    "url": "http://127.0.0.1:18080/safe-item?id=1",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/safe-item?id=1",
+    "parameters": {
+      "id": "1"
+    },
+    "created_at": "2026-08-08T06:09:12.396177317Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "d84e5efc9d46ab03d633bf1ec7421590a7e5b3ed5aafc48ee427c1912ecf5539",
+    "url": "http://127.0.0.1:18080/reflect?q=hello",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/reflect?q=hello",
+    "parameters": {
+      "q": "hello"
+    },
+    "created_at": "2026-08-08T06:09:12.396201456Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "5e1d7cebcc666da979ca2a0e4117f286d0568b7250b128bfe1bcacbd675bbd66",
+    "url": "http://127.0.0.1:18080/escaped?q=hello",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/escaped?q=hello",
+    "parameters": {
+      "q": "hello"
+    },
+    "created_at": "2026-08-08T06:09:12.396228144Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "89ef07f5cc36fd757c761058b66fdc48e97f2ed9ba4368f10ccbd54187631c14",
+    "url": "http://127.0.0.1:18080/file?path=marker.txt",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/file?path=marker.txt",
+    "parameters": {
+      "path": "marker.txt"
+    },
+    "created_at": "2026-08-08T06:09:12.396254822Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "97ac8ddbf0527d985bdcfe3062cc725e18ba2562ab18dffa530709f2e57879bc",
+    "url": "http://127.0.0.1:18080/safe-file?path=marker.txt",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/safe-file?path=marker.txt",
+    "parameters": {
+      "path": "marker.txt"
+    },
+    "created_at": "2026-08-08T06:09:12.396276899Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "f64e01833daaf3fb6c18c2da380be7a809823e2a7744f5140c5c066722129f39",
+    "url": "http://127.0.0.1:18080/exposure",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/exposure",
+    "created_at": "2026-08-08T06:09:12.396321306Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "96e96ee5be0e9674555749ba6b3e51de3a1a4dcf8e1d69485cecf478deef95e1",
+    "url": "http://127.0.0.1:18080/no-exposure",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/no-exposure",
+    "created_at": "2026-08-08T06:09:12.396338555Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "7404985b6fc01ac8241f41b60aa05b2fdfa09d6c44125d156e43a29760aad911",
+    "url": "http://127.0.0.1:18080/login",
+    "method": "GET",
+    "source_type": "anchor",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/login",
+    "created_at": "2026-08-08T06:09:12.396357788Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "beaf93fbcb5e7430bf65ba7ca3fce98970eb62359ce64f5b5032b4ac310a3a7b",
+    "url": "http://127.0.0.1:18080/app.js",
+    "method": "GET",
+    "source_type": "script_src",
+    "depth": 1,
+    "normalized_url": "http://127.0.0.1:18080/app.js",
+    "created_at": "2026-08-08T06:09:12.396378015Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "5a1bf2ffec9ed1212f2ac25ce7fabdd0abee4916125ef69fdf043255d842b128",
+    "url": "http://127.0.0.1:18080/escaped?q=hello",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/escaped?q=hello",
+    "parameters": {
+      "q": "hello"
+    },
+    "response": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 16,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "16",
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.442228646Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "64d935657e10123ee4d037b2e0eff508ddb41aa4659faaf61b991cc851893e63",
+    "url": "http://127.0.0.1:18080/exposure",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/exposure",
+    "response": {
+      "status_code": 200,
+      "content_type": "text/plain",
+      "content_length": 22,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "22",
+        "Content-Type": "text/plain",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+        "X-Raptor-Exposure": "assessment-2026"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.445671566Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "32a0722e3dbec0bed271178d8ad97f66923eae7929e1a2ec4531811fc3437226",
+    "url": "http://127.0.0.1:18080/no-exposure",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/no-exposure",
+    "response": {
+      "status_code": 200,
+      "content_type": "text/plain",
+      "content_length": 16,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "16",
+        "Content-Type": "text/plain",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.449242602Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "b14bf8da73de40cab3b4dac4f427f4619531bcbcf063645557afd99763320423",
+    "url": "http://127.0.0.1:18080/item?id=1",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/item?id=1",
+    "parameters": {
+      "id": "1"
+    },
+    "response": {
+      "status_code": 200,
+      "content_type": "application/json",
+      "content_length": 11,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "11",
+        "Content-Type": "application/json",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.45293767Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "060a71dfb92e993cbb343c5561ad51eb24d159357be42555395579f840f9a0bd",
+    "url": "http://127.0.0.1:18080/reflect?q=hello",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/reflect?q=hello",
+    "parameters": {
+      "q": "hello"
+    },
+    "response": {
+      "status_code": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": 16,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "16",
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.45705673Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "8d88263b8e3c0f2da69393c36c31b6c4e0fe424472e93afa554ed08743c2d74d",
+    "url": "http://127.0.0.1:18080/safe-file?path=marker.txt",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/safe-file?path=marker.txt",
+    "parameters": {
+      "path": "marker.txt"
+    },
+    "response": {
+      "status_code": 404,
+      "content_type": "text/plain",
+      "content_length": 9,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "9",
+        "Content-Type": "text/plain",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.462435005Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "f748e7eaeac1a4f98fa4969d8d23f324475f60cd0bd2318303843672087ddf45",
+    "url": "http://127.0.0.1:18080/file?path=marker.txt",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/file?path=marker.txt",
+    "parameters": {
+      "path": "marker.txt"
+    },
+    "response": {
+      "status_code": 200,
+      "content_type": "text/plain",
+      "content_length": 33,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "33",
+        "Content-Type": "text/plain",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.467283416Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  },
+  {
+    "id": "c57382e74a572a82c9f4e558b9868231f29faf0675d330ad01306026b422750a",
+    "url": "http://127.0.0.1:18080/safe-item?id=1",
+    "method": "GET",
+    "source_type": "page",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/safe-item?id=1",
+    "parameters": {
+      "id": "1"
+    },
+    "response": {
+      "status_code": 200,
+      "content_type": "application/json",
+      "content_length": 11,
+      "server": "RaptorAssessmentLab/1.0 Python/3.13.14",
+      "cache_control": "",
+      "headers": {
+        "Content-Length": "11",
+        "Content-Type": "application/json",
+        "Date": "Sat, 08 Aug 2026 06:09:12 GMT",
+        "Server": "RaptorAssessmentLab/1.0 Python/3.13.14"
+      },
+      "set_cookies": null
+    },
+    "created_at": "2026-08-08T06:09:12.473898566Z",
+    "completed_at": "0001-01-01T00:00:00Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  }
+]

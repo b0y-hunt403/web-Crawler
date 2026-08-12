@@ -1,0 +1,5 @@
+{"area":"nuclei","gap_id":"gap-nuclei-standard","reason":"No installed/pinned nuclei-templates repository; standard safe-template run skipped.","trust_class":"COVERAGE_GAP"}
+{"area":"lfimap","gap_id":"gap-lfimap-detection","reason":"LFImap returned zero findings for marker-only traversal corpus; independent marker replay succeeded.","trust_class":"COVERAGE_GAP"}
+{"area":"authentication","gap_id":"gap-auth-login","reason":"CLI exposes session file but not AuthConfig credentials; browser login integration test failed without credentials.","trust_class":"COVERAGE_GAP"}
+{"area":"request fidelity","gap_id":"gap-body-completeness","reason":"Observed form POST stored base64 text with completeness unknown.","trust_class":"COVERAGE_GAP"}
+{"area":"persistence","gap_id":"gap-response-status","reason":"Raw discovered_requests schema has no response-status column and status aggregates were empty.","trust_class":"COVERAGE_GAP"}

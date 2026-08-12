@@ -1,0 +1,24 @@
+http://127.0.0.1:18080
+
+
+GET / HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36
+Accept-Encoding: gzip
+
+
+
+HTTP/1.0 200 OK
+Connection: close
+Content-Length: 528
+Content-Type: text/html; charset=utf-8
+Date: Sat, 08 Aug 2026 06:04:40 GMT
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+
+<!doctype html><title>Raptor Lab</title>
+<a href='/item?id=1'>SQL GET</a><a href='/safe-item?id=1'>SQL control</a>
+<a href='/reflect?q=hello'>XSS</a><a href='/escaped?q=hello'>XSS control</a>
+<a href='/file?path=marker.txt'>LFI</a><a href='/safe-file?path=marker.txt'>LFI control</a>
+<a href='/exposure'>Nuclei exposure</a><a href='/no-exposure'>Nuclei control</a>
+<a href='/login'>Login</a><script src='/app.js'></script>
+<form action='/form-search' method='post'><input name='term' value='alpha'><button>Search</button></form>

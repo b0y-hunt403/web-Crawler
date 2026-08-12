@@ -1,0 +1,9 @@
+Script started on 2026-08-08 10:51:43+03:00 [COMMAND="curl --silent --show-error --include --max-time 5 'http://127.0.0.1:18080/safe-file?path=../../marker.txt'" <not executed on terminal>]
+HTTP/1.0 404 Not Found
+[1mServer[0m: RaptorAssessmentLab/1.0 Python/3.13.14
+[1mDate[0m: Sat, 08 Aug 2026 07:51:43 GMT
+[1mContent-Type[0m: text/plain
+[1mContent-Length[0m: 9
+
+not found
+Script done on 2026-08-08 10:51:43+03:00 [COMMAND_EXIT_CODE="0"]

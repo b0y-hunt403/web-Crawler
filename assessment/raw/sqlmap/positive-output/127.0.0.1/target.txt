@@ -1,0 +1,1 @@
+http://127.0.0.1:18080/item?id=1 (GET)  # /usr/bin/sqlmap -r assessment/evidence/sqlmap/item-positive.req -p id --batch --risk=1 --level=1 --threads=1 --timeout=10 --retries=1 --output-dir=assessment/raw/sqlmap/positive-output -t assessment/raw/sqlmap/positive-traffic.txt --har=assessment/raw/sqlmap/positive.har --flush-session --disable-coloring

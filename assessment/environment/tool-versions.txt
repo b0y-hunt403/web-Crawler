@@ -1,0 +1,9 @@
+katana v1.6.1
+sqlmap 1.10.6#stable
+dalfox v2.13.0
+nuclei v3.9.0
+lfimap 0.1.4
+raptor v2.0.0-worktree
+python 3.13.14
+go 1.26.4
+curl system

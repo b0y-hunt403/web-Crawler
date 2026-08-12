@@ -1,0 +1,1 @@
+http://127.0.0.1:18080/safe-item?id=1 (GET)  # /usr/bin/sqlmap -r assessment/evidence/sqlmap/item-negative.req -p id --batch --risk=1 --level=1 --threads=1 --timeout=10 --retries=1 --output-dir=assessment/raw/sqlmap/negative-output -t assessment/raw/sqlmap/negative-traffic.txt --har=assessment/raw/sqlmap/negative.har --flush-session --disable-coloring

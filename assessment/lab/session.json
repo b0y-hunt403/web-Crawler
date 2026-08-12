@@ -1,0 +1,15 @@
+{
+  "id": "assessment-authenticated",
+  "cookies": [
+    {
+      "name": "lab_session",
+      "value": "assessment-session",
+      "domain": "127.0.0.1",
+      "path": "/",
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

@@ -1,0 +1,12 @@
+Script started on 2026-08-08 09:00:45+03:00 [COMMAND="sha256sum /home/b0y/go/bin/katana /usr/bin/sqlmap /home/b0y/go/bin/dalfox /home/b0y/go/bin/nuclei /usr/local/bin/lfimap /opt/lfimap/lfimap/lfimap.py ./raptor ./raptor-api ./sessionmgr" <not executed on terminal>]
+8e7ed90ef621ab0b8965b2037503a979ea975ae54b7330c25d5d37be18e4139e  /home/b0y/go/bin/katana
+0752b92f35cf8b822dc742274a1875082475a2ff0d5588d5854e53862ef5e903  /usr/bin/sqlmap
+b83ba2638f66c94e335076fa220b3eecc13e1217d4819e7a96422a4ffe7c63af  /home/b0y/go/bin/dalfox
+27c4c3f16c1187a3172032449fad1507666e7d4e7d63525cf5a68f60f5faf980  /home/b0y/go/bin/nuclei
+ac8e82c8d355c76027f9aa04c44f32568e744339d72d7cdc7ee3d9130f419c55  /usr/local/bin/lfimap
+c888b2b70170141d6712f2eed52eef7a96c14c0ea7df800cbb55c131753bf17d  /opt/lfimap/lfimap/lfimap.py
+eccfa7672b75eee2b2d9e2360beb2b2db319af9cdc0700ea9227069711a7c1cf  ./raptor
+804b90551afa13a8fe543b87a1aa7fb1cdf0bba952ae7e83d92aeda9bb583a90  ./raptor-api
+73e66571722bbde9927193fe26ca5c1744552b2aeded9e82c508135008d3d6bd  ./sessionmgr
+
+Script done on 2026-08-08 09:00:47+03:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,23 @@
+id: raptor-assessment-exposure
+
+info:
+  name: Raptor deterministic assessment exposure
+  author: assessment
+  severity: low
+  description: Matches only the assessment lab's deterministic header and body.
+  tags: assessment
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "X-Raptor-Exposure: assessment-2026"
+      - type: word
+        part: body
+        words:
+          - "deterministic exposure"

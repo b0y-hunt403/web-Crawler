@@ -1,0 +1,18 @@
+http://127.0.0.1:18080/app.js
+
+
+GET /app.js HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36
+Accept-Encoding: gzip
+
+
+
+HTTP/1.0 200 OK
+Connection: close
+Content-Length: 63
+Content-Type: application/javascript
+Date: Sat, 08 Aug 2026 06:04:41 GMT
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+
+fetch('/api/profile?id=7'); const route='/js-only?from=bundle';

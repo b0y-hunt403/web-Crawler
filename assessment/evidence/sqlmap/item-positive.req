@@ -1,0 +1,6 @@
+GET /item?id=1 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+

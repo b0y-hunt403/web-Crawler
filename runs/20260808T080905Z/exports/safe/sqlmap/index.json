@@ -1,0 +1,121 @@
+[
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/api/profile",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/api/profile?id=7",
+    "parameter_paths": [
+      "query.id:integer"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-001.txt",
+    "request_id": "496607.6",
+    "response_status": 200,
+    "source_page": "",
+    "task_id": ""
+  },
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/safe-file",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/safe-file?path=marker.txt",
+    "parameter_paths": [
+      "query.path:string"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-002.txt",
+    "request_id": "510CF3D1B4036D6B8ED6194BA5601E5C",
+    "response_status": 0,
+    "source_page": "",
+    "task_id": ""
+  },
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/reflect",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/reflect?q=hello",
+    "parameter_paths": [
+      "query.q:string"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-003.txt",
+    "request_id": "D35B4961E111127112576FA48AD61473",
+    "response_status": 0,
+    "source_page": "",
+    "task_id": ""
+  },
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/escaped",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/escaped?q=hello",
+    "parameter_paths": [
+      "query.q:string"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-004.txt",
+    "request_id": "2D65C8C9CF8EF5A3B2E36B04A4672D1D",
+    "response_status": 0,
+    "source_page": "",
+    "task_id": ""
+  },
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/item",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/item?id=1",
+    "parameter_paths": [
+      "query.id:integer"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-005.txt",
+    "request_id": "9D36BC8DCEB564E7ECA2F4C2934130B7",
+    "response_status": 0,
+    "source_page": "",
+    "task_id": ""
+  },
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/file",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/file?path=marker.txt",
+    "parameter_paths": [
+      "query.path:string"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-006.txt",
+    "request_id": "9DCCC27C45803BD852CC7522092C1D86",
+    "response_status": 0,
+    "source_page": "",
+    "task_id": ""
+  },
+  {
+    "authentication_required": false,
+    "body_type": "binary",
+    "endpoint_template": "/safe-item",
+    "exclusion_warnings": [],
+    "method": "GET",
+    "original_url": "http://127.0.0.1:18080/safe-item?id=1",
+    "parameter_paths": [
+      "query.id:integer"
+    ],
+    "replayability": "REPLAYABLE",
+    "request_filename": "request-007.txt",
+    "request_id": "A6FDF6C8FE7D00180DD867CE3F17D10C",
+    "response_status": 0,
+    "source_page": "",
+    "task_id": ""
+  }
+]

@@ -1,0 +1,20 @@
+Script started on 2026-08-08 09:00:10+03:00 [COMMAND="command -v katana; command -v sqlmap; command -v sqlmap.py; command -v dalfox; command -v nuclei; find /home/b0y /opt /usr/local -iname "lfimap.py" -o -iname "*lfimap*" 2>/dev/null | head -100" <not executed on terminal>]
+/home/b0y/go/bin/katana
+/usr/bin/sqlmap
+/home/b0y/go/bin/dalfox
+/home/b0y/go/bin/nuclei
+/home/b0y/Documents/Projects/web_Scanner/assessment/raw/lfimap
+/home/b0y/Documents/Projects/web_Scanner/assessment/evidence/lfimap
+/opt/lfimap
+/opt/lfimap/lfimap.egg-info
+/opt/lfimap/lfimap
+/opt/lfimap/lfimap/lfimap.py
+/opt/lfimap/build/lib/lfimap
+/opt/lfimap/build/lib/lfimap/lfimap.py
+/usr/local/lib/python3.13/dist-packages/lfimap-0.1.4.dist-info
+/usr/local/lib/python3.13/dist-packages/lfimap
+/usr/local/lib/python3.13/dist-packages/lfimap/lfimap.py
+/usr/local/lib/python3.13/dist-packages/lfimap/__pycache__/lfimap.cpython-313.pyc
+/usr/local/bin/lfimap
+
+Script done on 2026-08-08 09:00:24+03:00 [COMMAND_EXIT_CODE="0"]

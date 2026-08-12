@@ -1,0 +1,11 @@
+Script started on 2026-08-08 09:01:18+03:00 [COMMAND="go test ./..." <not executed on terminal>]
+# github.com/Anduamlk/web-Crawler/session
+session/context_test.go:6:2: package testing is not in std (/usr/lib/go-1.26/src/testing)
+FAIL	github.com/Anduamlk/web-Crawler/session [setup failed]
+# ./...
+pattern ./...: open /home/b0y/.cache/go-build/75/75733d30822f1978714532f184e80ca0a78e36453965c2aedc40722cbf213bb8-d: read-only file system
+FAIL	./... [setup failed]
+?   	github.com/Anduamlk/web-Crawler/cmd/sessionmgr	[no test files]
+FAIL
+
+Script done on 2026-08-08 09:01:27+03:00 [COMMAND_EXIT_CODE="1"]

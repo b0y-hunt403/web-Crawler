@@ -1,0 +1,8 @@
+POST /form-search HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Raptor-Assessment/1.0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 10
+Connection: close
+
+term=alpha

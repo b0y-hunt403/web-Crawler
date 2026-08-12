@@ -1,0 +1,27 @@
+Script started on 2026-08-08 09:00:10+03:00 [COMMAND="pwd; git status --short; git rev-parse HEAD; git log -1 --format=fuller" <not executed on terminal>]
+/home/b0y/Documents/Projects/web_Scanner
+ [31mD[m auth-login.db-shm
+ [31mD[m auth-login.db-wal
+ [31mM[m crawler/config.go
+ [31mM[m crawler/dynamic.go
+ [31mM[m crawler/models.go
+ [31mM[m crawler/store.go
+[31m??[m .raptor-api-key
+[31m??[m api/
+[31m??[m assessment/
+[31m??[m cmd/raptor-api/
+[31m??[m post-form-fixed.log~
+[31m??[m raptor-api
+[31m??[m raptor-api-local.db-shm
+[31m??[m raptor-api-local.db-wal
+[31m??[m scanner-get-urls.txt
+8b51e6297661c9a653e1647c00f7f0738724bad3
+[33mcommit 8b51e6297661c9a653e1647c00f7f0738724bad3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author:     jones <jones@nexus.htb>
+AuthorDate: Tue Aug 4 15:52:28 2026 +0300
+Commit:     jones <jones@nexus.htb>
+CommitDate: Tue Aug 4 15:52:28 2026 +0300
+
+    Raptor Web Crawler v2.0.0
+
+Script done on 2026-08-08 09:00:10+03:00 [COMMAND_EXIT_CODE="0"]

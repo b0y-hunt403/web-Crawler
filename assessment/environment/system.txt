@@ -1,0 +1,61 @@
+Script started on 2026-08-08 09:00:10+03:00 [COMMAND="go version; go env; uname -a; docker version; python3 --version" <not executed on terminal>]
+go version go1.26.4 linux/amd64
+AR='ar'
+CC='x86_64-linux-gnu-gcc'
+CGO_CFLAGS='-O2 -g'
+CGO_CPPFLAGS=''
+CGO_CXXFLAGS='-O2 -g'
+CGO_ENABLED='1'
+CGO_FFLAGS='-O2 -g'
+CGO_LDFLAGS='-O2 -g'
+CXX='x86_64-linux-gnu-g++'
+GCCGO='gccgo'
+GO111MODULE=''
+GOAMD64='v1'
+GOARCH='amd64'
+GOAUTH='netrc'
+GOBIN=''
+GOCACHE='/home/b0y/.cache/go-build'
+GOCACHEPROG=''
+GODEBUG=''
+GOENV='/home/b0y/.config/go/env'
+GOEXE=''
+GOEXPERIMENT=''
+GOFIPS140='off'
+GOFLAGS=''
+GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build2682183519=/tmp/go-build -gno-record-gcc-switches'
+GOHOSTARCH='amd64'
+GOHOSTOS='linux'
+GOINSECURE=''
+GOMOD='/home/b0y/Documents/Projects/web_Scanner/go.mod'
+GOMODCACHE='/home/b0y/go/pkg/mod'
+GONOPROXY=''
+GONOSUMDB=''
+GOOS='linux'
+GOPATH='/home/b0y/go'
+GOPRIVATE=''
+GOPROXY='https://proxy.golang.org,direct'
+GOROOT='/usr/lib/go-1.26'
+GOSUMDB='sum.golang.org'
+GOTELEMETRY='local'
+GOTELEMETRYDIR='/home/b0y/.config/go/telemetry'
+GOTMPDIR=''
+GOTOOLCHAIN='auto'
+GOTOOLDIR='/usr/lib/go-1.26/pkg/tool/linux_amd64'
+GOVCS=''
+GOVERSION='go1.26.4'
+GOWORK=''
+PKG_CONFIG='pkg-config'
+Linux kali 7.0.12+kali-amd64 #1 SMP PREEMPT_DYNAMIC Kali 7.0.12-2kali1 (2026-06-18) x86_64 GNU/Linux
+Client:
+ Version:           28.5.2+dfsg4
+ API version:       1.51
+ Go version:        go1.26.3
+ Git commit:        9cc6dea35e9a963f281434761c656fba4ac43aed
+ Built:             Mon May 25 00:07:24 2026
+ OS/Arch:           linux/amd64
+ Context:           default
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.51/version": dial unix /var/run/docker.sock: connect: operation not permitted
+Python 3.13.14
+
+Script done on 2026-08-08 09:00:10+03:00 [COMMAND_EXIT_CODE="0"]

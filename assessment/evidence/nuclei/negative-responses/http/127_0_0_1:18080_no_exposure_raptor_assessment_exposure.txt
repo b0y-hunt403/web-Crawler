@@ -1,0 +1,22 @@
+[raptor-assessment-exposure] Dumped HTTP request for http://127.0.0.1:18080/no-exposure
+
+
+GET /no-exposure HTTP/1.1
+Host: 127.0.0.1:18080
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15
+Connection: close
+Accept: */*
+Accept-Language: en
+Accept-Encoding: gzip
+
+
+[raptor-assessment-exposure] Dumped HTTP response http://127.0.0.1:18080/no-exposure
+
+HTTP/1.0 200 OK
+Connection: close
+Content-Length: 16
+Content-Type: text/plain
+Date: Sat, 08 Aug 2026 07:52:26 GMT
+Server: RaptorAssessmentLab/1.0 Python/3.13.14
+
+negative control

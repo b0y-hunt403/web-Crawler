@@ -1,0 +1,4 @@
+http://127.0.0.1:18080/safe-file?path=marker.txt
+http://127.0.0.1:18080/reflect?q=hello
+http://127.0.0.1:18080/escaped?q=hello
+http://127.0.0.1:18080/file?path=marker.txt

@@ -1,0 +1,624 @@
+{
+  "info": {
+    "name": "Raptor observed APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET http://127.0.0.1:18080/api/profile?id=7",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "empty"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          },
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "cors"
+          },
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "same-origin"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          },
+          {
+            "key": "Accept",
+            "value": "*/*"
+          },
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "api",
+            "profile"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/api/profile?id=7"
+        }
+      }
+    },
+    {
+      "name": "GET http://127.0.0.1:18080/safe-file?path=marker.txt",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "none"
+          },
+          {
+            "key": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          },
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+          },
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "document"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "navigate"
+          },
+          {
+            "key": "Sec-Fetch-User",
+            "value": "?1"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/safe-file?path=marker.txt"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "safe-file"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/safe-file?path=marker.txt"
+        }
+      }
+    },
+    {
+      "name": "GET http://127.0.0.1:18080/reflect?q=hello",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+          },
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "navigate"
+          },
+          {
+            "key": "Sec-Fetch-User",
+            "value": "?1"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/reflect?q=hello"
+          },
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "document"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          },
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "none"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          },
+          {
+            "key": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "reflect"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/reflect?q=hello"
+        }
+      }
+    },
+    {
+      "name": "GET http://127.0.0.1:18080/escaped?q=hello",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/escaped?q=hello"
+          },
+          {
+            "key": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          },
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+          },
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "navigate"
+          },
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "none"
+          },
+          {
+            "key": "Sec-Fetch-User",
+            "value": "?1"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "document"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "escaped"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/escaped?q=hello"
+        }
+      }
+    },
+    {
+      "name": "GET http://127.0.0.1:18080/item?id=1",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/item?id=1"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "navigate"
+          },
+          {
+            "key": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "none"
+          },
+          {
+            "key": "Sec-Fetch-User",
+            "value": "?1"
+          },
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "document"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "item"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/item?id=1"
+        }
+      }
+    },
+    {
+      "name": "GET http://127.0.0.1:18080/file?path=marker.txt",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "document"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          },
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          },
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/file?path=marker.txt"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "navigate"
+          },
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "none"
+          },
+          {
+            "key": "Sec-Fetch-User",
+            "value": "?1"
+          },
+          {
+            "key": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "file"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/file?path=marker.txt"
+        }
+      }
+    },
+    {
+      "name": "GET http://127.0.0.1:18080/safe-item?id=1",
+      "request": {
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "header": [
+          {
+            "key": "Accept-Encoding",
+            "value": "gzip, deflate, br, zstd"
+          },
+          {
+            "key": "Sec-Fetch-Dest",
+            "value": "document"
+          },
+          {
+            "key": "sec-ch-ua",
+            "value": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+          },
+          {
+            "key": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "key": "Host",
+            "value": "127.0.0.1:18080"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          },
+          {
+            "key": "sec-ch-ua-platform",
+            "value": "\"Linux\""
+          },
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+          },
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:18080"
+          },
+          {
+            "key": "Referer",
+            "value": "http://127.0.0.1:18080/safe-item?id=1"
+          },
+          {
+            "key": "Sec-Fetch-User",
+            "value": "?1"
+          },
+          {
+            "key": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "key": "sec-ch-ua-mobile",
+            "value": "?0"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "en-US,en;q=0.9"
+          },
+          {
+            "key": "Sec-Fetch-Mode",
+            "value": "navigate"
+          },
+          {
+            "key": "Sec-Fetch-Site",
+            "value": "none"
+          }
+        ],
+        "method": "GET",
+        "url": {
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1:18080"
+          ],
+          "path": [
+            "safe-item"
+          ],
+          "protocol": "http",
+          "raw": "http://127.0.0.1:18080/safe-item?id=1"
+        }
+      }
+    }
+  ]
+}

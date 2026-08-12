@@ -1,0 +1,38 @@
+[
+  {
+    "id": "8F1A507F1A5918FBA0CABA6B499F17D4",
+    "url": "http://127.0.0.1:18080/protected",
+    "method": "GET",
+    "headers": {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Connection": "keep-alive",
+      "Cookie": "lab_session=assessment-session",
+      "Host": "127.0.0.1:18080",
+      "Origin": "http://127.0.0.1:18080",
+      "Referer": "http://127.0.0.1:18080/protected",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-User": "?1",
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"Linux\""
+    },
+    "body_type": "binary",
+    "source_type": "cdp_observed",
+    "depth": 0,
+    "normalized_url": "http://127.0.0.1:18080/protected",
+    "created_at": "2026-08-08T06:17:10.608455667Z",
+    "cdp_request_id": "8F1A507F1A5918FBA0CABA6B499F17D4",
+    "lifecycle_state": "completed",
+    "request_timestamp": 1786169830.5783305,
+    "completed_at": "2026-08-08T06:17:10.60845679Z",
+    "body_complete": false,
+    "body_completeness_known": false,
+    "completeness_status": "UNKNOWN"
+  }
+]
