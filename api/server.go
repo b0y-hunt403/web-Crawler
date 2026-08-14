@@ -9,6 +9,7 @@ import (
 	"github.com/Anduamlk/web-Crawler/crawler"
 	"github.com/Anduamlk/web-Crawler/session"
 	"github.com/google/uuid"
+	"log"
 	_ "modernc.org/sqlite"
 	"net/http"
 	"net/url"
@@ -27,14 +28,10 @@ type Server struct {
 	mu     sync.RWMutex
 }
 type FeedRequest struct {
-	StartURL       string   `json:"start_url"`
-	AllowedOrigins []string `json:"allowed_origins"`
-	Auth           *struct {
-		Type     string `json:"type"`
-		Username string `json:"username"`
-		Password string `json:"password"`
-	} `json:"auth"`
-	Options struct {
+	StartURL       string    `json:"start_url"`
+	AllowedOrigins []string  `json:"allowed_origins"`
+	Auth           *FeedAuth `json:"auth"`
+	Options        struct {
 		Depth                   int  `json:"depth"`
 		MaxPages                int  `json:"max_pages"`
 		TimeoutSeconds          int  `json:"timeout_seconds"`
@@ -43,6 +40,13 @@ type FeedRequest struct {
 		AllowAccountCreation    bool `json:"allow_account_creation"`
 		AllowFileUploads        bool `json:"allow_file_uploads"`
 	} `json:"options"`
+}
+
+type FeedAuth struct {
+	Type     string `json:"type"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+	RoleID   string `json:"role_id,omitempty"`
 }
 
 func New(dbPath, key string) (*Server, error) {
@@ -155,6 +159,29 @@ func (s *Server) feed(w http.ResponseWriter, r *http.Request) {
 		write(w, map[string]string{"error": "INVALID_REQUEST"}, 400)
 		return
 	}
+	if q.Auth != nil {
+		t := strings.ToLower(strings.TrimSpace(q.Auth.Type))
+		switch t {
+		case "none":
+			if q.Auth.Username != "" || q.Auth.Password != "" || q.Auth.RoleID != "" {
+				write(w, map[string]string{"error": "AUTH_MODE_CONFLICT"}, 400)
+				return
+			}
+		case "form":
+			if q.Auth.Username == "" || q.Auth.Password == "" || q.Auth.RoleID != "" {
+				write(w, map[string]string{"error": "AUTH_MODE_INVALID"}, 400)
+				return
+			}
+		case "session_manager_cdp":
+			if q.Auth.RoleID == "" || q.Auth.Username != "" || q.Auth.Password != "" {
+				write(w, map[string]string{"error": "AUTH_MODE_INVALID"}, 400)
+				return
+			}
+		default:
+			write(w, map[string]string{"error": "AUTH_MODE_INVALID"}, 400)
+			return
+		}
+	}
 	u, e := url.Parse(q.StartURL)
 	if e != nil || u.Scheme != "http" && u.Scheme != "https" || u.User != nil {
 		write(w, map[string]string{"error": "INVALID_URL"}, 400)
@@ -208,10 +235,49 @@ func (s *Server) run(id string, q FeedRequest) {
 	cfg.AllowedOrigins = append([]string(nil), q.AllowedOrigins...)
 	cfg.DynamicCrawl = q.Options.Dynamic
 	cfg.DBPath = ""
+	cfg.BrowserSource = "local"
 	if q.Auth != nil {
-		cfg.Auth = &crawler.AuthConfig{Type: q.Auth.Type, Username: q.Auth.Username, Password: q.Auth.Password}
+		cfg.Auth = &crawler.AuthConfig{Type: q.Auth.Type, Username: q.Auth.Username, Password: q.Auth.Password, RoleID: q.Auth.RoleID}
+		if strings.EqualFold(q.Auth.Type, "session_manager_cdp") {
+			cfg.BrowserSource = "session_manager_cdp"
+			cfg.SessionManagerURL = os.Getenv("PLAYSCAN_SESSION_MANAGER_URL")
+			cfg.SessionManagerRoleID = q.Auth.RoleID
+		}
 	}
-	prov := session.NewChromiumProvider(session.ChromiumOptions{Headless: true})
+	var prov session.BrowserContextProvider = session.NewChromiumProvider(session.ChromiumOptions{Headless: true})
+	var release func()
+	if q.Auth != nil && strings.EqualFold(q.Auth.Type, "session_manager_cdp") {
+		client, ce := session.NewSessionManagerHTTPClient(os.Getenv("PLAYSCAN_SESSION_MANAGER_URL"), os.Getenv("PLAYSCAN_SESSION_MANAGER_TOKEN"), session.AllowedWebSocketHosts(os.Getenv("PLAYSCAN_SESSION_MANAGER_WS_HOSTS")))
+		if ce != nil {
+			s.db.Exec(`UPDATE crawl_runs SET status='failed',completed_at=?,error_message=? WHERE id=?`, time.Now().UTC(), ce.Error(), id)
+			return
+		}
+		acq, cancel := context.WithTimeout(ctx, 15*time.Second)
+		lease, ce := client.AcquireContext(acq, q.StartURL, q.Auth.RoleID)
+		cancel()
+		if ce != nil {
+			s.db.Exec(`UPDATE crawl_runs SET status='failed',completed_at=?,error_message=? WHERE id=?`, time.Now().UTC(), ce.Error(), id)
+			return
+		}
+		log.Printf("SESSION_MANAGER_CONTEXT_ACQUIRED context_id_hash=%s session_id_hash=%s", session.RedactedSessionIdentifier(lease.ContextID), session.RedactedSessionIdentifier(lease.SessionID))
+		release = func() {
+			cc, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			_ = client.ReleaseContext(cc, lease.ContextID)
+			log.Printf("SESSION_MANAGER_CONTEXT_RELEASED context_id_hash=%s", session.RedactedSessionIdentifier(lease.ContextID))
+		}
+		remote, ce := session.NewRemoteCDPProvider(lease)
+		if ce != nil {
+			s.db.Exec(`UPDATE crawl_runs SET status='failed',completed_at=?,error_message=? WHERE id=?`, time.Now().UTC(), ce.Error(), id)
+			return
+		}
+		prov = remote
+		defer func() {
+			if release != nil {
+				release()
+			}
+		}()
+	}
 	store, se := crawler.NewRequestStore(s.dbPath)
 	if se != nil {
 		s.db.Exec(`UPDATE crawl_runs SET status='failed',completed_at=?,error_message=? WHERE id=?`, time.Now().UTC(), "request store unavailable", id)

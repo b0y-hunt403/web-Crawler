@@ -1,5 +1,0 @@
-POST /login HTTP/1.1
-Host: 0a2400fc03df633b8043b2cd00c100e4.web-security-academy.net
-Content-Type: application/x-www-form-urlencoded
-
-csrf=hszQjtf1Ckd4Y5KesnrsGLSTnOjZ1oS8&password=Test1234%21&username=testuser

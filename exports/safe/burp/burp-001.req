@@ -1,4 +1,0 @@
-GET /api/cronos/layout/GetCalendarExtrasAsync/?checkIn=2026-08-20T06%3A35%3A50.9425774%2B07%3A00&currency=USD&occupancy=2&suggestedPrice=2 HTTP/1.1
-Host: www.agoda.com
-Content-Type: text/plain
-

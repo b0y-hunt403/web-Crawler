@@ -1,5 +1,0 @@
-POST /login HTTP/1.1
-Host: localhost:3000
-Content-Type: application/json
-
-{"username": "testuser", "password": "Test1234!"}

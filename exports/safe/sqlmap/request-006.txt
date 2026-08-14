@@ -1,4 +1,0 @@
-GET /api/cronos/geo/goodtoknow?accommodationType=0&objectId=14524&pageTypeId=5 HTTP/1.1
-Host: www.agoda.com
-Content-Type: text/plain
-

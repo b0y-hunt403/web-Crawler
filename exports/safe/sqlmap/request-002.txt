@@ -1,4 +1,0 @@
-GET /api/cronos/layout/GetCalendarExtrasAsync/?propertyId=0 HTTP/1.1
-Host: www.agoda.com
-Content-Type: text/plain
-
