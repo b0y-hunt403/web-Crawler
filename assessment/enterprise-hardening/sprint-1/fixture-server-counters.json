@@ -1,0 +1,9 @@
+{
+  "fixture": "127.0.0.1 policy fixture",
+  "approved_auth_post": 1,
+  "blocked_background_post": 0,
+  "blocked_background_put": 0,
+  "blocked_background_patch": 0,
+  "blocked_background_delete": 0,
+  "execution": "TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire"
+}

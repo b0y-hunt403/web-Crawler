@@ -1,0 +1,95 @@
+=== RUN   TestChromiumNetworkPolicyBlocksMutationsBeforeWire
+2026/08/15 09:15:44 [1/1] Crawling depth 0: http://127.0.0.1:44403
+2026/08/15 09:15:44 REQUEST: method=GET url=http://127.0.0.1:44403/ type=Document content_type= body_len=0 request_id_hash=f95821690c7fac5f
+2026/08/15 09:15:44 RUNTIME_HOOK method=GET url=http://127.0.0.1:44403/read body_type= body_len=0 header_names=0 stack_hash=f4e3caa389e991bd
+2026/08/15 09:15:44 RUNTIME_APPLICATION_CALL method=GET url=http://127.0.0.1:44403/read body_type= body_len=0
+2026/08/15 09:15:44 REQUEST: method=GET url=http://127.0.0.1:44403/read type=Fetch content_type= body_len=0 request_id_hash=0223f70e915ccbe8
+2026/08/15 09:15:44 RUNTIME_HOOK method=POST url=http://127.0.0.1:44403/background-post body_type= body_len=15 header_names=1 stack_hash=17c322cafdd37284
+2026/08/15 09:15:44 RUNTIME_APPLICATION_CALL method=POST url=http://127.0.0.1:44403/background-post body_type= body_len=15
+2026/08/15 09:15:44 CDP_REQUEST_SEEN id_hash=3e2dbb3d9bb1020d method=POST url=http://127.0.0.1:44403/background-post body_len=0 source_type=unknown
+2026/08/15 09:15:44 REQUEST_BODY_EXTRACTED id_hash=3e2dbb3d9bb1020d method=POST url=http://127.0.0.1:44403/background-post body_len=20 source_type=unknown
+2026/08/15 09:15:44 REQUEST: method=POST url=http://127.0.0.1:44403/background-post type=Fetch content_type=application/json body_len=20 request_id_hash=3e2dbb3d9bb1020d
+2026/08/15 09:15:44 PENDING_REQUEST_CREATED id=1362293.3 method=POST url=http://127.0.0.1:44403/background-post body_len=15 source_type=unknown
+2026/08/15 09:15:44 RUNTIME_HOOK method=PUT url=http://127.0.0.1:44403/background-put body_type= body_len=2 header_names=0 stack_hash=744447a246dac745
+2026/08/15 09:15:44 RUNTIME_APPLICATION_CALL method=PUT url=http://127.0.0.1:44403/background-put body_type= body_len=2
+2026/08/15 09:15:44 CDP_REQUEST_SEEN id_hash=19d537957cd132fe method=PUT url=http://127.0.0.1:44403/background-put body_len=0 source_type=unknown
+2026/08/15 09:15:44 REQUEST_BODY_EXTRACTED id_hash=19d537957cd132fe method=PUT url=http://127.0.0.1:44403/background-put body_len=4 source_type=unknown
+2026/08/15 09:15:44 REQUEST: method=PUT url=http://127.0.0.1:44403/background-put type=Fetch content_type=text/plain;charset=UTF-8 body_len=4 request_id_hash=19d537957cd132fe
+2026/08/15 09:15:44 PENDING_REQUEST_CREATED id=1362293.4 method=PUT url=http://127.0.0.1:44403/background-put body_len=4 source_type=unknown
+2026/08/15 09:15:44 RUNTIME_HOOK method=PATCH url=http://127.0.0.1:44403/background-patch body_type= body_len=2 header_names=0 stack_hash=1ac2b55c183cd290
+2026/08/15 09:15:44 RUNTIME_APPLICATION_CALL method=PATCH url=http://127.0.0.1:44403/background-patch body_type= body_len=2
+2026/08/15 09:15:44 CDP_REQUEST_SEEN id_hash=13590267179295ec method=PATCH url=http://127.0.0.1:44403/background-patch body_len=0 source_type=unknown
+2026/08/15 09:15:44 REQUEST_BODY_EXTRACTED id_hash=13590267179295ec method=PATCH url=http://127.0.0.1:44403/background-patch body_len=4 source_type=unknown
+2026/08/15 09:15:44 REQUEST: method=PATCH url=http://127.0.0.1:44403/background-patch type=Fetch content_type=text/plain;charset=UTF-8 body_len=4 request_id_hash=13590267179295ec
+2026/08/15 09:15:44 PENDING_REQUEST_CREATED id=1362293.5 method=PATCH url=http://127.0.0.1:44403/background-patch body_len=4 source_type=unknown
+2026/08/15 09:15:44 RUNTIME_HOOK method=DELETE url=http://127.0.0.1:44403/background-delete body_type= body_len=0 header_names=0 stack_hash=b370669fa222eeb5
+2026/08/15 09:15:44 RUNTIME_APPLICATION_CALL method=DELETE url=http://127.0.0.1:44403/background-delete body_type= body_len=0
+2026/08/15 09:15:44 CDP_REQUEST_SEEN id_hash=513365734e94f992 method=DELETE url=http://127.0.0.1:44403/background-delete body_len=0 source_type=unknown
+2026/08/15 09:15:44 REQUEST_BODY_EXTRACTED id_hash=513365734e94f992 method=DELETE url=http://127.0.0.1:44403/background-delete body_len=0 source_type=unknown
+2026/08/15 09:15:44 REQUEST: method=DELETE url=http://127.0.0.1:44403/background-delete type=Fetch content_type= body_len=0 request_id_hash=513365734e94f992
+2026/08/15 09:15:44 PENDING_REQUEST_CREATED id=1362293.6 method=DELETE url=http://127.0.0.1:44403/background-delete body_len=0 source_type=unknown
+2026/08/15 09:15:44 NETWORK_POLICY_BLOCK method=POST rule=MUTATION_BLOCKED request_id_hash=3d1e1979871603ac
+2026/08/15 09:15:44 NETWORK_POLICY_BLOCK method=PUT rule=MUTATION_BLOCKED request_id_hash=f75935447172f87c
+2026/08/15 09:15:44 NETWORK_POLICY_BLOCK method=PATCH rule=MUTATION_BLOCKED request_id_hash=0ee7a55dc68a8672
+2026/08/15 09:15:44 NETWORK_POLICY_BLOCK method=DELETE rule=DELETE_BLOCKED request_id_hash=184898756e02f51d
+2026/08/15 09:15:44 RESPONSE: status=204 method= url=http://127.0.0.1:44403/favicon.ico
+2026/08/15 09:15:44 REQUEST FAILED: request_id=1362293.2 error=net::ERR_ABORTED
+2026/08/15 09:15:44 REQUEST FAILED: request_id=1362293.3 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/15 09:15:44 REQUEST FAILED: request_id=1362293.4 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/15 09:15:44 REQUEST FAILED: request_id=1362293.5 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/15 09:15:44 REQUEST FAILED: request_id=1362293.6 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/15 09:15:44 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at http://127.0.0.1:44403/:1:24 url= line=19 column=402
+2026/08/15 09:15:44 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at http://127.0.0.1:44403/:1:133 url= line=19 column=402
+2026/08/15 09:15:44 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at http://127.0.0.1:44403/:1:183 url= line=19 column=402
+2026/08/15 09:15:44 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at http://127.0.0.1:44403/:1:237 url= line=19 column=402
+2026/08/15 09:15:44 DOM_SETTLED ready_state=complete location=http://127.0.0.1:44403/ title="" body_children=0 body_text_len=0 anchors=0 buttons=0 forms=0 controls=0 dom_state=body-ready reason=quiet elapsed_ms=505 quiet_ms=505
+2026/08/15 09:15:44 DOM_SNAPSHOT page=http://127.0.0.1:44403 snapshot_url=http://127.0.0.1:44403/ ready_state=complete links=0 forms=0 controls=0 scripts=0 dom_state=772eb830
+2026/08/15 09:15:44 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:44403 snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/15 09:15:44 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:44403/ forms=0 controls=0
+2026/08/15 09:15:44 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:44403/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/15 09:15:44 WORKFLOW_QUEUE_EMPTY page=http://127.0.0.1:44403/ forms=0 controls=0
+2026/08/15 09:15:44 WORKFLOW_QUEUE_DRAINED page=http://127.0.0.1:44403 pending=0 executing=0 navigation_pending=false
+2026/08/15 09:15:44 INITIAL INTERACTION RESULT: changed=false interacted=0 clicked=0 filled=0 submitted=0 discovered=0 continue=false error= lastStep= lastElement= fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil>
+2026/08/15 09:15:44 INITIAL INTERACTION RESULT DETAILS: fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil> submitAttempted=false submitEventObserved=false
+2026/08/15 09:15:44 FORM_VALID: unknown
+2026/08/15 09:15:44 DOM_SNAPSHOT page=http://127.0.0.1:44403 snapshot_url=http://127.0.0.1:44403/ ready_state=complete links=0 forms=0 controls=0 scripts=0 dom_state=772eb830 phase=final
+2026/08/15 09:15:44 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:44403 snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+--- PASS: TestChromiumNetworkPolicyBlocksMutationsBeforeWire (3.46s)
+=== RUN   TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire
+--- PASS: TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire (0.00s)
+=== RUN   TestNetworkPolicyConfigParsingFailClosed
+--- PASS: TestNetworkPolicyConfigParsingFailClosed (0.00s)
+=== RUN   TestExactAuthRejectsUnrelatedActiveRequests
+--- PASS: TestExactAuthRejectsUnrelatedActiveRequests (0.00s)
+=== RUN   TestNetworkPolicyAllowsReadOnlyMethods
+--- PASS: TestNetworkPolicyAllowsReadOnlyMethods (0.00s)
+=== RUN   TestNetworkPolicyBlocksDeleteBeforeWire
+--- PASS: TestNetworkPolicyBlocksDeleteBeforeWire (0.00s)
+=== RUN   TestNetworkPolicyBlocksPOSTPUTPATCHBeforeWire
+--- PASS: TestNetworkPolicyBlocksPOSTPUTPATCHBeforeWire (0.00s)
+=== RUN   TestNetworkPolicyAllowsOnlyExactActiveAuthenticationPOST
+--- PASS: TestNetworkPolicyAllowsOnlyExactActiveAuthenticationPOST (0.00s)
+=== RUN   TestNetworkPolicyBlocksForgotPasswordByDefault
+--- PASS: TestNetworkPolicyBlocksForgotPasswordByDefault (0.00s)
+=== RUN   TestNetworkPolicyBlocksAccountCreationByDefault
+--- PASS: TestNetworkPolicyBlocksAccountCreationByDefault (0.00s)
+=== RUN   TestNetworkPolicyAllowsExplicitReadOnlyGraphQLQuery
+--- PASS: TestNetworkPolicyAllowsExplicitReadOnlyGraphQLQuery (0.00s)
+=== RUN   TestNetworkPolicyBlocksGraphQLMutation
+--- PASS: TestNetworkPolicyBlocksGraphQLMutation (0.00s)
+PASS
+ok  	github.com/Anduamlk/web-Crawler/crawler	3.483s
+testing: warning: no tests to run
+PASS
+ok  	github.com/Anduamlk/web-Crawler/api	0.013s [no tests to run]
+testing: warning: no tests to run
+PASS
+ok  	github.com/Anduamlk/web-Crawler/session	0.008s [no tests to run]

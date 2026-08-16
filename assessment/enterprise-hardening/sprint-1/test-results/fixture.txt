@@ -1,0 +1,4 @@
+=== RUN   TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire
+--- PASS: TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire (0.00s)
+PASS
+ok  	github.com/Anduamlk/web-Crawler/crawler	0.009s

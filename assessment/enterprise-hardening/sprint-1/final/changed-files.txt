@@ -1,0 +1,10 @@
+.gitignore
+api/server.go
+crawler/config.go
+crawler/dynamic.go
+crawler/dynamic_integration_test.go
+crawler/network_policy.go
+crawler/network_policy_test.go
+crawler/network_policy_fixture_test.go
+crawler/network_policy_chromium_test.go
+crawler/redaction.go

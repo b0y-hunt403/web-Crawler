@@ -1,0 +1,7 @@
+{
+  "remaining": [
+    "Full HAR/Postman/Burp/SQLMap/Dalfox artifact recursive secret test is not yet implemented",
+    "Blocked provenance page/frame fields depend on CDP metadata availability",
+    "Pre-existing go vet findings remain assigned to Sprint 2"
+  ]
+}

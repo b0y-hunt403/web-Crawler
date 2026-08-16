@@ -1,0 +1,7 @@
+ok  	github.com/Anduamlk/web-Crawler/api	0.060s
+?   	github.com/Anduamlk/web-Crawler/cmd/crawler	[no test files]
+?   	github.com/Anduamlk/web-Crawler/cmd/raptor-api	[no test files]
+?   	github.com/Anduamlk/web-Crawler/cmd/sessionmgr	[no test files]
+?   	github.com/Anduamlk/web-Crawler/cmd/sessionmgr/crawler	[no test files]
+ok  	github.com/Anduamlk/web-Crawler/crawler	0.146s
+ok  	github.com/Anduamlk/web-Crawler/session	0.007s

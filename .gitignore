@@ -20,6 +20,7 @@
 crawler
 !/crawler/
 /crawler/*
+!/crawler/auth_claim_chromium_test.go
 !/crawler/banner_test.go
 !/crawler/request_intelligence.go
 !/crawler/request_intelligence_test.go
@@ -27,6 +28,16 @@ crawler
 !/crawler/api_intelligence_test.go
 !/crawler/export.go
 !/crawler/dynamic_integration_test.go
+!/crawler/network_policy.go
+!/crawler/network_policy_test.go
+!/crawler/network_policy_fixture_test.go
+!/crawler/redaction.go
+!/crawler/network_policy_chromium_test.go
+!/crawler/fetch_enforcer.go
+!/crawler/auth_claim_lifecycle_test.go
+!/crawler/safe_artifact_test.go
+!/crawler/fetch_request_id_test.go
+!/crawler/enforcement_failure_test.go
 
 *.exe
 *.exe~

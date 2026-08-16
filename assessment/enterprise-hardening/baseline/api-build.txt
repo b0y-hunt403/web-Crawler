@@ -1,0 +1,24 @@
+go: downloading github.com/google/uuid v1.6.0
+go: downloading modernc.org/sqlite v1.53.0
+go: downloading github.com/chromedp/cdproto v0.0.0-20260704091341-6ca7914c3938
+go: downloading github.com/chromedp/chromedp v0.15.1
+go: downloading github.com/minio/minio-go/v7 v7.2.1
+go: downloading github.com/gorilla/websocket v1.5.3
+go: downloading github.com/PuerkitoBio/goquery v1.12.0
+session/profile.go:11:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/context.go:13:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/inject.go:14:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/recorder.go:16:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/context.go:14:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/context.go:15:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/recorder.go:18:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/remote_cdp.go:10:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/context.go:16:2: github.com/chromedp/chromedp@v0.15.1: Get "https://proxy.golang.org/github.com/chromedp/chromedp/@v/v0.15.1.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/inject.go:17:2: github.com/google/uuid@v1.6.0: Get "https://proxy.golang.org/github.com/google/uuid/@v/v1.6.0.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/recorder.go:20:2: github.com/gorilla/websocket@v1.5.3: Get "https://proxy.golang.org/github.com/gorilla/websocket/@v/v1.5.3.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/minio_archive_store.go:10:2: github.com/minio/minio-go/v7@v7.2.1: Get "https://proxy.golang.org/github.com/minio/minio-go/v7/@v/v7.2.1.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/minio_archive_store.go:11:2: github.com/minio/minio-go/v7@v7.2.1: Get "https://proxy.golang.org/github.com/minio/minio-go/v7/@v/v7.2.1.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+session/store.go:10:2: modernc.org/sqlite@v1.53.0: Get "https://proxy.golang.org/modernc.org/sqlite/@v/v1.53.0.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+crawler/static.go:14:2: github.com/PuerkitoBio/goquery@v1.12.0: Get "https://proxy.golang.org/github.com/%21puerkito%21bio/goquery/@v/v1.12.0.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+crawler/dynamic.go:24:2: github.com/chromedp/cdproto@v0.0.0-20260704091341-6ca7914c3938: Get "https://proxy.golang.org/github.com/chromedp/cdproto/@v/v0.0.0-20260704091341-6ca7914c3938.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted
+crawler/dynamic.go:30:2: github.com/chromedp/chromedp@v0.15.1: Get "https://proxy.golang.org/github.com/chromedp/chromedp/@v/v0.15.1.zip": dial tcp: lookup proxy.golang.org on 4.2.2.2:53: dial udp 4.2.2.2:53: socket: operation not permitted

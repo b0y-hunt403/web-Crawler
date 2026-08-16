@@ -82,6 +82,7 @@ func TestDynamicCrawlerPersistsRealLoginPOST(t *testing.T) {
 	var resultsMu sync.Mutex
 	var saveErr error
 	config := DefaultCrawlerConfig()
+	config.NetworkPolicy = NetworkPolicyConfig{AllowMutations: true, AllowDestructiveActions: true}
 	config.SeedURL = srv.URL + "/login"
 	config.MaxDepth = 0
 	config.MaxPages = 1
@@ -183,6 +184,8 @@ func TestDynamicCrawlerPersistsRealLoginPOST(t *testing.T) {
 }
 
 func TestDynamicCrawlerPersistsPUTPATCHDELETE(t *testing.T) {
+	t.Setenv("RAPTOR_ALLOW_MUTATIONS", "true")
+	t.Setenv("RAPTOR_ALLOW_DESTRUCTIVE_ACTIONS", "true")
 	expected := map[string]string{
 		"PUT":    `{"name":"test"}`,
 		"PATCH":  `{"enabled":true}`,
@@ -229,6 +232,7 @@ document.querySelector('#delete-form').addEventListener('submit',e=>{e.preventDe
 	}
 	defer store.Close()
 	config := DefaultCrawlerConfig()
+	config.NetworkPolicy = NetworkPolicyConfig{AllowMutations: true, AllowDestructiveActions: true}
 	config.SeedURL = srv.URL + "/work"
 	config.MaxDepth, config.MaxPages = 0, 1
 	config.RequestTimeout = 20 * time.Second
@@ -337,6 +341,7 @@ func TestOptionsRetainedButExcludedFromReplay(t *testing.T) {
 }
 
 func TestDynamicModalDrawerAndWizardFormsEnterQueueAndExecute(t *testing.T) {
+	t.Setenv("RAPTOR_ALLOW_MUTATIONS", "true")
 	var mu sync.Mutex
 	received := map[string]int{}
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -367,6 +372,7 @@ document.querySelector('#drawer-open').onclick=()=>{host.innerHTML='<div class="
 	srv.Start()
 	defer srv.Close()
 	config := DefaultCrawlerConfig()
+	config.NetworkPolicy = NetworkPolicyConfig{AllowMutations: true, AllowDestructiveActions: true}
 	config.SeedURL, config.MaxPages, config.RequestTimeout = srv.URL, 1, 30*time.Second
 	c, err := NewDynamicCrawler(config, func(*DiscoveredRequest, error) {}, sessionmgr.NewChromiumProvider(sessionmgr.ChromiumOptions{Headless: true}), nil)
 	if err != nil {

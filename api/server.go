@@ -39,6 +39,9 @@ type FeedRequest struct {
 		AllowDestructiveActions bool `json:"allow_destructive_actions"`
 		AllowAccountCreation    bool `json:"allow_account_creation"`
 		AllowFileUploads        bool `json:"allow_file_uploads"`
+		AllowMutations          bool `json:"allow_mutations"`
+		AllowRecovery           bool `json:"allow_recovery"`
+		AllowLogout             bool `json:"allow_logout"`
 	} `json:"options"`
 }
 
@@ -236,6 +239,7 @@ func (s *Server) run(id string, q FeedRequest) {
 	cfg.DynamicCrawl = q.Options.Dynamic
 	cfg.DBPath = ""
 	cfg.BrowserSource = "local"
+	cfg.NetworkPolicy = crawler.NetworkPolicyConfig{AllowMutations: q.Options.AllowMutations, AllowDestructiveActions: q.Options.AllowDestructiveActions, AllowAccountCreation: q.Options.AllowAccountCreation, AllowRecovery: q.Options.AllowRecovery, AllowLogout: q.Options.AllowLogout, AllowFileUploads: q.Options.AllowFileUploads}
 	if q.Auth != nil {
 		cfg.Auth = &crawler.AuthConfig{Type: q.Auth.Type, Username: q.Auth.Username, Password: q.Auth.Password, RoleID: q.Auth.RoleID}
 		if strings.EqualFold(q.Auth.Type, "session_manager_cdp") {

@@ -193,14 +193,22 @@ func ExportReplayArtifacts(store *RequestStore, dir string) error {
 				}
 			}
 		}
-		raw, _ := replayText(r)
+		raw, err := replayText(r)
+		if err != nil {
+			return fmt.Errorf("build replay request %s: %w", r.ID, err)
+		}
 		if authSessionRequest(r.URL) && !private {
 			continue
 		}
 		if !authSessionRequest(r.URL) {
 			filename := fmt.Sprintf("request-%03d.txt", i+1)
-			_ = os.WriteFile(filepath.Join(dir, "sqlmap", filename), []byte(raw), 0600)
-			_ = os.WriteFile(filepath.Join(dir, "burp", fmt.Sprintf("burp-%03d.req", i+1)), []byte(raw), 0600)
+			if err := os.WriteFile(filepath.Join(dir, "sqlmap", filename), []byte(raw), 0600); err != nil {
+				return fmt.Errorf("write SQLMap request %s: %w", filename, err)
+			}
+			burpName := fmt.Sprintf("burp-%03d.req", i+1)
+			if err := os.WriteFile(filepath.Join(dir, "burp", burpName), []byte(raw), 0600); err != nil {
+				return fmt.Errorf("write Burp request %s: %w", burpName, err)
+			}
 			index = append(index, map[string]interface{}{"request_filename": filename, "request_id": r.ID, "method": r.Method, "original_url": r.URL, "endpoint_template": r.Template, "parameter_paths": r.Parameters, "body_type": r.BodyType, "authentication_required": r.AuthRequired, "source_page": r.PageURL, "task_id": r.TaskID, "response_status": r.Status, "replayability": r.Replayability, "exclusion_warnings": []string{}})
 		}
 		entries = append(entries, map[string]interface{}{"request": map[string]interface{}{"method": r.Method, "url": r.URL, "headers": r.Headers, "postData": map[string]string{"mimeType": r.BodyType, "text": r.Body}}, "response": nil})

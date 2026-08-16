@@ -1,0 +1,7 @@
+{
+  "source_type": "cdp_policy_blocked",
+  "lifecycle_state": "blocked_by_policy",
+  "failure_reason": "POLICY_DELETE_BLOCKED",
+  "response_status": null,
+  "scanner_eligible": false
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "failure_reason": "POLICY_MUTATION_BLOCKED",
+    "frame_id": "",
+    "id": "b7edde47f1b6e1ebbd206b01fa68eae777fede6419fe3ec94bf54fa8125d122f",
+    "lifecycle_state": "blocked_by_policy",
+    "page_url": "",
+    "response": "null",
+    "source_type": "cdp_policy_blocked"
+  },
+  {
+    "failure_reason": "POLICY_MUTATION_BLOCKED",
+    "frame_id": "",
+    "id": "319fcf38002d84003669ddbf893f74cbb2db0c006fea15c18e1931b1b5aa50ab",
+    "lifecycle_state": "blocked_by_policy",
+    "page_url": "",
+    "response": "null",
+    "source_type": "cdp_policy_blocked"
+  },
+  {
+    "failure_reason": "POLICY_MUTATION_BLOCKED",
+    "frame_id": "",
+    "id": "d29c1e406d18ee3b1561017c8e41bb66a6c04b061c60ccc6d8a2c9d82f48b4cb",
+    "lifecycle_state": "blocked_by_policy",
+    "page_url": "",
+    "response": "null",
+    "source_type": "cdp_policy_blocked"
+  },
+  {
+    "failure_reason": "POLICY_DELETE_BLOCKED",
+    "frame_id": "",
+    "id": "894c42003eb35e04df9cfaeaf1b0bfac68a5e6e6881ecb9a5991a4e36e21fb9f",
+    "lifecycle_state": "blocked_by_policy",
+    "page_url": "",
+    "response": "null",
+    "source_type": "cdp_policy_blocked"
+  }
+]

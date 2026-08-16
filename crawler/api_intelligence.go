@@ -166,6 +166,12 @@ func authContext(req *DiscoveredRequest) string {
 }
 
 func AnalyzeRequest(req *DiscoveredRequest) RequestAnalysis {
+	if req == nil {
+		return RequestAnalysis{Classification: ClassUnknown, Replayability: "NOT_REPLAYABLE", ExclusionReasons: []string{"nil_request"}}
+	}
+	if req.SourceType == "cdp_policy_blocked" || req.LifecycleState == "blocked_by_policy" {
+		return RequestAnalysis{Classification: ClassUnknown, EndpointTemplate: EndpointTemplate(req.URL), AuthContext: authContext(req), Replayability: "NOT_REPLAYABLE", ExclusionReasons: []string{"blocked_by_policy"}, SQLMapReason: "blocked_by_policy", DalfoxReason: "blocked_by_policy"}
+	}
 	a := RequestAnalysis{Classification: ClassifyObservedRequest(req), EndpointTemplate: EndpointTemplate(req.URL), AuthContext: authContext(req)}
 	a.ContentType = NormalizeContentType(HeaderValue(req.Headers, "Content-Type"))
 	if a.ContentType == "" {

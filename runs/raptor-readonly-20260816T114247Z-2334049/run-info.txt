@@ -1,0 +1,11 @@
+run_id=raptor-readonly-20260816T114247Z-2334049
+target_url=http://127.0.0.1:3000
+profile=readonly
+session_mode=local
+depth=1
+pages=10
+concurrency=1
+request_timeout=15s
+wall_timeout=180
+katana=false
+started_at=2026-08-16T11:42:47Z

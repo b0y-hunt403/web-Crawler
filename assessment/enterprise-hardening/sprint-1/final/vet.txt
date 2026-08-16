@@ -1,0 +1,6 @@
+crawler/dynamic.go:2132:4: the cancelField function is not used on all paths (possible context leak)
+crawler/dynamic.go:2571:2: this return statement may be reached without using the cancelField var defined on line 2132
+crawler/dynamic.go:2825:2: unreachable code
+crawler/dynamic.go:2917:2: unreachable code
+crawler/dynamic.go:3018:4: unreachable code
+crawler/static.go:478:3: unreachable code

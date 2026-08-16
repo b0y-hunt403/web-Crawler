@@ -1,0 +1,12 @@
+/home/b0y/Documents/Projects/web_Scanner
+41673d364e6367d6bd996d60f6dd29adb729c5c2
+main
+origin	git@github.com:Anduamlk/web-Crawler.git (fetch)
+origin	git@github.com:Anduamlk/web-Crawler.git (push)
+ M crawler/export.go
+?? assessment/enterprise-hardening/baseline/identity.txt
+ crawler/export.go | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+go version go1.26.4 linux/amd64
+github.com/chromedp/chromedp v0.15.1
+github.com/chromedp/cdproto v0.0.0-20260704091341-6ca7914c3938

@@ -1,0 +1,399 @@
+ok  	github.com/Anduamlk/web-Crawler/api	0.031s
+?   	github.com/Anduamlk/web-Crawler/cmd/crawler	[no test files]
+?   	github.com/Anduamlk/web-Crawler/cmd/raptor-api	[no test files]
+?   	github.com/Anduamlk/web-Crawler/cmd/sessionmgr	[no test files]
+?   	github.com/Anduamlk/web-Crawler/cmd/sessionmgr/crawler	[no test files]
+2026/08/14 17:00:33 APPLICATION_ANALYSIS_START page=http://localhost:3000/login outcome=APPLICATION_HANDLER_RETURNED_WITHOUT_NETWORK scripts_considered=1
+2026/08/14 17:00:33 APPLICATION_ANALYSIS_RESULT scripts_considered=1 scripts_skipped=1 scripts_analyzed=0 bytes=0 candidates=0 failure_reasons=0
+2026/08/14 17:00:34 [1/1] Crawling depth 0: http://127.0.0.1:39147/login
+2026/08/14 17:00:34 REQUEST: method=GET url=http://127.0.0.1:39147/login type=Document content_type= body_len=0 request_id_hash=5b183a9c4ca2cf30
+2026/08/14 17:00:34 RESPONSE: status=404 method= url=http://127.0.0.1:39147/favicon.ico
+2026/08/14 17:00:34 DOM_SETTLED ready_state=complete location=http://127.0.0.1:39147/login title="" body_children=2 body_text_len=5 anchors=0 buttons=1 forms=1 controls=4 dom_state=body-ready reason=quiet elapsed_ms=504 quiet_ms=504
+2026/08/14 17:00:34 DOM_SNAPSHOT page=http://127.0.0.1:39147/login snapshot_url=http://127.0.0.1:39147/login ready_state=complete links=0 forms=1 controls=0 scripts=0 dom_state=b2d09015
+2026/08/14 17:00:34 ROUTE_SKIPPED url=http://127.0.0.1:39147/login source=form_get reason=ineligible_or_current
+2026/08/14 17:00:34 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:39147/login snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:34 FORM FOUND: action=http://127.0.0.1:39147/login fields=3
+2026/08/14 17:00:34 AUTH_FORM_CANDIDATE requested_page=http://127.0.0.1:39147/login snapshot_url=http://127.0.0.1:39147/login current_location=http://127.0.0.1:39147/login form_selector=form:nth-of-type(1) submit_label=Login field_semantics=[email password checkbox] confidence=9 positive_evidence=[identity_control password_control auth_submit_label auth_form_action] negative_evidence=[] reason=strong_auth_evidence
+2026/08/14 17:00:34 AUTH_FORM_IDENTIFIED page=http://127.0.0.1:39147/login snapshot_url=http://127.0.0.1:39147/login selector=form:nth-of-type(1) attempt_id=ef5000c05f07f236686759adbbeed57ad41ab1731bb2c67b42d12aa4d9014322
+2026/08/14 17:00:34 AUTH_ATTEMPT_STARTED page=http://127.0.0.1:39147/login selector=form:nth-of-type(1) attempt_id=ef5000c05f07f236686759adbbeed57ad41ab1731bb2c67b42d12aa4d9014322
+2026/08/14 17:00:34 TRUSTED_INTERACTION_START attempt=form-0-1786716034564434081 form=form:nth-of-type(1) fields=3 submit=form:nth-of-type(1) > button:nth-of-type(1)
+2026/08/14 17:00:34 FIELD_DISCOVERED page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=0 total=3 selector=input[name="email"][type="email"] type=email semantic=email name=email id= required=true disabled=false readonly=false
+2026/08/14 17:00:34 FIELD_INTERACTION_START page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=0 selector=input[name="email"][type="email"]
+2026/08/14 17:00:34 FIELD_VALUE_GENERATED page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=0 category=email value_len=23
+2026/08/14 17:00:34 TRUSTED_FIELD_VERIFIED selector=input[name="email"][type="email"] type=email value_len=23
+2026/08/14 17:00:34 CONTROLLED_FIELD_SYNC_RESULT selector=input[name="email"][type="email"] dom_value_len=23 formdata_value_len=23 persisted_after_blur=true focused=false status=FORMDATA_SYNCHRONIZED
+2026/08/14 17:00:34 FIELD_INTERACTION_SUCCESS page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=0 selector=input[name="email"][type="email"] elapsed_ms=162
+2026/08/14 17:00:34 FIELD_DISCOVERED page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=1 total=3 selector=input[name="password"][type="password"] type=password semantic=password name=password id= required=true disabled=false readonly=false
+2026/08/14 17:00:34 FIELD_INTERACTION_START page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=1 selector=input[name="password"][type="password"]
+2026/08/14 17:00:34 FIELD_VALUE_GENERATED page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=1 category=password value_len=9
+2026/08/14 17:00:34 TRUSTED_FIELD_VERIFIED selector=input[name="password"][type="password"] type=password value_len=9
+2026/08/14 17:00:34 CONTROLLED_FIELD_SYNC_RESULT selector=input[name="password"][type="password"] dom_value_len=9 formdata_value_len=9 persisted_after_blur=true focused=false status=FORMDATA_SYNCHRONIZED
+2026/08/14 17:00:34 FIELD_INTERACTION_SUCCESS page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=1 selector=input[name="password"][type="password"] elapsed_ms=129
+2026/08/14 17:00:34 FIELD_DISCOVERED page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=2 total=3 selector=input[name="remember"][type="checkbox"] type=checkbox semantic=checkbox name=remember id= required=false disabled=false readonly=false
+2026/08/14 17:00:34 FIELD_INTERACTION_START page=http://127.0.0.1:39147/login form=form:nth-of-type(1) index=2 selector=input[name="remember"][type="checkbox"]
+2026/08/14 17:00:35 FORM_VALID: true
+2026/08/14 17:00:35 PRE_SUBMIT_FORM_STATE page=http://127.0.0.1:39147/login form=form:nth-of-type(1) state=[{"name":"email","id":"","type":"email","domValueLen":23,"hasName":true,"formDataApplicable":true,"formValueLen":23,"checked":false,"required":true,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""},{"name":"password","id":"","type":"password","domValueLen":9,"hasName":true,"formDataApplicable":true,"formValueLen":9,"checked":false,"required":true,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""},{"name":"remember","id":"","type":"checkbox","domValueLen":2,"hasName":true,"formDataApplicable":true,"formValueLen":0,"checked":false,"required":false,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""},{"name":"","id":"","type":"submit","domValueLen":0,"hasName":false,"formDataApplicable":false,"formValueLen":0,"checked":false,"required":false,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""}]
+2026/08/14 17:00:35 TRUSTED_SUBMIT_CLICKED attempt=form-0-1786716034564434081 selector=form:nth-of-type(1) > button:nth-of-type(1)
+2026/08/14 17:00:35 RUNTIME_HOOK method=POST url=http://127.0.0.1:39147/api/login body_type= body_len=58 header_names=1 stack_hash=57f7c585d1bec02e
+2026/08/14 17:00:35 RUNTIME_APPLICATION_CALL method=POST url=http://127.0.0.1:39147/api/login body_type= body_len=58
+2026/08/14 17:00:35 CDP_REQUEST_SEEN id_hash=a985a1ddea22d16c method=POST url=http://127.0.0.1:39147/api/login body_len=0 source_type=unknown
+2026/08/14 17:00:35 REQUEST_BODY_EXTRACTED id_hash=a985a1ddea22d16c method=POST url=http://127.0.0.1:39147/api/login body_len=80 source_type=unknown
+2026/08/14 17:00:35 REQUEST: method=POST url=http://127.0.0.1:39147/api/login type=Fetch content_type=application/json body_len=80 request_id_hash=a985a1ddea22d16c
+2026/08/14 17:00:35 PENDING_REQUEST_CREATED id=784821.3 method=POST url=http://127.0.0.1:39147/api/login body_len=58 source_type=unknown
+2026/08/14 17:00:35 NETWORK_POLICY_ALLOW method=POST rule=AUTH_EXACT
+2026/08/14 17:00:35 FETCH_CONTINUE_SUCCESS id_hash=3d1e1979871603ac method=POST url=http://127.0.0.1:39147/api/login body_len=0 source_type=unknown
+2026/08/14 17:00:35 RESPONSE: status=200 method=POST url=http://127.0.0.1:39147/api/login
+2026/08/14 17:00:35 REQUEST_CLASSIFIED id=784821.3 method=POST url=http://127.0.0.1:39147/api/login body_len=58 source_type=ajax_fetch
+2026/08/14 17:00:35 RUNTIME_CDP_CORRELATION method=POST url=http://127.0.0.1:39147/api/login matched=true
+2026/08/14 17:00:35 REQUEST_COMPLETED id=784821.3 method=POST url=http://127.0.0.1:39147/api/login body_len=58 source_type=ajax_fetch
+2026/08/14 17:00:35 REQUEST_CONVERTED method=POST url=http://127.0.0.1:39147/api/login content_type=application/json body_type=json observed_source=ajax_fetch api_classification=json_api body_len=58
+2026/08/14 17:00:35 POST_SUBMIT_FORM_STATE page=http://127.0.0.1:39147/login form=form:nth-of-type(1) state=[map[checked:false connected:true disabled:false domValueLen:23 id: name:email valid:true validationMessage: visible:true] map[checked:false connected:true disabled:false domValueLen:9 id: name:password valid:true validationMessage: visible:true] map[checked:false connected:true disabled:false domValueLen:2 id: name:remember valid:true validationMessage: visible:true] map[checked:false connected:true disabled:false domValueLen:0 id: name: valid:true validationMessage: visible:true]]
+2026/08/14 17:00:35 APPLICATION_DOM_CHANGE page=http://127.0.0.1:39147/login form=form:nth-of-type(1) changes=[]
+2026/08/14 17:00:35 APPLICATION_VALIDATION_MESSAGE page=http://127.0.0.1:39147/login form=form:nth-of-type(1) messages=[]
+2026/08/14 17:00:35 SUBMIT_BUTTON_STATE page=http://127.0.0.1:39147/login form=form:nth-of-type(1) before=http://127.0.0.1:39147/login after=map[ariaDisabled:<nil> connected:true disabled:false loading:false text:Login]
+2026/08/14 17:00:35 APPLICATION_FLOW page=http://127.0.0.1:39147/login fields=15
+2026/08/14 17:00:35 INTERACTION_OUTCOME: APPLICATION_REQUEST_OBSERVED
+2026/08/14 17:00:35 AUTH_REQUEST_OBSERVED page=http://127.0.0.1:39147/login attempt_id=ef5000c05f07f236686759adbbeed57ad41ab1731bb2c67b42d12aa4d9014322
+2026/08/14 17:00:35 AUTH_POST_LOGIN_SETTLED requested_url=http://127.0.0.1:39147/login final_location=http://127.0.0.1:39147/login visible_login_forms=1 logout_control=false
+2026/08/14 17:00:35 AUTH_STORAGE_EVIDENCE cookie_names_hash=2166136261 local_storage_key_names=[] session_storage_key_names=[]
+2026/08/14 17:00:35 AUTH_SESSION_UNPROVEN page=http://127.0.0.1:39147/login final_location=http://127.0.0.1:39147/login reason=stable_authenticated_evidence_absent
+2026/08/14 17:00:35 INTERACTION_STRATEGY: chromedp_keyboard_click
+2026/08/14 17:00:35 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:39147/login forms=1 controls=0
+2026/08/14 17:00:35 ROUTE_SKIPPED url=http://127.0.0.1:39147/login source=form_get reason=ineligible_or_current
+2026/08/14 17:00:35 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:39147/login snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:35 WORKFLOW_QUEUE_EMPTY page=http://127.0.0.1:39147/login forms=1 controls=0
+2026/08/14 17:00:35 WORKFLOW_QUEUE_DRAINED page=http://127.0.0.1:39147/login pending=0 executing=0 navigation_pending=false
+2026/08/14 17:00:35 INITIAL INTERACTION RESULT: changed=false interacted=0 clicked=0 filled=0 submitted=0 discovered=0 continue=false error= lastStep= lastElement= fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil>
+2026/08/14 17:00:35 INITIAL INTERACTION RESULT DETAILS: fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil> submitAttempted=false submitEventObserved=false
+2026/08/14 17:00:35 FORM_VALID: unknown
+2026/08/14 17:00:35 DOM_SNAPSHOT page=http://127.0.0.1:39147/login snapshot_url=http://127.0.0.1:39147/login ready_state=complete links=0 forms=1 controls=0 scripts=0 dom_state=b2d09015 phase=final
+2026/08/14 17:00:35 ROUTE_SKIPPED url=http://127.0.0.1:39147/login source=form_get reason=ineligible_or_current
+2026/08/14 17:00:35 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:39147/login snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:35 [1/1] Crawling depth 0: http://127.0.0.1:35577/work
+2026/08/14 17:00:35 REQUEST: method=GET url=http://127.0.0.1:35577/work type=Document content_type= body_len=0 request_id_hash=ebf430e47bfbf156
+2026/08/14 17:00:35 RESPONSE: status=200 method= url=http://127.0.0.1:35577/favicon.ico
+2026/08/14 17:00:36 DOM_SETTLED ready_state=complete location=http://127.0.0.1:35577/work title="" body_children=4 body_text_len=19 anchors=0 buttons=3 forms=3 controls=5 dom_state=body-ready reason=quiet elapsed_ms=504 quiet_ms=504
+2026/08/14 17:00:36 DOM_SNAPSHOT page=http://127.0.0.1:35577/work snapshot_url=http://127.0.0.1:35577/work ready_state=complete links=0 forms=3 controls=0 scripts=0 dom_state=4ebe2a59
+2026/08/14 17:00:36 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:36 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:36 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:36 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:35577/work snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:36 FORM FOUND: action=http://127.0.0.1:35577/work fields=1
+2026/08/14 17:00:36 FORM FOUND: action=http://127.0.0.1:35577/work fields=1
+2026/08/14 17:00:36 FORM FOUND: action=http://127.0.0.1:35577/work fields=0
+2026/08/14 17:00:36 TRUSTED_INTERACTION_START attempt=form-0-1786716036473678236 form=#put-form fields=1 submit=#put-submit
+2026/08/14 17:00:36 FIELD_DISCOVERED page=http://127.0.0.1:35577/work form=#put-form index=0 total=1 selector=#profile-name type=text semantic=text name=name id=profile-name required=true disabled=false readonly=false
+2026/08/14 17:00:36 FIELD_INTERACTION_START page=http://127.0.0.1:35577/work form=#put-form index=0 selector=#profile-name
+2026/08/14 17:00:36 FIELD_VALUE_GENERATED page=http://127.0.0.1:35577/work form=#put-form index=0 category=text value_len=4
+2026/08/14 17:00:36 TRUSTED_FIELD_VERIFIED selector=#profile-name type=text value_len=4
+2026/08/14 17:00:36 CONTROLLED_FIELD_SYNC_RESULT selector=#profile-name dom_value_len=4 formdata_value_len=4 persisted_after_blur=true focused=false status=FORMDATA_SYNCHRONIZED
+2026/08/14 17:00:36 FIELD_INTERACTION_SUCCESS page=http://127.0.0.1:35577/work form=#put-form index=0 selector=#profile-name elapsed_ms=174
+2026/08/14 17:00:36 FORM_VALID: true
+2026/08/14 17:00:36 PRE_SUBMIT_FORM_STATE page=http://127.0.0.1:35577/work form=#put-form state=[{"name":"name","id":"profile-name","type":"text","domValueLen":4,"hasName":true,"formDataApplicable":true,"formValueLen":4,"checked":false,"required":true,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""},{"name":"","id":"put-submit","type":"submit","domValueLen":0,"hasName":false,"formDataApplicable":false,"formValueLen":0,"checked":false,"required":false,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""}]
+2026/08/14 17:00:36 RUNTIME_HOOK method=PUT url=http://127.0.0.1:35577/api/profile body_type= body_len=15 header_names=1 stack_hash=ab9eac23772136bb
+2026/08/14 17:00:36 RUNTIME_APPLICATION_CALL method=PUT url=http://127.0.0.1:35577/api/profile body_type= body_len=15
+2026/08/14 17:00:36 TRUSTED_SUBMIT_CLICKED attempt=form-0-1786716036473678236 selector=#put-submit
+2026/08/14 17:00:36 CDP_REQUEST_SEEN id_hash=f53008d40ea4776c method=PUT url=http://127.0.0.1:35577/api/profile body_len=0 source_type=unknown
+2026/08/14 17:00:36 REQUEST_BODY_EXTRACTED id_hash=f53008d40ea4776c method=PUT url=http://127.0.0.1:35577/api/profile body_len=20 source_type=unknown
+2026/08/14 17:00:36 REQUEST: method=PUT url=http://127.0.0.1:35577/api/profile type=Fetch content_type=application/json body_len=20 request_id_hash=f53008d40ea4776c
+2026/08/14 17:00:36 PENDING_REQUEST_CREATED id=785024.3 method=PUT url=http://127.0.0.1:35577/api/profile body_len=15 source_type=unknown
+2026/08/14 17:00:36 NETWORK_POLICY_BLOCK method=PUT rule=MUTATION_BLOCKED request_id_hash=3d1e1979871603ac
+2026/08/14 17:00:36 REQUEST FAILED: request_id=785024.3 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/14 17:00:36 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at HTMLFormElement.<anonymous> (http://127.0.0.1:35577/work:5:86) url= line=19 column=402
+2026/08/14 17:00:36 POST_SUBMIT_FORM_STATE page=http://127.0.0.1:35577/work form=#put-form state=[map[checked:false connected:true disabled:false domValueLen:4 id:profile-name name:name valid:true validationMessage: visible:true] map[checked:false connected:true disabled:false domValueLen:0 id:put-submit name: valid:true validationMessage: visible:true]]
+2026/08/14 17:00:36 APPLICATION_DOM_CHANGE page=http://127.0.0.1:35577/work form=#put-form changes=[]
+2026/08/14 17:00:36 APPLICATION_VALIDATION_MESSAGE page=http://127.0.0.1:35577/work form=#put-form messages=[]
+2026/08/14 17:00:36 SUBMIT_BUTTON_STATE page=http://127.0.0.1:35577/work form=#put-form before=http://127.0.0.1:35577/work after=map[ariaDisabled:<nil> connected:true disabled:false loading:false text:Save]
+2026/08/14 17:00:36 APPLICATION_FLOW page=http://127.0.0.1:35577/work fields=15
+2026/08/14 17:00:36 INTERACTION_OUTCOME: APPLICATION_REQUEST_OBSERVED
+2026/08/14 17:00:36 INTERACTION_STRATEGY: chromedp_keyboard_click
+2026/08/14 17:00:36 TRUSTED_INTERACTION_START attempt=form-1-1786716036913973358 form=#patch-form fields=1 submit=[data-testid="patch-submit"]
+2026/08/14 17:00:36 FIELD_DISCOVERED page=http://127.0.0.1:35577/work form=#patch-form index=0 total=1 selector=#setting-name type=text semantic=text name=setting id=setting-name required=true disabled=false readonly=false
+2026/08/14 17:00:36 FIELD_INTERACTION_START page=http://127.0.0.1:35577/work form=#patch-form index=0 selector=#setting-name
+2026/08/14 17:00:36 FIELD_VALUE_GENERATED page=http://127.0.0.1:35577/work form=#patch-form index=0 category=text value_len=4
+2026/08/14 17:00:37 TRUSTED_FIELD_VERIFIED selector=#setting-name type=text value_len=4
+2026/08/14 17:00:37 CONTROLLED_FIELD_SYNC_RESULT selector=#setting-name dom_value_len=4 formdata_value_len=4 persisted_after_blur=true focused=false status=FORMDATA_SYNCHRONIZED
+2026/08/14 17:00:37 FIELD_INTERACTION_SUCCESS page=http://127.0.0.1:35577/work form=#patch-form index=0 selector=#setting-name elapsed_ms=119
+2026/08/14 17:00:37 FORM_VALID: true
+2026/08/14 17:00:37 PRE_SUBMIT_FORM_STATE page=http://127.0.0.1:35577/work form=#patch-form state=[{"name":"setting","id":"setting-name","type":"text","domValueLen":4,"hasName":true,"formDataApplicable":true,"formValueLen":4,"checked":false,"required":true,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""},{"name":"","id":"","type":"submit","domValueLen":0,"hasName":false,"formDataApplicable":false,"formValueLen":0,"checked":false,"required":false,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""}]
+2026/08/14 17:00:37 TRUSTED_SUBMIT_CLICKED attempt=form-1-1786716036913973358 selector=[data-testid="patch-submit"]
+2026/08/14 17:00:37 RUNTIME_HOOK method=PATCH url=http://127.0.0.1:35577/api/settings body_type= body_len=16 header_names=1 stack_hash=50b1be0e0d9c3e12
+2026/08/14 17:00:37 RUNTIME_APPLICATION_CALL method=PATCH url=http://127.0.0.1:35577/api/settings body_type= body_len=16
+2026/08/14 17:00:37 CDP_REQUEST_SEEN id_hash=1a151e5129c2e5ec method=PATCH url=http://127.0.0.1:35577/api/settings body_len=0 source_type=unknown
+2026/08/14 17:00:37 REQUEST_BODY_EXTRACTED id_hash=1a151e5129c2e5ec method=PATCH url=http://127.0.0.1:35577/api/settings body_len=24 source_type=unknown
+2026/08/14 17:00:37 REQUEST: method=PATCH url=http://127.0.0.1:35577/api/settings type=Fetch content_type=application/json body_len=24 request_id_hash=1a151e5129c2e5ec
+2026/08/14 17:00:37 PENDING_REQUEST_CREATED id=785024.4 method=PATCH url=http://127.0.0.1:35577/api/settings body_len=16 source_type=unknown
+2026/08/14 17:00:37 NETWORK_POLICY_BLOCK method=PATCH rule=MUTATION_BLOCKED request_id_hash=f75935447172f87c
+2026/08/14 17:00:37 REQUEST FAILED: request_id=785024.4 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/14 17:00:37 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at HTMLFormElement.<anonymous> (http://127.0.0.1:35577/work:6:88) url= line=19 column=402
+2026/08/14 17:00:37 POST_SUBMIT_FORM_STATE page=http://127.0.0.1:35577/work form=#patch-form state=[map[checked:false connected:true disabled:false domValueLen:4 id:setting-name name:setting valid:true validationMessage: visible:true] map[checked:false connected:true disabled:false domValueLen:0 id: name: valid:true validationMessage: visible:true]]
+2026/08/14 17:00:37 APPLICATION_DOM_CHANGE page=http://127.0.0.1:35577/work form=#patch-form changes=[]
+2026/08/14 17:00:37 APPLICATION_VALIDATION_MESSAGE page=http://127.0.0.1:35577/work form=#patch-form messages=[]
+2026/08/14 17:00:37 SUBMIT_BUTTON_STATE page=http://127.0.0.1:35577/work form=#patch-form before=http://127.0.0.1:35577/work after=map[ariaDisabled:<nil> connected:true disabled:false loading:false text:Update]
+2026/08/14 17:00:37 APPLICATION_FLOW page=http://127.0.0.1:35577/work fields=15
+2026/08/14 17:00:37 INTERACTION_OUTCOME: APPLICATION_REQUEST_OBSERVED
+2026/08/14 17:00:37 INTERACTION_STRATEGY: chromedp_keyboard_click
+2026/08/14 17:00:37 TRUSTED_INTERACTION_START attempt=form-2-1786716037278839885 form=#delete-form fields=0 submit=#delete-submit
+2026/08/14 17:00:37 FORM_VALID: true
+2026/08/14 17:00:37 PRE_SUBMIT_FORM_STATE page=http://127.0.0.1:35577/work form=#delete-form state=[{"name":"","id":"delete-submit","type":"submit","domValueLen":0,"hasName":false,"formDataApplicable":false,"formValueLen":0,"checked":false,"required":false,"valid":true,"validationMessage":"","disabled":false,"ariaInvalid":"","ariaDescribedBy":""}]
+2026/08/14 17:00:37 RUNTIME_HOOK method=DELETE url=http://127.0.0.1:35577/api/items/123 body_type= body_len=0 header_names=0 stack_hash=5ea2a491d5a271fd
+2026/08/14 17:00:37 RUNTIME_APPLICATION_CALL method=DELETE url=http://127.0.0.1:35577/api/items/123 body_type= body_len=0
+2026/08/14 17:00:37 TRUSTED_SUBMIT_CLICKED attempt=form-2-1786716037278839885 selector=#delete-submit
+2026/08/14 17:00:37 CDP_REQUEST_SEEN id_hash=4634cce4b1ed7d9e method=DELETE url=http://127.0.0.1:35577/api/items/123 body_len=0 source_type=unknown
+2026/08/14 17:00:37 REQUEST_BODY_EXTRACTED id_hash=4634cce4b1ed7d9e method=DELETE url=http://127.0.0.1:35577/api/items/123 body_len=0 source_type=unknown
+2026/08/14 17:00:37 REQUEST: method=DELETE url=http://127.0.0.1:35577/api/items/123 type=Fetch content_type= body_len=0 request_id_hash=4634cce4b1ed7d9e
+2026/08/14 17:00:37 PENDING_REQUEST_CREATED id=785024.5 method=DELETE url=http://127.0.0.1:35577/api/items/123 body_len=0 source_type=unknown
+2026/08/14 17:00:37 NETWORK_POLICY_BLOCK method=DELETE rule=DELETE_BLOCKED request_id_hash=0ee7a55dc68a8672
+2026/08/14 17:00:37 REQUEST FAILED: request_id=785024.5 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/14 17:00:37 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at HTMLFormElement.<anonymous> (http://127.0.0.1:35577/work:7:89) url= line=19 column=402
+2026/08/14 17:00:37 POST_SUBMIT_FORM_STATE page=http://127.0.0.1:35577/work form=#delete-form state=[map[checked:false connected:true disabled:false domValueLen:0 id:delete-submit name: valid:true validationMessage: visible:true]]
+2026/08/14 17:00:37 APPLICATION_DOM_CHANGE page=http://127.0.0.1:35577/work form=#delete-form changes=[]
+2026/08/14 17:00:37 APPLICATION_VALIDATION_MESSAGE page=http://127.0.0.1:35577/work form=#delete-form messages=[]
+2026/08/14 17:00:37 SUBMIT_BUTTON_STATE page=http://127.0.0.1:35577/work form=#delete-form before=http://127.0.0.1:35577/work after=map[ariaDisabled:<nil> connected:true disabled:false loading:false text:Confirm]
+2026/08/14 17:00:37 APPLICATION_FLOW page=http://127.0.0.1:35577/work fields=15
+2026/08/14 17:00:37 INTERACTION_OUTCOME: APPLICATION_REQUEST_OBSERVED
+2026/08/14 17:00:37 INTERACTION_STRATEGY: chromedp_keyboard_click
+2026/08/14 17:00:37 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:35577/work forms=3 controls=0
+2026/08/14 17:00:37 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:37 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:37 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:37 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:35577/work snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:37 WORKFLOW_QUEUE_EMPTY page=http://127.0.0.1:35577/work forms=3 controls=0
+2026/08/14 17:00:37 WORKFLOW_QUEUE_DRAINED page=http://127.0.0.1:35577/work pending=0 executing=0 navigation_pending=false
+2026/08/14 17:00:37 INITIAL INTERACTION RESULT: changed=false interacted=0 clicked=0 filled=0 submitted=0 discovered=0 continue=false error= lastStep= lastElement= fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil>
+2026/08/14 17:00:37 INITIAL INTERACTION RESULT DETAILS: fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil> submitAttempted=false submitEventObserved=false
+2026/08/14 17:00:37 FORM_VALID: unknown
+2026/08/14 17:00:37 DOM_SNAPSHOT page=http://127.0.0.1:35577/work snapshot_url=http://127.0.0.1:35577/work ready_state=complete links=0 forms=3 controls=0 scripts=0 dom_state=4ebe2a59 phase=final
+2026/08/14 17:00:37 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:37 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:37 ROUTE_SKIPPED url=http://127.0.0.1:35577/work source=form_get reason=ineligible_or_current
+2026/08/14 17:00:37 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:35577/work snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+--- FAIL: TestDynamicCrawlerPersistsPUTPATCHDELETE (2.04s)
+    dynamic_integration_test.go:260: PUT received body="", want "{\"name\":\"test\"}"
+    dynamic_integration_test.go:260: PATCH received body="", want "{\"enabled\":true}"
+2026/08/14 17:00:37 [1/1] Crawling depth 0: http://127.0.0.1:41159
+2026/08/14 17:00:37 REQUEST: method=GET url=http://127.0.0.1:41159/ type=Document content_type= body_len=0 request_id_hash=1b82bb010bc0b279
+2026/08/14 17:00:38 RESPONSE: status=404 method= url=http://127.0.0.1:41159/favicon.ico
+2026/08/14 17:00:38 DOM_SETTLED ready_state=complete location=http://127.0.0.1:41159/ title="" body_children=4 body_text_len=21 anchors=0 buttons=2 forms=0 controls=2 dom_state=body-ready reason=quiet elapsed_ms=503 quiet_ms=503
+2026/08/14 17:00:38 DOM_SNAPSHOT page=http://127.0.0.1:41159 snapshot_url=http://127.0.0.1:41159/ ready_state=complete links=0 forms=0 controls=2 scripts=0 dom_state=67ec1bc9
+2026/08/14 17:00:38 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159 snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:38 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:41159/ forms=0 controls=2
+2026/08/14 17:00:38 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:38 WORKFLOW_TASK_QUEUED task_id=75acb6358e866e22dc73e1fcb66965e4a79507837064744561114809fd95e714 category=CONTROL page=http://127.0.0.1:41159/ dom_state=67ec1bc9 selector=#modal-open type=submit label="Open modal" parent=page-e3522c7c4a521c04e99a08ae3e4afe4fe82b6f6755bc927e44df93f333bf769e status=queued
+2026/08/14 17:00:38 WORKFLOW_TASK_QUEUED task_id=1a9d5f6c8eb5c0ff96590d6e62db30c25fc9b2e3e76b1ac5c5d1915fc9426872 category=CONTROL page=http://127.0.0.1:41159/ dom_state=67ec1bc9 selector=#drawer-open type=submit label="Open drawer" parent=page-e3522c7c4a521c04e99a08ae3e4afe4fe82b6f6755bc927e44df93f333bf769e status=queued
+2026/08/14 17:00:38 WORKFLOW_TASK_EXECUTING task_id=75acb6358e866e22dc73e1fcb66965e4a79507837064744561114809fd95e714 category=CONTROL page=http://127.0.0.1:41159/ selector=#modal-open status=executing
+2026/08/14 17:00:38 WORKFLOW_TASK_RESULT task_id=75acb6358e866e22dc73e1fcb66965e4a79507837064744561114809fd95e714 category=CONTROL status=completed
+2026/08/14 17:00:38 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:41159/ forms=1 controls=2 caused_by=75acb6358e866e22dc73e1fcb66965e4a79507837064744561114809fd95e714
+2026/08/14 17:00:38 ROUTE_SKIPPED url=http://127.0.0.1:41159/ source=form_get reason=ineligible_or_current
+2026/08/14 17:00:38 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:38 WORKFLOW_TASK_QUEUED task_id=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79 category=FORM page=http://127.0.0.1:41159/ dom_state=86028e6d selector=#shared label="Next" parent=page-e3522c7c4a521c04e99a08ae3e4afe4fe82b6f6755bc927e44df93f333bf769e status=queued
+2026/08/14 17:00:38 DYNAMIC_FORM_QUEUED task_id=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79 page=http://127.0.0.1:41159/ form=#shared state=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79
+2026/08/14 17:00:38 WORKFLOW_TASK_EXECUTING task_id=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79 category=FORM page=http://127.0.0.1:41159/ selector=#shared status=executing
+2026/08/14 17:00:38 CONSOLE [log]: DOM FIELD: {"checked":false,"disabled":false,"id":"","name":"name","required":true,"type":"text","value":""}
+2026/08/14 17:00:38 CONSOLE [log]: SUBMIT BUTTON FOUND: selector=button
+2026/08/14 17:00:38 CONSOLE [log]: FIELD CONSTRAINTS: {"ariaInvalid":"","autocomplete":"","disabled":false,"maxlength":0,"minlength":0,"name":"name","pattern":"","placeholder":"","readonly":false,"required":true,"validation":"Please fill out this field."}
+2026/08/14 17:00:38 CONSOLE [log]: FIELD: name=name type=text
+2026/08/14 17:00:38 CONSOLE [log]: FIELD FILLED: name=name value=test
+2026/08/14 17:00:38 CONSOLE [log]: FORM_STATE_BEFORE_SUBMIT: {"active":"{\"tag\":\"INPUT\",\"type\":\"text\",\"name\":\"name\",\"id\":\"\",\"className\":\"\",\"formAction\":\"http://127.0.0.1:41159/\"}","disabled":false,"valid":true}
+2026/08/14 17:00:39 CONSOLE [log]: SUBMIT_EVENT_OBSERVED: [{"event":"submit","defaultPreventedAtCapture":false,"defaultPreventedAfterDispatch":true,"targetMatchesForm":true,"action":"http://127.0.0.1:41159/","method":"get","valid":true,"values":[{"name":"name","value":"test"}]}]
+2026/08/14 17:00:39 CONSOLE [log]: FORM_STATE_AFTER_SUBMIT: {"active":"{\"tag\":\"BODY\",\"type\":\"\",\"name\":\"\",\"id\":\"\",\"className\":\"\",\"formAction\":\"\"}","fields":[{"checked":false,"name":"name","type":"text","valid":true,"validationMessage":"","value":"test"}],"formData":[{"name":"name","value":"test"}],"valid":true}
+2026/08/14 17:00:39 INTERACTION_EVALUATION_REMOTE: type=object subtype= description= hasValue=true
+2026/08/14 17:00:39 DYNAMIC_FORM_EXECUTED task_id=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79 page=http://127.0.0.1:41159/ form=#shared submitted=1
+2026/08/14 17:00:39 WORKFLOW_TASK_RESULT task_id=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79 category=FORM status=completed
+2026/08/14 17:00:39 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:41159/ forms=1 controls=2 caused_by=1c4db3887305bc51fe453c45afc974141d930cb6f7d470f03481ea10409fbc79
+2026/08/14 17:00:39 ROUTE_SKIPPED url=http://127.0.0.1:41159/ source=form_get reason=ineligible_or_current
+2026/08/14 17:00:39 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:39 WORKFLOW_TASK_QUEUED task_id=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707 category=FORM page=http://127.0.0.1:41159/ dom_state=eb771eef selector=#shared label="Finish" parent=page-e3522c7c4a521c04e99a08ae3e4afe4fe82b6f6755bc927e44df93f333bf769e status=queued
+2026/08/14 17:00:39 DYNAMIC_FORM_QUEUED task_id=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707 page=http://127.0.0.1:41159/ form=#shared state=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707
+2026/08/14 17:00:39 WORKFLOW_TASK_EXECUTING task_id=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707 category=FORM page=http://127.0.0.1:41159/ selector=#shared status=executing
+2026/08/14 17:00:39 CONSOLE [log]: DOM FIELD: {"checked":false,"disabled":false,"id":"","name":"email","required":true,"type":"email","value":""}
+2026/08/14 17:00:39 CONSOLE [log]: SUBMIT BUTTON FOUND: selector=button
+2026/08/14 17:00:39 CONSOLE [log]: FIELD CONSTRAINTS: {"ariaInvalid":"","autocomplete":"","disabled":false,"maxlength":0,"minlength":0,"name":"email","pattern":"","placeholder":"","readonly":false,"required":true,"validation":"Please fill out this field."}
+2026/08/14 17:00:39 CONSOLE [log]: FIELD: name=email type=email
+2026/08/14 17:00:39 CONSOLE [log]: FIELD FILLED: name=email value=test@example.com
+2026/08/14 17:00:39 CONSOLE [log]: FORM_STATE_BEFORE_SUBMIT: {"active":"{\"tag\":\"INPUT\",\"type\":\"email\",\"name\":\"email\",\"id\":\"\",\"className\":\"\",\"formAction\":\"http://127.0.0.1:41159/\"}","disabled":false,"valid":true}
+2026/08/14 17:00:39 RUNTIME_HOOK method=POST url=http://127.0.0.1:41159/created body_type= body_len=28 header_names=1 stack_hash=8086f1642ff05c6b
+2026/08/14 17:00:39 RUNTIME_APPLICATION_CALL method=POST url=http://127.0.0.1:41159/created body_type= body_len=28
+2026/08/14 17:00:39 CDP_REQUEST_SEEN id_hash=3e140bd74ccc69f3 method=POST url=http://127.0.0.1:41159/created body_len=0 source_type=unknown
+2026/08/14 17:00:39 REQUEST_BODY_EXTRACTED id_hash=3e140bd74ccc69f3 method=POST url=http://127.0.0.1:41159/created body_len=40 source_type=unknown
+2026/08/14 17:00:39 REQUEST: method=POST url=http://127.0.0.1:41159/created type=Fetch content_type=application/json body_len=40 request_id_hash=3e140bd74ccc69f3
+2026/08/14 17:00:39 PENDING_REQUEST_CREATED id=785181.3 method=POST url=http://127.0.0.1:41159/created body_len=28 source_type=unknown
+2026/08/14 17:00:39 NETWORK_POLICY_BLOCK method=POST rule=MUTATION_BLOCKED request_id_hash=3d1e1979871603ac
+2026/08/14 17:00:39 REQUEST FAILED: request_id=785181.3 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/14 17:00:39 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at document.querySelector.onsubmit (http://127.0.0.1:41159/:4:482)
+    at <anonymous>:101:322
+    at tryStep (<anonymous>:31:82)
+    at <anonymous>:101:273
+    at <anonymous>:117:3
+    at <anonymous>:117:386 url= line=19 column=402
+2026/08/14 17:00:39 CONSOLE [log]: SUBMIT_EVENT_OBSERVED: [{"event":"submit","defaultPreventedAtCapture":false,"defaultPreventedAfterDispatch":true,"targetMatchesForm":true,"action":"http://127.0.0.1:41159/","method":"get","valid":true,"values":[{"name":"email","value":"test@example.com"}]}]
+2026/08/14 17:00:39 CONSOLE [log]: RUNTIME_ERROR: [{"type":"unhandledrejection","message":"TypeError: Failed to fetch\n    at window.fetch (<anonymous>:20:403)\n    at document.querySelector.onsubmit (http://127.0.0.1:41159/:4:482)\n    at <anonymous>:101:322\n    at tryStep (<anonymous>:31:82)\n    at <anonymous>:101:273\n    at <anonymous>:117:3\n    at <anonymous>:117:386"}]
+2026/08/14 17:00:39 CONSOLE [log]: FORM_STATE_AFTER_SUBMIT: {"active":"{\"tag\":\"INPUT\",\"type\":\"email\",\"name\":\"email\",\"id\":\"\",\"className\":\"\",\"formAction\":\"http://127.0.0.1:41159/\"}","fields":[{"checked":false,"name":"email","type":"email","valid":true,"validationMessage":"","value":"test@example.com"}],"formData":[{"name":"email","value":"test@example.com"}],"valid":true}
+2026/08/14 17:00:39 INTERACTION_EVALUATION_REMOTE: type=object subtype= description= hasValue=true
+2026/08/14 17:00:39 DYNAMIC_FORM_EXECUTED task_id=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707 page=http://127.0.0.1:41159/ form=#shared submitted=1
+2026/08/14 17:00:39 WORKFLOW_TASK_RESULT task_id=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707 category=FORM status=completed
+2026/08/14 17:00:39 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:41159/ forms=1 controls=2 caused_by=e500c51c72f24a84d1881d08717cb51f3b6e5af556ad1a97abd6fdcbf895d707
+2026/08/14 17:00:39 ROUTE_SKIPPED url=http://127.0.0.1:41159/ source=form_get reason=ineligible_or_current
+2026/08/14 17:00:39 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:39 WORKFLOW_TASK_EXECUTING task_id=1a9d5f6c8eb5c0ff96590d6e62db30c25fc9b2e3e76b1ac5c5d1915fc9426872 category=CONTROL page=http://127.0.0.1:41159/ selector=#drawer-open status=executing
+2026/08/14 17:00:39 WORKFLOW_TASK_RESULT task_id=1a9d5f6c8eb5c0ff96590d6e62db30c25fc9b2e3e76b1ac5c5d1915fc9426872 category=CONTROL status=completed
+2026/08/14 17:00:39 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:41159/ forms=1 controls=2 caused_by=1a9d5f6c8eb5c0ff96590d6e62db30c25fc9b2e3e76b1ac5c5d1915fc9426872
+2026/08/14 17:00:39 ROUTE_SKIPPED url=http://127.0.0.1:41159/ source=form_get reason=ineligible_or_current
+2026/08/14 17:00:39 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:39 WORKFLOW_TASK_QUEUED task_id=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d category=FORM page=http://127.0.0.1:41159/ dom_state=3e7718ed selector=#update label="Save" parent=page-e3522c7c4a521c04e99a08ae3e4afe4fe82b6f6755bc927e44df93f333bf769e status=queued
+2026/08/14 17:00:39 DYNAMIC_FORM_QUEUED task_id=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d page=http://127.0.0.1:41159/ form=#update state=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d
+2026/08/14 17:00:39 WORKFLOW_TASK_EXECUTING task_id=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d category=FORM page=http://127.0.0.1:41159/ selector=#update status=executing
+2026/08/14 17:00:39 CONSOLE [log]: DOM FIELD: {"checked":false,"disabled":false,"id":"","name":"title","required":true,"type":"text","value":""}
+2026/08/14 17:00:39 CONSOLE [log]: SUBMIT BUTTON FOUND: selector=button
+2026/08/14 17:00:39 CONSOLE [log]: FIELD CONSTRAINTS: {"ariaInvalid":"","autocomplete":"","disabled":false,"maxlength":0,"minlength":0,"name":"title","pattern":"","placeholder":"","readonly":false,"required":true,"validation":"Please fill out this field."}
+2026/08/14 17:00:39 CONSOLE [log]: FIELD: name=title type=text
+2026/08/14 17:00:39 CONSOLE [log]: FIELD FILLED: name=title value=test
+2026/08/14 17:00:39 CONSOLE [log]: FORM_STATE_BEFORE_SUBMIT: {"active":"{\"tag\":\"INPUT\",\"type\":\"text\",\"name\":\"title\",\"id\":\"\",\"className\":\"\",\"formAction\":\"http://127.0.0.1:41159/\"}","disabled":false,"valid":true}
+2026/08/14 17:00:39 RUNTIME_HOOK method=PATCH url=http://127.0.0.1:41159/updated body_type= body_len=16 header_names=1 stack_hash=970003b52b161f9e
+2026/08/14 17:00:39 RUNTIME_APPLICATION_CALL method=PATCH url=http://127.0.0.1:41159/updated body_type= body_len=16
+2026/08/14 17:00:39 NETWORK_POLICY_BLOCK method=PATCH rule=MUTATION_BLOCKED request_id_hash=f75935447172f87c
+2026/08/14 17:00:39 CDP_REQUEST_SEEN id_hash=49b3fec0ab14adb4 method=PATCH url=http://127.0.0.1:41159/updated body_len=0 source_type=unknown
+2026/08/14 17:00:39 REQUEST_BODY_EXTRACTED id_hash=49b3fec0ab14adb4 method=PATCH url=http://127.0.0.1:41159/updated body_len=24 source_type=unknown
+2026/08/14 17:00:39 REQUEST: method=PATCH url=http://127.0.0.1:41159/updated type=Fetch content_type=application/json body_len=24 request_id_hash=49b3fec0ab14adb4
+2026/08/14 17:00:39 PENDING_REQUEST_CREATED id=785181.4 method=PATCH url=http://127.0.0.1:41159/updated body_len=16 source_type=unknown
+2026/08/14 17:00:39 REQUEST FAILED: request_id=785181.4 error=net::ERR_BLOCKED_BY_CLIENT.Inspector
+2026/08/14 17:00:39 PAGE ERROR: text=Uncaught (in promise) description=TypeError: Failed to fetch
+    at window.fetch (<anonymous>:20:403)
+    at document.querySelector.onsubmit (http://127.0.0.1:41159/:5:258)
+    at <anonymous>:101:322
+    at tryStep (<anonymous>:31:82)
+    at <anonymous>:101:273
+    at <anonymous>:117:3
+    at <anonymous>:117:386 url= line=19 column=402
+2026/08/14 17:00:40 CONSOLE [log]: SUBMIT_EVENT_OBSERVED: [{"event":"submit","defaultPreventedAtCapture":false,"defaultPreventedAfterDispatch":true,"targetMatchesForm":true,"action":"http://127.0.0.1:41159/","method":"get","valid":true,"values":[{"name":"title","value":"test"}]}]
+2026/08/14 17:00:40 CONSOLE [log]: RUNTIME_ERROR: [{"type":"unhandledrejection","message":"TypeError: Failed to fetch\n    at window.fetch (<anonymous>:20:403)\n    at document.querySelector.onsubmit (http://127.0.0.1:41159/:5:258)\n    at <anonymous>:101:322\n    at tryStep (<anonymous>:31:82)\n    at <anonymous>:101:273\n    at <anonymous>:117:3\n    at <anonymous>:117:386"}]
+2026/08/14 17:00:40 CONSOLE [log]: FORM_STATE_AFTER_SUBMIT: {"active":"{\"tag\":\"INPUT\",\"type\":\"text\",\"name\":\"title\",\"id\":\"\",\"className\":\"\",\"formAction\":\"http://127.0.0.1:41159/\"}","fields":[{"checked":false,"name":"title","type":"text","valid":true,"validationMessage":"","value":"test"}],"formData":[{"name":"title","value":"test"}],"valid":true}
+2026/08/14 17:00:40 INTERACTION_EVALUATION_REMOTE: type=object subtype= description= hasValue=true
+2026/08/14 17:00:40 DYNAMIC_FORM_EXECUTED task_id=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d page=http://127.0.0.1:41159/ form=#update submitted=1
+2026/08/14 17:00:40 WORKFLOW_TASK_RESULT task_id=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d category=FORM status=completed
+2026/08/14 17:00:40 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:41159/ forms=1 controls=2 caused_by=7a8a0cb1270fd12211256e2c8293a9549cbda0177a66b0cacd7de2ff7251474d
+2026/08/14 17:00:40 ROUTE_SKIPPED url=http://127.0.0.1:41159/ source=form_get reason=ineligible_or_current
+2026/08/14 17:00:40 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:40 WORKFLOW_QUEUE_DRAINED page=http://127.0.0.1:41159/ pending=0 executing=0 navigation_pending=false
+2026/08/14 17:00:40 INITIAL INTERACTION RESULT: changed=false interacted=0 clicked=0 filled=0 submitted=0 discovered=0 continue=false error= lastStep= lastElement= fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil>
+2026/08/14 17:00:40 INITIAL INTERACTION RESULT DETAILS: fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil> submitAttempted=false submitEventObserved=false
+2026/08/14 17:00:40 FORM_VALID: unknown
+2026/08/14 17:00:40 DOM_SNAPSHOT page=http://127.0.0.1:41159 snapshot_url=http://127.0.0.1:41159/ ready_state=complete links=0 forms=1 controls=2 scripts=0 dom_state=3e7718ed phase=final
+2026/08/14 17:00:40 ROUTE_DISCOVERED original=http://127.0.0.1:41159/ source=form_get
+2026/08/14 17:00:40 ROUTE_NORMALIZED original=http://127.0.0.1:41159/ canonical=http://127.0.0.1:41159/
+2026/08/14 17:00:40 ROUTE_QUEUED url=http://127.0.0.1:41159/ depth=1 source=form_get
+2026/08/14 17:00:40 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:41159 snapshot_links=0 accepted_in_scope=1 appended_to_next=1
+--- FAIL: TestDynamicModalDrawerAndWizardFormsEnterQueueAndExecute (2.73s)
+    dynamic_integration_test.go:389: dynamic workflows did not execute exactly once: POST=0 PATCH=0
+2026/08/14 17:00:40 [1/3] Crawling depth 0: http://127.0.0.1:36385
+2026/08/14 17:00:40 REQUEST: method=GET url=http://127.0.0.1:36385/ type=Document content_type= body_len=0 request_id_hash=3d508f376beba43d
+2026/08/14 17:00:40 RESPONSE: status=200 method= url=http://127.0.0.1:36385/favicon.ico
+2026/08/14 17:00:41 DOM_SETTLED ready_state=complete location=http://127.0.0.1:36385/ title="" body_children=3 body_text_len=20 anchors=2 buttons=0 forms=0 controls=0 dom_state=body-ready reason=quiet elapsed_ms=705 quiet_ms=424
+2026/08/14 17:00:41 DOM_SNAPSHOT page=http://127.0.0.1:36385 snapshot_url=http://127.0.0.1:36385/ ready_state=complete links=2 forms=0 controls=0 scripts=0 dom_state=c644e0e4
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/Login source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/Login canonical=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_QUEUED url=http://127.0.0.1:36385/Login depth=1 source=anchor
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/forgot-password source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/forgot-password canonical=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_QUEUED url=http://127.0.0.1:36385/forgot-password depth=1 source=anchor
+2026/08/14 17:00:41 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:36385 snapshot_links=2 accepted_in_scope=2 appended_to_next=2
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/Login source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/Login canonical=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_ALREADY_SEEN url=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/forgot-password source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/forgot-password canonical=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_ALREADY_SEEN url=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:36385 snapshot_links=2 accepted_in_scope=2 appended_to_next=0
+2026/08/14 17:00:41 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:36385/ forms=0 controls=0
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/Login source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/Login canonical=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_ALREADY_SEEN url=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/forgot-password source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/forgot-password canonical=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_ALREADY_SEEN url=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:36385/ snapshot_links=2 accepted_in_scope=2 appended_to_next=0
+2026/08/14 17:00:41 WORKFLOW_QUEUE_EMPTY page=http://127.0.0.1:36385/ forms=0 controls=0
+2026/08/14 17:00:41 WORKFLOW_QUEUE_DRAINED page=http://127.0.0.1:36385 pending=0 executing=0 navigation_pending=false
+2026/08/14 17:00:41 INITIAL INTERACTION RESULT: changed=false interacted=0 clicked=0 filled=0 submitted=0 discovered=0 continue=false error= lastStep= lastElement= fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil>
+2026/08/14 17:00:41 INITIAL INTERACTION RESULT DETAILS: fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil> submitAttempted=false submitEventObserved=false
+2026/08/14 17:00:41 FORM_VALID: unknown
+2026/08/14 17:00:41 DOM_SNAPSHOT page=http://127.0.0.1:36385 snapshot_url=http://127.0.0.1:36385/ ready_state=complete links=2 forms=0 controls=0 scripts=0 dom_state=c644e0e4 phase=final
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/Login source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/Login canonical=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_ALREADY_SEEN url=http://127.0.0.1:36385/Login
+2026/08/14 17:00:41 ROUTE_DISCOVERED original=http://127.0.0.1:36385/forgot-password source=anchor
+2026/08/14 17:00:41 ROUTE_NORMALIZED original=http://127.0.0.1:36385/forgot-password canonical=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_ALREADY_SEEN url=http://127.0.0.1:36385/forgot-password
+2026/08/14 17:00:41 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:36385 snapshot_links=2 accepted_in_scope=2 appended_to_next=0
+2026/08/14 17:00:42 [1/3] Crawling depth 0: http://127.0.0.1:37523
+2026/08/14 17:00:42 REQUEST: method=GET url=http://127.0.0.1:37523/ type=Document content_type= body_len=0 request_id_hash=e2871c06ddbc03eb
+2026/08/14 17:00:42 RESPONSE: status=200 method= url=http://127.0.0.1:37523/favicon.ico
+2026/08/14 17:00:42 DOM_SETTLED ready_state=complete location=http://127.0.0.1:37523/ title="" body_children=3 body_text_len=20 anchors=2 buttons=0 forms=0 controls=0 dom_state=body-ready reason=quiet elapsed_ms=757 quiet_ms=418
+2026/08/14 17:00:42 DOM_SNAPSHOT page=http://127.0.0.1:37523 snapshot_url=http://127.0.0.1:37523/ ready_state=complete links=2 forms=0 controls=0 scripts=0 dom_state=ec58cce5
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/Login source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/Login canonical=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_QUEUED url=http://127.0.0.1:37523/Login depth=1 source=anchor
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/forgot-password source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/forgot-password canonical=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_QUEUED url=http://127.0.0.1:37523/forgot-password depth=1 source=anchor
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:37523 snapshot_links=2 accepted_in_scope=2 appended_to_next=2
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/Login source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/Login canonical=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_ALREADY_SEEN url=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/forgot-password source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/forgot-password canonical=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_ALREADY_SEEN url=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:37523 snapshot_links=2 accepted_in_scope=2 appended_to_next=0
+2026/08/14 17:00:42 DYNAMIC_FORM_DISCOVERY page=http://127.0.0.1:37523/ forms=0 controls=0
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/Login source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/Login canonical=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_ALREADY_SEEN url=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/forgot-password source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/forgot-password canonical=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_ALREADY_SEEN url=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:37523/ snapshot_links=2 accepted_in_scope=2 appended_to_next=0
+2026/08/14 17:00:42 WORKFLOW_QUEUE_EMPTY page=http://127.0.0.1:37523/ forms=0 controls=0
+2026/08/14 17:00:42 WORKFLOW_QUEUE_DRAINED page=http://127.0.0.1:37523 pending=0 executing=0 navigation_pending=false
+2026/08/14 17:00:42 INITIAL INTERACTION RESULT: changed=false interacted=0 clicked=0 filled=0 submitted=0 discovered=0 continue=false error= lastStep= lastElement= fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil>
+2026/08/14 17:00:42 INITIAL INTERACTION RESULT DETAILS: fieldStates=0 formData=0 submitDiagnostics=0 runtimeErrors=0 formValid=<nil> submitAttempted=false submitEventObserved=false
+2026/08/14 17:00:42 FORM_VALID: unknown
+2026/08/14 17:00:42 DOM_SNAPSHOT page=http://127.0.0.1:37523 snapshot_url=http://127.0.0.1:37523/ ready_state=complete links=2 forms=0 controls=0 scripts=0 dom_state=ec58cce5 phase=final
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/Login source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/Login canonical=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_ALREADY_SEEN url=http://127.0.0.1:37523/Login
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=http://127.0.0.1:37523/forgot-password source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=http://127.0.0.1:37523/forgot-password canonical=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_ALREADY_SEEN url=http://127.0.0.1:37523/forgot-password
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=http://127.0.0.1:37523 snapshot_links=2 accepted_in_scope=2 appended_to_next=0
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=https://example.test/Login source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=https://example.test/Login canonical=https://example.test/Login
+2026/08/14 17:00:42 ROUTE_QUEUED url=https://example.test/Login depth=1 source=anchor
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=https://example.test/forgot-password source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=https://example.test/forgot-password canonical=https://example.test/forgot-password
+2026/08/14 17:00:42 ROUTE_QUEUED url=https://example.test/forgot-password depth=1 source=anchor
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=https://example.test/ snapshot_links=2 accepted_in_scope=2 appended_to_next=2
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=https://example.test/login source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=https://example.test/login canonical=https://example.test/login
+2026/08/14 17:00:42 ROUTE_QUEUED url=https://example.test/login depth=1 source=anchor
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=https://example.test/ snapshot_links=1 accepted_in_scope=1 appended_to_next=1
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=https://example.test/login?campaign=trial&_rsc=test source=nextjs_rsc_prefetch
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=https://example.test/login?campaign=trial&_rsc=test canonical=https://example.test/login?campaign=trial
+2026/08/14 17:00:42 ROUTE_QUEUED url=https://example.test/login?campaign=trial depth=1 source=nextjs_rsc_prefetch
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=https://example.test/ snapshot_links=0 accepted_in_scope=1 appended_to_next=1
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=https://example.test/ snapshot_links=0 accepted_in_scope=0 appended_to_next=0
+2026/08/14 17:00:42 ROUTE_DISCOVERED original=https://example.test/revealed source=anchor
+2026/08/14 17:00:42 ROUTE_NORMALIZED original=https://example.test/revealed canonical=https://example.test/revealed
+2026/08/14 17:00:42 ROUTE_QUEUED url=https://example.test/revealed depth=1 source=anchor
+2026/08/14 17:00:42 ROUTE_DISCOVERY_SUMMARY page=https://example.test/ snapshot_links=1 accepted_in_scope=1 appended_to_next=1
+FAIL
+FAIL	github.com/Anduamlk/web-Crawler/crawler	9.350s
+ok  	github.com/Anduamlk/web-Crawler/session	0.006s
+FAIL

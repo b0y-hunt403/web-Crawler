@@ -1,0 +1,29 @@
+=== RUN   TestSensitiveRedactionCoversEncodedAndJWTValues
+--- PASS: TestSensitiveRedactionCoversEncodedAndJWTValues (0.00s)
+=== RUN   TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire
+    network_policy_fixture_test.go:17: localhost unavailable: listen tcp4 127.0.0.1:0: socket: operation not permitted
+--- SKIP: TestNetworkPolicyFixtureBlocksBackgroundMutationsBeforeWire (0.00s)
+=== RUN   TestRuntimeHookLogsAreStructurallyRedacted
+--- PASS: TestRuntimeHookLogsAreStructurallyRedacted (0.00s)
+=== RUN   TestSafeExportsContainNoSecretMarkers
+--- PASS: TestSafeExportsContainNoSecretMarkers (0.00s)
+=== RUN   TestBrowserWebSocketURLIsRedacted
+--- PASS: TestBrowserWebSocketURLIsRedacted (0.00s)
+=== RUN   TestNetworkPolicyAllowsReadOnlyMethods
+--- PASS: TestNetworkPolicyAllowsReadOnlyMethods (0.00s)
+=== RUN   TestNetworkPolicyBlocksDeleteBeforeWire
+--- PASS: TestNetworkPolicyBlocksDeleteBeforeWire (0.00s)
+=== RUN   TestNetworkPolicyBlocksPOSTPUTPATCHBeforeWire
+--- PASS: TestNetworkPolicyBlocksPOSTPUTPATCHBeforeWire (0.00s)
+=== RUN   TestNetworkPolicyAllowsOnlyExactActiveAuthenticationPOST
+--- PASS: TestNetworkPolicyAllowsOnlyExactActiveAuthenticationPOST (0.00s)
+=== RUN   TestNetworkPolicyBlocksForgotPasswordByDefault
+--- PASS: TestNetworkPolicyBlocksForgotPasswordByDefault (0.00s)
+=== RUN   TestNetworkPolicyBlocksAccountCreationByDefault
+--- PASS: TestNetworkPolicyBlocksAccountCreationByDefault (0.00s)
+=== RUN   TestNetworkPolicyAllowsExplicitReadOnlyGraphQLQuery
+--- PASS: TestNetworkPolicyAllowsExplicitReadOnlyGraphQLQuery (0.00s)
+=== RUN   TestNetworkPolicyBlocksGraphQLMutation
+--- PASS: TestNetworkPolicyBlocksGraphQLMutation (0.00s)
+PASS
+ok  	github.com/Anduamlk/web-Crawler/crawler	0.008s
