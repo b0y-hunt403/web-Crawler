@@ -14,7 +14,9 @@
   <img src="https://img.shields.io/badge/browser-Chromium-4285F4?logo=googlechrome" alt="Chromium">
   <img src="https://img.shields.io/badge/discovery-Katana-7B42BC" alt="Katana">
 </p>
-
+Raptor is a discovery and request-intelligence engine that converts real application
+ behavior into normalized, evidence-backed, scanner-ready HTTP requests.
+ 
 Raptor combines fast URL discovery with static analysis and Chromium-backed
 dynamic crawling. Katana is used to find URLs; Raptor owns request capture,
 normalization, authentication metadata, form analysis, JavaScript endpoint
