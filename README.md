@@ -1,7 +1,7 @@
 # Raptor
 
 <div align="center">
-  <img src="images/banner.png" alt="Raptor web crawler" width="800">
+  
 </div>
 
 <p align="center">
