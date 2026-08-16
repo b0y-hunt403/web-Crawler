@@ -44,6 +44,36 @@ authenticated cookie export.
 
 ## Architecture
 
+flowchart TD
+  CLI[cmd/crawler CLI] --> CFG[CrawlerConfig]
+  API[Target crawl API] --> CFG
+  CFG --> K{UseKatana?}
+  K -->|yes| KE[Embedded Katana: deliberately disabled]
+  KE --> KB[Katana subprocess fallback]
+  KB --> Q[Priority URL queue]
+  K -->|no| Q
+  Q --> ST[StaticCrawler]
+  Q --> DY[DynamicCrawler / Chromium CDP]
+  ST --> SC[Static candidates: anchors, forms, JS]
+  SC --> Q
+  DY --> LC[Observed -> body extraction -> response -> completed/failed]
+  LC --> FUNNEL[Crawler.handleDiscovered]
+  SC --> FUNNEL
+  FUNNEL --> DB[(SQLite discovered_requests)]
+  DB --> IDX[IndexRequest / AnalyzeRequest / request Intellgence]
+  IDX --> PARAMS[request_parameters]
+  IDX --> INV[api_endpoint_inventory]
+  IDX --> CANDS[scanner_candidates: SQLMAP, DALFOX]
+  IDX --> GAPS[coverage_gaps]
+  INV --> EXP[Replay exports]
+  CANDS --> EXP
+  EXP --> SQL[SQLMap raw requests /JSON , Body , .txt file]
+  EXP --> DAL[Dalfox GET URLs /query parameter, in some case body params]
+  DB --> LOCAL[ crawl API request views]
+  NUC[Nuclei] -. no repository adapter .-> DB
+  LFI[LFImap] -. no repository adapter .-> DB
+
+
 ```text
                          +---------------------+
                          |       Katana        |
