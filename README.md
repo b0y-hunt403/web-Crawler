@@ -158,9 +158,19 @@ go vet ./...
 
 ## Quick start
 
-Full crawl:
-env RAPTOR_AUTH_USERNAME='admin@epos-epos.et' RAPTOR_AUTH_PASSWORD='replace-on-first-deploy' RAPTOR_AUTH_MAX_ATTEMPTS='1' RAPTOR_ALLOW_REAUTH='false' RAPTOR_ALLOW_MUTATIONS='false' RAPTOR_ALLOW_DESTRUCTIVE_ACTIONS='false' RAPTOR_ALLOW_ACCOUNT_CREATION='false' RAPTOR_ALLOW_FILE_UPLOADS='false' timeout 300 ./raptor -url 'http://localhost:4999/login' -dynamic -katana -katana-depth 2 -katana-concurrency 1 -depth 3 -pages 25 -concurrency 1 -timeout 15s -db aws-readonly.db -output aws-readonly.json 2>&1 | tee aws-readonly.log
+Full Scan authenticated context
 
+Managed Session Manager:
+
+```bash
+raptor -u 'http://target.com/' -r '0fa5d0cb-bb28-4686-bdc9-17d06bd71a22'
+```
+
+Direct WebSocket:
+
+```bash
+raptor -u 'http://196.188.172.7:38415/en/client/dashboard' -cwu "$(curl -fsS 'http://....' | jq -er '.webSocketDebuggerUrl')"
+```
 Static crawl:
 
 ```bash
