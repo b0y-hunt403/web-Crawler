@@ -171,6 +171,33 @@ Direct WebSocket:
 ```bash
 raptor -u 'http://196.188.172.7:38415/en/client/dashboard' -cwu "$(curl -fsS 'http://....' | jq -er '.webSocketDebuggerUrl')"
 ```
+
+
+```bash
+raptor \
+  -u 'http://target.com/dashboard' \
+  -cwu 'user=ws://172..132:9200/devtools/browser/USER_UUID' \
+  -cwu 'admin=ws://172...132:9201/devtools/browser/ADMIN_UUID' \
+  -cwu 'auditor=ws://172..132:9202/devtools/browser/AUDITOR_UUID' \
+  --parallel 3 \
+  --profile readonly \
+  -d 2 \
+  -p 50 \
+  -c 1
+```
+
+```bash
+raptor \
+  -u 'https://staging.example/dashboard' \
+  -r 'user=USER_ROLE_UUID' \
+  -r 'admin=ADMIN_ROLE_UUID' \
+  --parallel 2 \
+  --profile staging-mutations \
+  --allow-parallel-mutations \
+  -d 1 \
+  -p 10 \
+  -c 1
+```
 Static crawl:
 
 ```bash
